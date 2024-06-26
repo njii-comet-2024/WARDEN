@@ -41,3 +41,9 @@ This project is still a work in progress.
 - Communicate with both the ground and air vehicles to control them.
 - Receive video feed from both the ground and air vehicles.
 - Send commands to the ground vehicle through the air vehicle when connection is lost.
+
+---
+
+## Changelog
+
+Major changes will be documented in ![Changelog](docs/about/changelog.md). These changes will be tagged as a new version.
