@@ -69,6 +69,7 @@ Single line comment before any complex code blocks.
 
 - @author `author name` `author github username`
 - @param \``param name`\` `param description`
+- @return `variable name` `variable description`
 
 ### Naming Conventions
 
