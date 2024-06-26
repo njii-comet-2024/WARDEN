@@ -67,9 +67,9 @@ Single line comment before any complex code blocks.
 
 **Tags**
 
-- @author `author name` `author github username`
-- @param \``param name`\` `param description`
-- @return `variable name` `variable description`
+- @author `author name`: `author github username`
+- @param \``param name`\`: `param description`
+- @return \``variable name`\`: `variable description`
 
 ### Naming Conventions
 
