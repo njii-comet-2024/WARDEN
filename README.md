@@ -63,9 +63,10 @@ Multi-line comments at the beginning of every class detailing the class's purpos
 
 Single line comment before any complex code blocks.
 
+</br>
+
 **Tags**
 
-</br>
 - @author [author name] [author github username]
 - @param `param name` [param description]
 
