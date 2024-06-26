@@ -3,8 +3,8 @@
 
 ---
 
-# STRAFE -- COMET 2024
-Air ground tandum recon system control code
+# WARDEN -- COMET 2024
+Wireless Assessment Rover with Drone Extended Network
 
 ---
 
@@ -17,7 +17,7 @@ Air ground tandum recon system control code
 
 </details>
 
-*Repository url:* https://github.com/https://github.com/njii-comet-2024/project-main
+*Repository url:* https://github.com/https://github.com/njii-comet-2024/WARDEN
 
 ---
 

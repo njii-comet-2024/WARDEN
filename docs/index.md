@@ -1,18 +1,18 @@
-# **COMET-2024 Documentation**
+# **Project WARDEN Documentation**
 
 :computer: air ground tandum recon system control code
 
-[:simple-github: Visit the repository](https://github.com/njii-comet-2024/COMET-2024){ .md-button }
+[:simple-github: Visit the repository](https://github.com/njii-comet-2024/WARDEN){ .md-button }
 
 </br>
 
 
 ## Quick start
 
-**Step 1:** Clone the [repository](https://github.com/njii-comet-2024/COMET-2024.git)
+**Step 1:** Clone the [repository](https://github.com/njii-comet-2024/WARDEN.git)
 
 ```
-git clone https://github.com/njii-comet-2024/COMET-2024.git
+git clone https://github.com/njii-comet-2024/WARDEN.git
 ```
 
 **Step 2 :** Install the requirements in your virtual environment.
@@ -24,7 +24,7 @@ pip install -r requirements.txt
 **Step 3:** Run the project using the main.py file.
 
 ```bash
-python src/COMET-2024 -l debug
+python src/WARDEN -l debug
 ```
 
 ## Documentation contents

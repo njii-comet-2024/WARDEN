@@ -20,6 +20,8 @@ jobs: # Jobs to run
         pip install cookiecutter
     - name: Run main.py  # Step to run the script
       run: | # Commands to create the cookiecutter template and run the project
-        git clone https://github.com/njii-comet-2024/COMET-2024
-        cd COMET-2024
-        python src/air-vehicle/main.py -l debug
+        git clone https://github.com/njii-comet-2024/WARDEN
+        cd WARDEN
+        python src/air-vehicle/control.py -l debug
+        python src/air-vehicle/comms.py -l debug
+        python src/ground-vehicle/main.py -l debug

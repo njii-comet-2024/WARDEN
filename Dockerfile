@@ -1,4 +1,4 @@
-# Project: comet-2024
+# Project: WARDEN
 # Author/s: COMET Software Subteam 2024
 # -----------------------------------------------------
 
@@ -7,9 +7,10 @@
 FROM python:3.8-slim
 
 # Copy the files to run the app
-COPY src /COMET-2024/src/air-vehicle
-COPY data /COMET-2024/data
-COPY requirements.txt /COMET-2024
+COPY src /WARDEN/src/air-vehicle
+COPY src /WARDEN/src/ground-vehicle
+COPY data /WARDEN/data
+COPY requirements.txt /WARDEN
 
 # Install python and other common libraries
 RUN apt-get update -y && \
@@ -25,11 +26,11 @@ RUN apt-get update -y && \
     unixodbc-dev \
     python3-pip \
     nano && \
-    pip3 install -r /comet-2024/requirements.txt &&\
+    pip3 install -r /WARDEN/requirements.txt &&\
     pip3 install --upgrade pip
 
 # Select the working directory
-WORKDIR /COMET-2024
+WORKDIR /WARDEN
 
 # Add this comand to avoid the container to close after the execution
 #CMD tail -f /dev/null

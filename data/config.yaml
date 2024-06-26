@@ -1,4 +1,4 @@
-# Configuration file for the project COMET-2024
+# Configuration file for the project WARDEN
 # Author/s: COMET Software Subteam 2024
 # -----------------------------------------------------
 # Date: 26/06/2024
@@ -8,7 +8,7 @@
 # -----------------------------------------------------
 
 # Configuration parameters
-project_name: "COMET-2024"
+project_name: "WARDEN"
 path_logs: data/logs/file.log
 
 # >>> Add your configuration parameters here <<<
