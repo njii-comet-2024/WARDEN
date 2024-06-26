@@ -8,7 +8,7 @@
 # -----------------------------------------------------
 
 # Configuration parameters
-project_name: "comet-2024"
+project_name: "COMET-2024"
 path_logs: data/logs/file.log
 
 # >>> Add your configuration parameters here <<<

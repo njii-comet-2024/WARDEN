@@ -7,7 +7,7 @@
 
 ## Version 0.1.0 (26/06/2024)
 
-This is the first documentation release of [comet-2024](https://github.com/njii-comet-2024/project-main) project.
+This is the first documentation release of [COMET-2024](https://github.com/njii-comet-2024/project-main) project.
 
 
 **Features**
