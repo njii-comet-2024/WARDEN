@@ -4,7 +4,6 @@ on: push # Events that trigger the workflow
   # push:
   #   branches:
   #     - main
-  #     - wip-release
 
 # Jobs
 jobs: # Jobs to run

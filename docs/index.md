@@ -2,17 +2,17 @@
 
 :computer: air ground tandum recon system control code
 
-[:simple-github: Visit the repository](https://github.com/njii-comet-2024/project-main){ .md-button }
+[:simple-github: Visit the repository](https://github.com/njii-comet-2024/COMET-2024){ .md-button }
 
 </br>
 
 
 ## Quick start
 
-**Step 1:** Clone the [repository](https://github.com/njii-comet-2024/project-main.git)
+**Step 1:** Clone the [repository](https://github.com/njii-comet-2024/COMET-2024.git)
 
 ```
-git clone https://github.com/njii-comet-2024/project-main.git
+git clone https://github.com/njii-comet-2024/COMET-2024.git
 ```
 
 **Step 2 :** Install the requirements in your virtual environment.

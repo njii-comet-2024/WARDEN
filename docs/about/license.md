@@ -2,7 +2,7 @@
 
 **MIT License**
 
-Copyright (c) 2022  Carlos Grande
+Copyright (c) 2022  Zoe Rizzo
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

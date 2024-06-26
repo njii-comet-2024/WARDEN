@@ -2,19 +2,17 @@
 
 ## Release contributors
 
-- [Carlos Grande (@charlstown)](https://github.com/charlstown)
+- [Zoe Rizzo (@zizz-0)](https://github.com/zizz-0)
 
 
 ## Version 0.1.0 (26/06/2024)
 
-This is the first documentation release of [COMET-2024](https://github.com/njii-comet-2024/project-main) project.
+This is the first documentation release of [COMET-2024](https://github.com/njii-comet-2024/COMET-2024) project.
 
 
 **Features**
 
-- User guide to run the project as a user.
-- Dev guide to contribute to the project or to have a deeply understanding about how it works.
-- About section to document licensing, references and documentation versioning.
+- 
 
 
 **Minor Changes**
@@ -24,4 +22,4 @@ This is the first documentation release of [COMET-2024](https://github.com/njii-
 
 **Bugfixes**
 
-- Config file with project name fixed to run the raw template
+- 

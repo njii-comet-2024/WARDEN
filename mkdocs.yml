@@ -1,13 +1,11 @@
 site_name: 
 site_description: A Python archetype documentation to help developers to start developing a coding project.
-repo_url: https://github.com/njii-comet-2024/project-main
+repo_url: https://github.com/njii-comet-2024/COMET-2024
 
 # Configuration
 # Theme
 theme:
   name: material
-  logo: assets/logo_32.png
-  favicon: assets/logo_32.ico
   features:
     - navigation.tabs
     - navigation.sections
