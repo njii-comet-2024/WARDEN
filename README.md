@@ -3,18 +3,17 @@
 
 ---
 
-</br>
-
 # STRAFE -- COMET 2024
 Air ground tandum recon system control code
-
-</br>
 
 ---
 
 <details><summary><b>Contents</b></summary>
 
 - [Description](Description)
+- [Goals](Goals)
+- [Changelog](Changelog)
+- [Standards](Standards)
 
 </details>
 
@@ -47,3 +46,29 @@ This project is still a work in progress.
 ## Changelog
 
 Major changes will be documented in ![Changelog](docs/about/changelog.md). These changes will be tagged as a new version.
+
+---
+
+## Standards
+
+### Comments
+
+Multi-line comments at the beginning of every function explaining what it does, the return value, and any parameters.
+
+</br>
+
+Multi-line comments at the beginning of every class detailing the class's purpose, the author(s), and date last updated.
+
+</br>
+
+Single line comment before any complex code blocks.
+
+**Tags**
+
+</br>
+- @author [author name] [author github username]
+- @param `param name` [param description]
+
+### Naming Conventions
+
+Both variables and functions should be named using camel case (e.g. camelCase).

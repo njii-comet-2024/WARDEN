@@ -1,5 +1,5 @@
 """
-Control and communication code for ground vehicle
+Communications code for air vehicle
 
 @author [name] [github]
 
@@ -18,7 +18,7 @@ from helpers import Helpers
 
 
 class App:
-
+    
     def __init__(self, args: argparse.Namespace):
         """
         Constructor method to read the configuration parameters, generate the instances from modules and declare the

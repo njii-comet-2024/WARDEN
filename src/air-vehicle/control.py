@@ -1,15 +1,10 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# -----------------------------------------------------
-# Project: comet-2024
-# Author/s: COMET Software Subteam 2024
-# -----------------------------------------------------
-# Date: 26/06/2024
-# License: MIT
-# Version: 0.1.0
-# Maintainer/s: zizz-0
-# Environment: comet-2024
-# -----------------------------------------------------
+"""
+Control code for air vehicle
+
+@author [name] [github]
+
+Date last modified: 06/26/2024
+"""
 
 # Libraries
 import sys
@@ -23,11 +18,7 @@ from helpers import Helpers
 
 
 class App:
-    """
-    Class description: Explain the main class.
-    Name the public methods from this class:
-    """
-
+    
     def __init__(self, args: argparse.Namespace):
         """
         Constructor method to read the configuration parameters, generate the instances from modules and declare the
@@ -60,11 +51,6 @@ class App:
         self.helpers = Helpers(logger=logger, config=self.config)
 
     def _get_logger(self, level: str) -> logging.Logger:
-        """
-        Method to generate the logger used in the project
-        :param level: the level of the logs to output
-        :return: the custom logger
-        """
         # Setting up the output level
         levels = {'debug': logging.DEBUG,
                   'info': logging.INFO,

@@ -1,19 +1,17 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# -----------------------------------------------------
-# Project: comet-2024
-# Author/s: COMET Software Subteam 2024
-# Maintainer/s: zizz-0
-# -----------------------------------------------------
+"""
+Helper functions for ground vehicle
+
+@author [name] [github]
+
+Date last modified: 06/26/2024
+"""
 
 # Libraries
 import logging
 
 
 class Helpers:
-    """
-    Example class as a template for other classes. Explain the use of this class here.
-    """
+    
     def __init__(self, logger: logging.Logger, config: dict):
         """
         Constructor method to create an instance from the class with initial arguments and
