@@ -4,7 +4,7 @@ import socket
 import pickle
 
 clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-hostIp = '10.255.0.137'
+hostIp = ' 172.16.224.229'
 port = 7777
 clientSocket.connect((hostIp, port))
 data = b""
