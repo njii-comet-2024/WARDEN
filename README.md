@@ -8,7 +8,7 @@ Wireless Assessment Rover with Drone Extended Network
 
 </br>
 
-https://github.com/https://github.com/njii-comet-2024/WARDEN
+https://github.com/njii-comet-2024/WARDEN
 
 ---
 
