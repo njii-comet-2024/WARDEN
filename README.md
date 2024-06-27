@@ -6,19 +6,9 @@
 # WARDEN -- COMET 2024
 Wireless Assessment Rover with Drone Extended Network
 
----
+</br>
 
-<details><summary><b>Contents</b></summary>
-
-- [Description](Description)
-- [Definitions](Definitions)
-- [Goals](Goals)
-- [Changelog](Changelog)
-- [Standards](Standards)
-
-</details>
-
-*Repository url:* https://github.com/https://github.com/njii-comet-2024/WARDEN
+https://github.com/https://github.com/njii-comet-2024/WARDEN
 
 ---
 
@@ -26,11 +16,9 @@ Wireless Assessment Rover with Drone Extended Network
 
 This repository holds the control code for the COMET 2024 internship project. 
 
-</br>
 
 This system is a deployable field recon ground vehicle. The objective is to extend the range of the ground vehicle by using an air vehicle, thus being able to cover more ground. 
 
-</br>
 
 This project is still a work in progress. 
 
@@ -40,23 +28,18 @@ This project is still a work in progress.
 
 **Rover:** The ground vehicle used for reconnaissance.
 
-</br>
 
 **Drone:** The air vehicle used to extend the rover's range.
 
-</br>
 
 **Central:** The laptop used to receive video footage from both vehicles.
 
-</br>
 
 **Rover Control:** The controller used to transmit movement controls to the rover.
 
-</br>
 
 **Drone Control:** The controller used to transmit movement controls to the drone.
 
-</br>
 
 **Ground Station:** Refers to all command controllers and receivers-- central, rover control, and drone control.
 
@@ -82,15 +65,12 @@ Major changes will be documented in the ![Changelog](docs/about/changelog.md). T
 
 Multi-line comments at the beginning of every function explaining what it does, the return value, and any parameters.
 
-</br>
 
 Multi-line comments at the beginning of every class detailing the class's purpose, the author(s), and date last updated.
 
-</br>
 
 Single line comment before any complex code blocks.
 
-</br>
 
 **Tags**
 
