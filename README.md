@@ -11,6 +11,7 @@ Wireless Assessment Rover with Drone Extended Network
 <details><summary><b>Contents</b></summary>
 
 - [Description](Description)
+- [Definitions](Definitions)
 - [Goals](Goals)
 - [Changelog](Changelog)
 - [Standards](Standards)
@@ -35,6 +36,32 @@ This project is still a work in progress.
 
 ---
 
+## Definitions
+
+**Rover:** The ground vehicle used for reconnaissance.
+
+</br>
+
+**Drone:** The air vehicle used to extend the rover's range.
+
+</br>
+
+**Central:** The laptop used to receive video footage from both vehicles.
+
+</br>
+
+**Rover Control:** The controller used to transmit movement controls to the rover.
+
+</br>
+
+**Drone Control:** The controller used to transmit movement controls to the drone.
+
+</br>
+
+**Ground Station:** Refers to all command controllers and receivers-- central, rover control, and drone control.
+
+---
+
 ## Goals
 
 - Communicate with both the ground and air vehicles to control them.
@@ -45,7 +72,7 @@ This project is still a work in progress.
 
 ## Changelog
 
-Major changes will be documented in ![Changelog](docs/about/changelog.md). These changes will be tagged as a new version.
+Major changes will be documented in the ![Changelog](docs/about/changelog.md). These changes will be tagged as a new version.
 
 ---
 
@@ -73,4 +100,4 @@ Single line comment before any complex code blocks.
 
 ### Naming Conventions
 
-Both variables and functions should be named using camel case (e.g. camelCase).
+Variables, functions, and classes should be named using camel case (e.g. camelCase).
