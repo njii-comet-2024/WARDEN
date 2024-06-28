@@ -1,4 +1,3 @@
-
 # This is server code to send video frames over UDP
 import cv2, imutils, socket
 import numpy as np
@@ -37,10 +36,15 @@ while True:
 			break
 		if cnt == framesToCount:
 			try:
+<<<<<<< HEAD
 				fps = round(framesToCount/(time.time()-st))
 				st=time.time()
 				cnt=0
+=======
+				fps = round(frames_to_count / (time.time() - st))
+				st = time.time()
+				cnt = 0
+>>>>>>> a5d8ef8361a9446ca0abb14f3c97b5bec7cd17bb
 			except:
 				pass
-		cnt+=1
-
+		cnt += 1

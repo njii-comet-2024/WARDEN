@@ -2,14 +2,18 @@
 Transmits rover video to central either directly or through drone
 Receives control code from central or drone and runs on rover
 
-@author [name] [github]
+@author Zoe Rizzo [@zizz-0]
 
 Date last modified: 06/26/2024
 """
 
-# Libraries
+# Pin locations
+LEFT_JOYSTICK = 0
+RIGHT_JOYSTICK = 0
 
-class Control:
+def drive():
+    # Main drive loop
+    print("vroom")
 
-    def __init__(self):
-        print("initializing")
+if __name__ == '__main__':
+    drive()
