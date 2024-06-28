@@ -12,7 +12,7 @@ hostName = socket.gethostname()
 hostIp = '10.255.0.137'#  socket.gethostbyname(hostName)
 print(hostIp)
 port = 9999
-socketAddress = (hostIp,port)
+socketAddress = (hostIp, port)
 serverSocket.bind(socketAddress)
 print('Listening at:', socketAddress)
 
@@ -25,7 +25,7 @@ while True:
 	WIDTH=400
 	while(vid.isOpened()):
 		_,frame = vid.read()
-		frame = imutils.resize(frame,width=WIDTH)
+		frame = imutils.resize(frame, width=WIDTH)
 		encoded, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY,80])
 		message = base64.b64encode(buffer)
 		serverSocket.sendto(message,clientAddr)
