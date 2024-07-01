@@ -9,17 +9,40 @@ Date last modified: 06/26/2024
 # Libraries
 import socket
 
-#create socket object
-s = socket.socket()
+#dictionary for controls
+controls = {
+    "rightJoy": 0,
+    "leftJoy": 0,
+    "rightTrigger": 0,
+    "leftTrigger": 0,
+    "cameraToggle": 0,
+    "controlToggle": 0,
+    "cameraTelescope": 0,
+    "cameraSwivelLeft": 0,
+    "cameraSwivelRight": 0
+}
 
-#Define port for connection
-port = 56789
+def clientProgram():
+    #create socket object
+    s = socket.socket()
+    #Define port for connection
+    port = 56789
 
-#connect to the server on local computer
-s.connect(('127.0.0.1', port))
+    #connect to the server on local computer
+    s.connect(('127.0.0.1', port))
 
-#recieve data from the server and decoding to get string 
-print(s.recv(1024).decode())
+    #get input
+    message = input(" -> ")
 
-#close the connection
-s.close()
+    while message.lower().strip() != 'bye':
+        s.send(message.encode()) #send message
+        data = s.recv(1024).decode() #recieve response
+
+        print('received from server: ' + data) #recieve response
+
+        message = input(" -> ") #again take input
+
+    #close the connection
+    s.close()
+
+clientProgram()
