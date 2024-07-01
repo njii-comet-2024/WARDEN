@@ -16,7 +16,7 @@ s = socket.socket()
 port = 56789
 
 #connect to the server on local computer
-s.connect(('127.0.0.1', port))
+s.connect(('10.255.0.140', port))
 
 #recieve data from the server and decoding to get string 
 print(s.recv(1024).decode())
