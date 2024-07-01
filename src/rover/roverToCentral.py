@@ -41,14 +41,25 @@ CAMERA = 0
 
 # Global variables
 
+
+# Controls:
+#
+# Right joystick  --> right treads
+# Left joystick   --> left treads
+# Right trigger   --> whegs fwd
+# Left trigger    --> whegs back
+# Right bumper    --> camera swivel right
+# Left bumper     --> camera swivel left
+# B               --> camera type toggle
+# X               --> camera telescope toggle
+# Y               --> control toggle [drone vs direct]
+
 # Controller inputs to receive from central
 controls = {
     "rightJoy": 0,
     "leftJoy": 0,
     "rightTrigger": 0,
     "leftTrigger": 0,
-    "rightBumper": 0,
-    "leftBumper": 0,
     "cameraToggle": 0,
     "controlToggle": 0,
     "cameraTelescope": 0,
@@ -175,14 +186,6 @@ class Rover:
                 print("Left trigger")
             else:
                 rightWheg = 0
-            
-            if(controls["rightBumper"] > 0):
-                
-                print("Right bumper")
-            elif(controls["leftBumper"] > 0):
-
-                print("Left bumper")
-            else:
                 leftWheg = 0
 
             if(controls["cameraToggle"] > 0):
