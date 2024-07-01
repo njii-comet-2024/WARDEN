@@ -63,17 +63,19 @@ class ControlState:
         self._state = 0
 
     """
-    Switches state from reg to IR (and vice versa)
+    Switches control state from direct to drone (and vice versa)
     @param `control` : the current control state
     """
     def switch(self, control):
         if control == 0:
             self._state = 1
             hostIp = '127.0.0.1' # change later
+            # disconnect from old IP
             connect(hostIp)
         elif control == 1:
             self._state = 0
             hostIp = '127.0.0.1' # change later
+            # disconnect from old IP
             connect(hostIp)
         else:
             pass # incorrect input

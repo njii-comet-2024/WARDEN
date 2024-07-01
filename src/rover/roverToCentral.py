@@ -102,7 +102,7 @@ class ControlState:
         self._state = 0
 
     """
-    Switches state from reg to IR (and vice versa)
+    Switches control state from direct to drone (and vice versa)
     @param `control` : the current control state
     """
     def switch(self, control):
