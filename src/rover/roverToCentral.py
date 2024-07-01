@@ -86,6 +86,44 @@ rightWheg = Motor(RIGHT_WHEG_FWD, RIGHT_WHEG_BACK)
 leftWheg = Motor(LEFT_WHEG_FWD, LEFT_WHEG_BACK)
 
 """
+Function to connect to a certain IP address
+@param `ip` : IP address of either drone or rover
+"""
+def connect(ip):
+    print("fill out later")
+
+"""
+State interface used to determine and switch control state (from direct to drone)
+0 --> direct
+1 --> drone
+"""
+class ControlState:
+    def __init__(self):
+        self._state = 0
+
+    """
+    Switches state from reg to IR (and vice versa)
+    @param `control` : the current control state
+    """
+    def switch(self, control):
+        if control == 0:
+            self._state = 1
+            hostIp = '127.0.0.1' # change later
+            connect(hostIp)
+        elif control == 1:
+            self._state = 0
+            hostIp = '127.0.0.1' # change later
+            connect(hostIp)
+        else:
+            pass # incorrect input
+    
+    """
+    Returns the current state
+    """
+    def getState(self):
+        return self._state
+
+"""
 State interface used to determine and switch camera state (from regular to IR)
 """
 class CameraTypeState:
@@ -114,7 +152,8 @@ class CameraTypeState:
 State interface used to determine what position the camera is in 
 """
 class CameraTelescopeState:
-    _state = 'UP'
+    def __init__(self):
+        self._state = 'UP'
 
     """
     Switches state from up to down (and vice versa)
@@ -136,19 +175,25 @@ class CameraTelescopeState:
     def getState(self):
         return self._state
 
+"""
+Class that defines a rover and its functionality
+"""
 class Rover:
-    loopCount = 0
-    cameraTypeState = CameraTypeState()
-    cameraTelescopeState = CameraTelescopeState()
+    """
+    Initializes an instance of Rover 
+    """
+    def __init__(self):
+        self.loopCount = 0
+        self.cameraTypeState = CameraTypeState()
+        self.cameraTelescopeState = CameraTelescopeState()
+        self.on = True # Rover running
 
     """
     Starts the rover and runs the drive loop
-    @param `max_loop_count` : how many loops to wait through in the event of an extended period of no controls transmitted
+    @param `maxLoopCount` : how many loops to wait through in the event of an extended period of no controls transmitted
     """
     def start(self, maxLoopCount=None):
         print("Starting rover...")
-
-        self.on = True # Rover running
 
         while self.on:
             self.drive()

@@ -47,24 +47,34 @@ controls = {
 }
 
 """
+Function to connect to a certain IP address
+@param `ip` : IP address of either drone or rover
+"""
+def connect(ip):
+    print("fill out later")
+
+"""
 State interface used to determine and switch control state (from direct to drone)
 0 --> direct
 1 --> drone
 """
 class ControlState:
-    _state = 0
+    def __init__(self):
+        self._state = 0
 
     """
     Switches state from reg to IR (and vice versa)
-    @param `control` : the current control
+    @param `control` : the current control state
     """
     def switch(self, control):
         if control == 0:
             self._state = 1
             hostIp = '127.0.0.1' # change later
+            connect(hostIp)
         elif control == 1:
             self._state = 0
             hostIp = '127.0.0.1' # change later
+            connect(hostIp)
         else:
             pass # incorrect input
     
@@ -74,18 +84,28 @@ class ControlState:
     def getState(self):
         return self._state
 
+"""
+Class that defines a drone and its functionality in transmitting controls
+"""
 class Drone:
-    loopCount = 0
-
-    def start(self, maxLoopCount=None):
+    """
+    Initializes an instance of Drone 
+    """
+    def __init__(self):
+        self.controlState = ControlState()
         self.on = True
+
+    """
+    Starts the drone transmitter and runs the transmission loop
+    """
+    def start(self):
         while self.on:
             self.sendControls()
-            if(self.loopCount > maxLoopCount):
-                    self.on = False
 
-    def sendControls():
-        controlState = ControlState()
+    """
+    Main loop to transmit controller input
+    """
+    def sendControls(self):
         controlInput = gamepad.read(64)
         if controlInput:
             print(controlInput)
@@ -102,7 +122,7 @@ class Drone:
 
             if(controls["controlToggle"] > 0):
                 print("Control switched")
-                ctrl = controlState.getState()
-                controlState.switch(ctrl)
+                ctrl = self.controlState.getState()
+                self.controlState.switch(ctrl)
             
             # TODO: add code to connect to IP address and transmit to rover or drone
