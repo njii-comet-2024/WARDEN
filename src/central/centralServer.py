@@ -24,20 +24,18 @@ def serverProgram():
     s.listen(5)
     print ("socket is listening")
 
+    #accept new connection
+    c, addr = s.accept()
+    print ('Got connection from', addr)
+
     while True:
-        #establish connection with client
-        c, addr = s.accept()
-        print ('Got connection from', addr)
-
-        #send message to the client. 
+        #recieve data from client and print it
         data = c.recv(1024).decode()
-        #if data is not recieved then break
-        if not data:
-            break
-
         print("from connected user: " + str(data))
-        data = input(' -> ')
-        c.send(data.encode())
+
+        #if statement to break the cycle
+        if data == 'endServer':
+            break
 
     #Close the connection
     c.close()

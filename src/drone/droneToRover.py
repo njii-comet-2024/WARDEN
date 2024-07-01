@@ -34,11 +34,9 @@ def clientProgram():
     #get input
     message = input(" -> ")
 
-    while message.lower().strip() != 'bye':
-        s.send(message.encode()) #send message
-        data = s.recv(1024).decode() #recieve response
+    while message.lower().strip() != 'endClient':
 
-        print('received from server: ' + data) #recieve response
+        s.send(message.encode()) #send message
 
         message = input(" -> ") #again take input
 
