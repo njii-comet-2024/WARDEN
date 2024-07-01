@@ -51,8 +51,7 @@ controls = {
     "leftBumper": 0,
     "cameraToggle": 0,
     "controlToggle": 0,
-    "cameraTelescopeUp": 0,
-    "cameraTelescopeDown": 0,
+    "cameraTelescope": 0,
     "cameraSwivelLeft": 0,
     "cameraSwivelRight": 0
 }
@@ -108,9 +107,36 @@ class CameraTypeState:
     def getState(self):
         return self._state
 
+"""
+State interface used to determine what position the camera is in 
+"""
+class CameraTelescopeState:
+    _state = 'UP'
+
+    """
+    Switches state from up to down (and vice versa)
+    @param `pos` : the current position of the camera
+    """
+    def switch(self, pos):
+        if pos == 'UP':
+            self._state = 'DOWN'
+            cameraY.backward()
+        elif pos == 'DOWN':
+            self._state = 'UP'
+            cameraY.forward()
+        else:
+            pass # incorrect input
+
+    """
+    Returns the current state
+    """
+    def getState(self):
+        return self._state
+
 class Rover:
     loopCount = 0
-    cameraType = CameraTypeState
+    cameraTypeState = CameraTypeState
+    cameraTelescopeState = CameraTelescopeState
 
     """
     Starts the rover and runs the drive loop
@@ -141,24 +167,26 @@ class Rover:
 
             if(controls["rightTrigger"] > 0):
                 rightWheg = 1
-                print("Right trigger")
-            elif(controls["rightBumper"] > 0):
+                leftWheg = 1
+                print("Left trigger")
+            elif(controls["leftTrigger"] > 0):
                 rightWheg = -1
-                print("Right bumper")
+                leftWheg = -1
+                print("Left trigger")
             else:
                 rightWheg = 0
             
-            if(controls["leftTrigger"] > 0):
-                leftWheg = 1
-                print("Left trigger")
+            if(controls["rightBumper"] > 0):
+                
+                print("Right bumper")
             elif(controls["leftBumper"] > 0):
-                leftWheg = -1
+
                 print("Left bumper")
             else:
                 leftWheg = 0
 
             if(controls["cameraToggle"] > 0):
-                self.cameraType.switch()
+                self.cameraTypeState.switch()
                 print("Camera toggle")
 
             if(controls["cameraSwivelLeft"] > 0):
@@ -169,12 +197,7 @@ class Rover:
                 cameraX.value(-1)
                 print("Camera swivel right")
             
-            if(controls["cameraTelescopeDown"] > 0):
+            if(controls["cameraTelescope"] > 0):
                 # if encoder steps < max steps
-                cameraY.backward()
-                print("Camera telescope down")
-                
-            if(controls["cameraTelescopeUp"] > 0):
-                # if encoder steps < max steps
-                cameraY.forward()
-                print("Camera telescope up")
+                self.cameraTelescopeState.switch()
+                print("Camera telescope switch")
