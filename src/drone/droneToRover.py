@@ -28,21 +28,21 @@ def clientProgram():
     #Define port for connection
     port = 56789
 
-#connect to the server on local computer
-s.connect(('10.255.0.140', port))
+    #connect to the server on local computer
+    s.connect(('10.255.0.140', port))
 
-#get input
-message = input(" -> ")
+    #get input
+    message = input(" -> ")
 
-while message.lower().strip() != 'bye':
-    s.send(message.encode()) #send message
-    data = s.recv(1024).decode() #recieve response
+    while message.lower().strip() != 'bye':
+        s.send(message.encode()) #send message
+        data = s.recv(1024).decode() #recieve response
 
-    print('received from server: ' + data) #recieve response
+        print('received from server: ' + data) #recieve response
 
-    message = input(" -> ") #again take input
+        message = input(" -> ") #again take input
 
-#close the connection
-s.close()
+    #close the connection
+    s.close()
 
 clientProgram()
