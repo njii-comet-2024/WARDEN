@@ -4,7 +4,7 @@ Receives control code from central or drone and runs on rover
 
 @author Zoe [@zizz-0]
 
-Date last modified: 06/28/2024
+Date last modified: 07/01/2024
 """
 
 from gpiozero import Servo
@@ -69,8 +69,8 @@ leftSpeed = 0
 
 
 # Electronics declarations
-cameraX = Servo(CAMERA_X)
-cameraEncoder = RotaryEncoder(CAMERA_ENCODER_ONE, CAMERA_ENCODER_TWO)
+cameraX = Servo(CAMERA_X) # Camera swivel
+cameraEncoder = RotaryEncoder(CAMERA_ENCODER_ONE, CAMERA_ENCODER_TWO, max_steps=10)
 cameraY = Motor(CAMERA_Y_FWD, CAMERA_Y_BACK) # Camera telecoping
 
 # Tread drive motors
@@ -108,33 +108,9 @@ class CameraTypeState:
     def getState(self):
         return self._state
 
-# """
-# State interface used to determine what position the camera is in 
-# """
-# class CameraTelescopeState:
-#     _state = 'UP'
-
-#     """
-#     Switches state from up to down (and vice versa)
-#     @param `pos` : the current position of the camera
-#     """
-#     def switch(self, pos):
-#         if pos == 'UP':
-#             self._state = 'DOWN'
-#         elif pos == 'DOWN':
-#             self._state = 'UP'
-#         else:
-#             pass # incorrect input
-    
-#     """
-#     Returns the current state
-#     """
-#     def getState(self):
-#         return self._state
-
 class Rover:
-    loop_count = 0
-    cameraPosition = CameraTelescopeState
+    loopCount = 0
+    cameraType = CameraTypeState
 
     """
     Starts the rover and runs the drive loop
@@ -155,7 +131,7 @@ class Rover:
     Main drive loop
     Will receive controller input from central and use them to control electronics
     """
-    def drive():
+    def drive(self):
         while True:
             # TODO: get controls from central
             # if [no controls]:
@@ -163,26 +139,42 @@ class Rover:
             rightSpeed = controls["rightJoy"]
             leftSpeed = controls["leftJoy"]
 
-            if(controls["rightTrigger"] == 1):
+            if(controls["rightTrigger"] > 0):
                 rightWheg = 1
-            elif(controls["rightBumper"] == 1):
+                print("Right trigger")
+            elif(controls["rightBumper"] > 0):
                 rightWheg = -1
+                print("Right bumper")
             else:
                 rightWheg = 0
             
-            if(controls["leftTrigger"] == 1):
+            if(controls["leftTrigger"] > 0):
                 leftWheg = 1
-            elif(controls["leftBumper"] == 1):
+                print("Left trigger")
+            elif(controls["leftBumper"] > 0):
                 leftWheg = -1
+                print("Left bumper")
             else:
                 leftWheg = 0
 
-            if(controls["cameraSwivelLeft"] == 1):
+            if(controls["cameraToggle"] > 0):
+                self.cameraType.switch()
+                print("Camera toggle")
+
+            if(controls["cameraSwivelLeft"] > 0):
                 cameraX.value(0.5)
+                print("Camera swivel left")
                 
-            if(controls["cameraSwivelRight"] == 1):
+            if(controls["cameraSwivelRight"] > 0):
                 cameraX.value(-1)
+                print("Camera swivel right")
             
-            if(controls["cameraTelescopeDown"] == 1):
-                
+            if(controls["cameraTelescopeDown"] > 0):
+                # if encoder steps < max steps
                 cameraY.backward()
+                print("Camera telescope down")
+                
+            if(controls["cameraTelescopeUp"] > 0):
+                # if encoder steps < max steps
+                cameraY.forward()
+                print("Camera telescope up")
