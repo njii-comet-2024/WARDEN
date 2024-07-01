@@ -9,7 +9,7 @@ bufferSize = 65536
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
 hostName = socket.gethostname()
-hostIp = '10.255.0.137'#  socket.gethostbyname(hostName)
+hostIp = socket.gethostbyname(hostName)
 print(hostIp)
 port = 9999
 socketAddress = (hostIp,port)
