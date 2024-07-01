@@ -1,6 +1,6 @@
 # This is server code to send video frames over UDP
-import cv2, imutils, socket
-import numpy as np
+import cv2, imutils, socket # type: ignore
+import numpy as np # type: ignore
 import time
 import base64
 
@@ -8,7 +8,7 @@ BUFF_SIZE = 65536
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, BUFF_SIZE)
 host_name = socket.gethostname()
-host_ip = '172.16.224.229' #socket.gethostbyname(host_name)
+host_ip = '10.255.0.140' #socket.gethostbyname(host_name)
 print(host_ip)
 port = 9999
 socket_address = (host_ip, port)
