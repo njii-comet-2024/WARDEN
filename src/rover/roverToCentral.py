@@ -138,14 +138,14 @@ class CameraTelescopeState:
 
 class Rover:
     loopCount = 0
-    cameraTypeState = CameraTypeState
-    cameraTelescopeState = CameraTelescopeState
+    cameraTypeState = CameraTypeState()
+    cameraTelescopeState = CameraTelescopeState()
 
     """
     Starts the rover and runs the drive loop
     @param `max_loop_count` : how many loops to wait through in the event of an extended period of no controls transmitted
     """
-    def start(self, max_loop_count=None):
+    def start(self, maxLoopCount=None):
         print("Starting rover...")
 
         self.on = True # Rover running
@@ -153,7 +153,7 @@ class Rover:
         while self.on:
             self.drive()
             # If no commands are sent for an extended period of time
-            if(self.loop_count > max_loop_count):
+            if(self.loopCount > maxLoopCount):
                 self.on = False
 
     """
@@ -182,7 +182,8 @@ class Rover:
 
             # Camera controls
             if(controls["cameraToggle"] > 0):
-                self.cameraTypeState.switch()
+                camera = CameraTypeState.getState()
+                self.cameraTypeState.switch(camera)
                 print("Camera toggle")
 
             if(controls["cameraSwivelLeft"] > 0):
@@ -195,7 +196,8 @@ class Rover:
             
             if(controls["cameraTelescope"] > 0):
                 # if encoder steps < max steps
-                self.cameraTelescopeState.switch()
+                pos = CameraTelescopeState.getState()
+                self.cameraTelescopeState.switch(pos)
                 print("Camera telescope switch")
 
             # Tread controls
