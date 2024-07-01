@@ -1,25 +1,15 @@
-
 # This is client code to receive video frames over UDP
 import cv2, imutils, socket # type: ignore
 import numpy as np # type: ignore
 import time
 import base64
 
-<<<<<<< HEAD
-BUFF_SIZE = 65536
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, BUFF_SIZE)
-host_name = socket.gethostname()
-host_ip = '10.255.0.137' #socket.gethostbyname(host_name)
-print(host_ip)
-=======
 bufferSize = 65536
 clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
 hostName = socket.gethostname()
 hostIp = '10.255.0.137'#  socket.gethostbyname(hostName)
 print(hostIp)
->>>>>>> refs/remotes/origin/communications
 port = 9999
 message = b'Hello'
 

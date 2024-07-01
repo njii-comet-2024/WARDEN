@@ -5,21 +5,12 @@ import numpy as np # type: ignore
 import time
 import base64
 
-<<<<<<< HEAD
-BUFF_SIZE = 65536
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, BUFF_SIZE)
-host_name = socket.gethostname()
-host_ip = '10.255.0.140' #socket.gethostbyname(host_name)
-print(host_ip)
-=======
 bufferSize = 65536
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
 hostName = socket.gethostname()
 hostIp = socket.gethostbyname(hostName)
 print(hostIp)
->>>>>>> refs/remotes/origin/communications
 port = 9999
 socketAddress = (hostIp,port)
 serverSocket.bind(socketAddress)
