@@ -2,7 +2,7 @@
 Transmits rover video to central either directly or through drone
 Receives control code from central or drone and runs on rover
 
-@author Zoe [@zizz-0]
+@author Zoe Rizzo [@zizz-0]
 
 Date last modified: 07/01/2024
 """
@@ -41,7 +41,6 @@ CAMERA = 0
 
 # Global variables
 
-
 # Controls:
 #
 # Right joystick  --> right treads
@@ -66,13 +65,6 @@ controls = {
     "cameraSwivelLeft": 0,
     "cameraSwivelRight": 0
 }
-
-# 0, 1, or -1
-# 0 --> off
-# 1 --> fwd
-# -1 --> back
-rightWheg = 0
-leftWheg = 0
 
 rightSpeed = 0
 leftSpeed = 0
@@ -173,21 +165,22 @@ class Rover:
             # TODO: get controls from central
             # if [no controls]:
             #   self.loop_count += 1
+
+            # These will probably have to be converted from input to output values
             rightSpeed = controls["rightJoy"]
             leftSpeed = controls["leftJoy"]
 
+            # Whegs controls
             if(controls["rightTrigger"] > 0):
-                rightWheg = 1
-                leftWheg = 1
-                print("Left trigger")
+                rightWheg.forward()
+                leftWheg.forward()
+                print("Whegs fwd")
             elif(controls["leftTrigger"] > 0):
-                rightWheg = -1
-                leftWheg = -1
-                print("Left trigger")
-            else:
-                rightWheg = 0
-                leftWheg = 0
+                rightWheg.backward()
+                leftWheg.backward()
+                print("Whegs back")
 
+            # Camera controls
             if(controls["cameraToggle"] > 0):
                 self.cameraTypeState.switch()
                 print("Camera toggle")
@@ -204,3 +197,24 @@ class Rover:
                 # if encoder steps < max steps
                 self.cameraTelescopeState.switch()
                 print("Camera telescope switch")
+
+            # Tread controls
+            if(controls["rightJoy"] > 0):
+                rightTreadOne.forward(rightSpeed)
+                rightTreadTwo.forward(rightSpeed)
+                print("Right treads")
+
+            if(controls["leftJoy"] > 0):
+                leftTreadOne.forward(leftSpeed)
+                leftTreadTwo.forward(leftSpeed)
+                print("Left treads")
+
+            if(controls["rightJoy"] < 0):
+                rightTreadOne.backward(rightSpeed)
+                rightTreadTwo.backward(rightSpeed)
+                print("Right treads")
+
+            if(controls["leftJoy"] < 0):
+                leftTreadOne.backward(leftSpeed)
+                leftTreadTwo.backward(leftSpeed)
+                print("Left treads")
