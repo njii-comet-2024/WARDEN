@@ -3,39 +3,23 @@ Transmits control code to rover
 
 @author [Vito Tribuzio] [Snoopy-0]
 
-Date last modified: 07/1/2024
+Date last modified: 06/26/2024
 """
 
 # Libraries
 import socket
-import sys
 
-#create a socket
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#create socket object
+s = socket.socket()
 
-#reserved a port on computer, can be anything
+#Define port for connection
 port = 56789
 
-#bind to the port, no ip in ip field which makes server listen to request
-s.bind(('', port))
-print ("socket binded to %s" %(port))
+#connect to the server on local computer
+s.connect(('127.0.0.1', port))
 
-#put socket into listening mode
-s.listen(5)
-print ("socket is listening")
+#recieve data from the server and decoding to get string 
+print(s.recv(1024).decode())
 
-while True:
-    #establish connection with client
-    c, addr = s.accept()
-    print ('Got connection from', addr)
-
-    #send message to the client. 
-    c.send('connected successfully'.encode())
-
-    #Close the connection
-    c.close()
-
-    break
-
-#send commands to the drone to send to the ground vehicle
-#def commands_to_drone(data):
+#close the connection
+s.close()
