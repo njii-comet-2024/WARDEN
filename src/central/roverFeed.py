@@ -12,11 +12,25 @@ import pickle
 import struct
 
 
+
 class Camera:
 
     def __init__(self):
         print("initializing")
 
-    def getDroneFeed():
-        capture = cv.VideoCapture(2) # need origin of camera, 2 potentially works, potentially doesnt
+    def getRoverFeed():
+        """
+        This function recieves rover camera feed
+        """
+        capture = cv.VideoCapture(1) # need origin of camera, 2 potentially works, potentially doesnt
         
+        while True:
+            isTrue, frame = capture.read()
+            cv.imshow('frame', frame)
+            if cv.waitKey(20) & 0xFF ==ord('q'):
+                break
+
+        capture.release()
+
+Camera.getRoverFeed()
+
