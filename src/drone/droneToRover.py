@@ -32,14 +32,15 @@ def clientProgram():
     s.connect(('10.255.0.140', port))
 
     #get input
-    message = input(" -> ")
+    #message = input(" -> ")
 
-    while message.lower().strip() != 'endClient':
-
-        s.send(message.encode()) #send message
-
-        message = input(" -> ") #again take input
-
+    while True:
+        #recieve message from server and print
+        message = s.recv(1024).decode()
+        print("From server: " + message)
+        #if certain message is sent, terminate program
+        if message == 'endClient':
+            break
     #close the connection
     s.close()
 

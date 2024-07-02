@@ -20,7 +20,7 @@ def serverProgram():
     s.bind(('', port))
     print ("socket binded to %s" %(port))
 
-#put socket into listening mode
+    #put socket into listening mode
     s.listen(5)
     print ("socket is listening")
 
@@ -28,14 +28,22 @@ def serverProgram():
     c, addr = s.accept()
     print ('Got connection from', addr)
 
+    data = input(' -> ')
+
     while True:
+        
         #recieve data from client and print it
-        data = c.recv(1024).decode()
-        print("from connected user: " + str(data))
+        #data = c.recv(1024).decode()
+        #print("from connected user: " + str(data))
+
+        #send data to the client
+        c.send(data.encode())
 
         #if statement to break the cycle
         if data == 'endServer':
             break
+        #take another input
+        data = input(' -> ')
 
     #Close the connection
     c.close()
