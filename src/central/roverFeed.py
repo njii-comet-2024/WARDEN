@@ -6,9 +6,5 @@ Receives video feed from rover
 Date last modified: 06/26/2024
 """
 
-# Libraries
-
-class Control:
-
-    def __init__(self):
-        print("initializing")
+def __init__(self):
+    print("initializing")
