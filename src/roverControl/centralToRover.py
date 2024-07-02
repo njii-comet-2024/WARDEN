@@ -49,6 +49,8 @@ controls = {
     "leftJoy": 0,
     "rightTrigger": 0,
     "leftTrigger": 0,
+    "rightBumper": 0,
+    "leftBumper": 0,
     "cameraToggle": 0,
     "controlToggle": 0,
     "cameraTelescope": 0,
@@ -77,7 +79,6 @@ class ControlState:
             print("Switching to drone")
         elif control == 1:
             self._state = 0
-            self._ip = '10.255.0.102' # change later
             s.bind((CENTRAL_IP, port))
             s.listen()
             print("Switching to central")
@@ -102,7 +103,9 @@ class Transmitter:
         self.on = True
         s.bind((CENTRAL_IP, port))
         s.listen()
-        c, addr = s.accept()
+        print("Listening for connection")
+        self.c, self.addr = s.accept()
+        print("Got connection from", self.addr)
 
     """
     Starts the transmitter and runs the transmission loop
@@ -123,11 +126,16 @@ class Transmitter:
                     controls["cameraToggle"] = 1
                 if event.button == buttonKeys['square']:
                     controls["controlToggle"] = 1
+                    
                 if event.button == buttonKeys['triangle']:
                     controls["cameraTelescope"] = 1
                 if event.button == buttonKeys['L1']:
-                    controls["cameraSwivelLeft"] = 1
+                    controls["leftBumper"] = 1
                 if event.button == buttonKeys['R1']:
+                    controls["rightBumper"] = 1
+                if event.button == buttonKeys['leftArrow']:
+                    controls["cameraSwivelLeft"] = 1
+                if event.button == buttonKeys['rightArrow']:
                     controls["cameraSwivelRight"] = 1
                 if event.button == buttonKeys['touchpad']:
                     self.on = False
@@ -140,8 +148,12 @@ class Transmitter:
                 if event.button == buttonKeys['triangle']:
                     controls["cameraTelescope"] = 0
                 if event.button == buttonKeys['L1']:
-                    controls["cameraSwivelLeft"] = 0
+                    controls["leftBumper"] = 0
                 if event.button == buttonKeys['R1']:
+                    controls["rightBumper"] = 0
+                if event.button == buttonKeys['leftArrow']:
+                    controls["cameraSwivelLeft"] = 0
+                if event.button == buttonKeys['rightArrow']:
                     controls["cameraSwivelRight"] = 0
 
             if event.type == pygame.JOYAXISMOTION:
@@ -172,6 +184,7 @@ class Transmitter:
             print(controls.values())
 
             serializedControls = pickle.dumps(controls)
+            self.c.send(serializedControls)
 
-trans = Transmitter()
-trans.start()
+transmit = Transmitter()
+transmit.start()
