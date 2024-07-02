@@ -84,12 +84,14 @@ class ControlState:
     def switch(self, control):
         if control == 0:
             self._state = 1
-            time.sleep(2)
+            s.close()
+            # time.sleep(2)
             s.connect((DRONE_IP, port))
             print("Switching to drone")
         elif control == 1:
             self._state = 0
-            time.sleep(2)
+            s.close()
+            # time.sleep(2)
             s.connect((CENTRAL_IP, port))
             print("Switching to central")
         else:
