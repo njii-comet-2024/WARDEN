@@ -17,7 +17,7 @@ def serverProgram():
     port = 56789
 
     #bind to the port, no ip in ip field which makes server listen to request
-    s.bind(('', port))
+    s.bind(('10.255.0.140', port))
     print ("socket binded to %s" %(port))
 
     #put socket into listening mode
