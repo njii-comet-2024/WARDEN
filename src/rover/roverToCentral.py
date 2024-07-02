@@ -11,6 +11,8 @@ from gpiozero import Servo
 from gpiozero import Motor
 from gpiozero import RotaryEncoder
 import socket
+import json
+import pickle
 
 # Port locations
 RIGHT_TREAD_ONE_FWD = 0
@@ -41,6 +43,9 @@ CAMERA_Y_BACK = 0
 CAMERA = 0
 
 # Global variables
+
+DRONE_IP = '10.255.0.102'
+CENTRAL_IP = '10.255.0.102'
 
 # Controls:
 #
@@ -88,7 +93,6 @@ rightTreadTwo = Motor(RIGHT_TREAD_TWO_FWD, RIGHT_TREAD_TWO_BACK)
 rightWheg = Motor(RIGHT_WHEG_FWD, RIGHT_WHEG_BACK)
 leftWheg = Motor(LEFT_WHEG_FWD, LEFT_WHEG_BACK)
 
-
 """
 State interface used to determine and switch control state (from direct to drone)
 0 --> direct
@@ -105,12 +109,12 @@ class ControlState:
     def switch(self, control):
         if control == 0:
             self._state = 1
-            hostIp = '127.0.0.1' # change later
-            s.connect((ip, port))
+            s.connect((DRONE_IP, port))
+            print("Switching to drone")
         elif control == 1:
             self._state = 0
-            hostIp = '127.0.0.1' # change later
-            s.connect((ip, port))
+            s.connect((CENTRAL_IP, port))
+            print("Switching to central")
         else:
             pass # incorrect input
     
@@ -183,7 +187,9 @@ class Rover:
         self.loopCount = 0
         self.cameraTypeState = CameraTypeState()
         self.cameraTelescopeState = CameraTelescopeState()
+        self.controlState = ControlState()
         self.on = True # Rover running
+        s.connect(CENTRAL_IP, port)
 
     """
     Starts the rover and runs the drive loop
@@ -208,6 +214,8 @@ class Rover:
             # if [no controls]:
             #   self.loop_count += 1
 
+            controls = pickle.loads()
+
             # These will probably have to be converted from input to output values
             rightSpeed = controls["rightJoy"]
             leftSpeed = controls["leftJoy"]
@@ -222,9 +230,14 @@ class Rover:
                 leftWheg.backward()
                 print("Whegs back")
 
+            if(controls["controlToggle"] > 0):
+                ctrl = self.controlState.getState()
+                self.controlState.switch(ctrl)
+                print("Control toggle")
+
             # Camera controls
             if(controls["cameraToggle"] > 0):
-                camera = CameraTypeState.getState()
+                camera = self.cameraTypeState.getState()
                 self.cameraTypeState.switch(camera)
                 print("Camera toggle")
 
@@ -238,7 +251,7 @@ class Rover:
             
             if(controls["cameraTelescope"] > 0):
                 # if encoder steps < max steps
-                pos = CameraTelescopeState.getState()
+                pos = self.cameraTelescopeState.getState()
                 self.cameraTelescopeState.switch(pos)
                 print("Camera telescope switch")
 

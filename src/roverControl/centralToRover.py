@@ -10,9 +10,10 @@ Date last modified: 07/01/2024
 import socket
 import pygame
 import json, os
+import pickle
 
-hostIp = '127.0.0.1' # change later
-port = 9999
+DRONE_IP = '10.255.0.102'
+CENTRAL_IP = '10.255.0.102'
 
 pygame.init()
 pygame.joystick.init()
@@ -26,6 +27,9 @@ with open(os.path.join("ps4Controls.json"), 'r+') as file:
 # 0: Left analog horizonal, 1: Left Analog Vertical, 2: Right Analog Horizontal
 # 3: Right Analog Vertical 4: Left Trigger, 5: Right Trigger
 analogKeys = {0:0, 1:0, 2:0, 3:0, 4:-1, 5: -1}
+
+s = socket.socket()
+port = 56789
 
 # Controls:
 #
@@ -52,14 +56,6 @@ controls = {
     "cameraSwivelRight": 0
 }
 
-
-"""
-Function to connect to a certain IP address
-@param `ip` : IP address of either drone or rover
-"""
-def connect(ip):
-    print("fill out later")
-
 """
 State interface used to determine and switch control state (from direct to drone)
 0 --> direct
@@ -76,14 +72,15 @@ class ControlState:
     def switch(self, control):
         if control == 0:
             self._state = 1
-            hostIp = '127.0.0.1' # change later
-            # disconnect from old IP
-            connect(hostIp)
+            s.bind((DRONE_IP, port))
+            s.listen()
+            print("Switching to drone")
         elif control == 1:
             self._state = 0
-            hostIp = '127.0.0.1' # change later
-            # disconnect from old IP
-            connect(hostIp)
+            self._ip = '10.255.0.102' # change later
+            s.bind((CENTRAL_IP, port))
+            s.listen()
+            print("Switching to central")
         else:
             pass # incorrect input
     
@@ -103,6 +100,9 @@ class Transmitter:
     def __init__(self):
         self.controlState = ControlState()
         self.on = True
+        s.bind((CENTRAL_IP, port))
+        s.listen()
+        c, addr = s.accept()
 
     """
     Starts the transmitter and runs the transmission loop
@@ -170,6 +170,8 @@ class Transmitter:
                     controls["rightTrigger"] = 0
 
             print(controls.values())
+
+            serializedControls = pickle.dumps(controls)
 
 trans = Transmitter()
 trans.start()
