@@ -246,22 +246,22 @@ class Rover:
                 print("Camera telescope switch")
 
             # Tread controls
-            if(controls["rightJoy"] > 0):
+            if(rightSpeed > 0):
                 rightTreadOne.forward(rightSpeed)
                 rightTreadTwo.forward(rightSpeed)
                 print("Right treads")
 
-            if(controls["leftJoy"] > 0):
+            if(leftSpeed > 0):
                 leftTreadOne.forward(leftSpeed)
                 leftTreadTwo.forward(leftSpeed)
                 print("Left treads")
 
-            if(controls["rightJoy"] < 0):
+            if(rightSpeed < 0):
                 rightTreadOne.backward(rightSpeed)
                 rightTreadTwo.backward(rightSpeed)
                 print("Right treads")
 
-            if(controls["leftJoy"] < 0):
+            if(leftSpeed < 0):
                 leftTreadOne.backward(leftSpeed)
                 leftTreadTwo.backward(leftSpeed)
                 print("Left treads")
