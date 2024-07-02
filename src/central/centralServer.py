@@ -31,7 +31,6 @@ def serverProgram():
     data = input(' -> ')
 
     while True:
-        
         #recieve data from client and print it
         #data = c.recv(1024).decode()
         #print("from connected user: " + str(data))
@@ -42,6 +41,7 @@ def serverProgram():
         #if statement to break the cycle
         if data == 'endServer':
             break
+
         #take another input
         data = input(' -> ')
 
