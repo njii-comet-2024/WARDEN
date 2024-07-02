@@ -22,6 +22,8 @@ This system is a deployable field recon ground vehicle. The objective is to exte
 
 This project is still a work in progress. 
 
+![Domain Model](docs\WARDEN Domain Model.png)
+
 ---
 
 ## Definitions
