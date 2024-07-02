@@ -293,8 +293,8 @@ class Rover:
                 print("Left whegs back")
 
             if(controls["controlToggle"] > 0):
-                ctrl = self.controlState.getState()
-                self.controlState.switch(ctrl)
+                # ctrl = self.controlState.getState()
+                # self.controlState.switch(ctrl)
                 print("Control toggle")
 
             # Camera controls
@@ -318,25 +318,25 @@ class Rover:
                 print("Camera telescope switch")
 
             # Tread controls
-            if(rightSpeed > 0):
-                # rightTreadOne.forward(rightSpeed)
-                # rightTreadTwo.forward(rightSpeed)
-                print("Right treads")
-
-            if(leftSpeed > 0):
-                # leftTreadOne.forward(leftSpeed)
-                # leftTreadTwo.forward(leftSpeed)
-                print("Left treads")
-
             if(rightSpeed < 0):
-                # rightTreadOne.backward(rightSpeed)
-                # rightTreadTwo.backward(rightSpeed)
-                print("Right treads")
+                # rightTreadOne.forward(abs(rightSpeed))
+                # rightTreadTwo.forward(abs(rightSpeed))
+                print("Right treads fwd")
 
             if(leftSpeed < 0):
+                # leftTreadOne.forward(abs(leftSpeed))
+                # leftTreadTwo.forward(abs(leftSpeed))
+                print("Left treads fwd")
+
+            if(rightSpeed > 0):
+                # rightTreadOne.backward(rightSpeed)
+                # rightTreadTwo.backward(rightSpeed)
+                print("Right treads back")
+
+            if(leftSpeed > 0):
                 # leftTreadOne.backward(leftSpeed)
                 # leftTreadTwo.backward(leftSpeed)
-                print("Left treads")
+                print("Left treads back")
 
 rover = Rover()
 rover.start()
