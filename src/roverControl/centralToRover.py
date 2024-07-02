@@ -174,18 +174,18 @@ class ControlState:
         return self._state
 
 """
-Class that defines a drone and its functionality in transmitting controls
+Class that defines a transmitter and its functionality in transmitting controls
 """
-class Drone:
+class Transmitter:
     """
-    Initializes an instance of Drone 
+    Initializes an instance of Transmitter 
     """
     def __init__(self):
         self.controlState = ControlState()
         self.on = True
 
     """
-    Starts the drone transmitter and runs the transmission loop
+    Starts the transmitter and runs the transmission loop
     """
     def start(self):
         while self.on:
