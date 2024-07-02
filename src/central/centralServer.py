@@ -7,16 +7,17 @@ Date last modified: 07/1/2024
 
 # Libraries
 import socket
+import sys
 
 def serverProgram():
     #create a socket
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     #reserved a port on computer, can be anything
-    port = 54423
+    port = 12345
 
     #bind to the port, no ip in ip field which makes server listen to request
-    s.bind(('10.255.0.140', port))
+    s.bind(('', port))
     print ("socket binded to %s" %(port))
 
     #put socket into listening mode
@@ -41,7 +42,6 @@ def serverProgram():
         if data == 'endServer':
             break
 
-        #take another input
         data = input(' -> ')
 
     #Close the connection
