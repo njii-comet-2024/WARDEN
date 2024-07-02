@@ -74,14 +74,6 @@ port = 56789
 # rightWheg = Motor(RIGHT_WHEG_FWD, RIGHT_WHEG_BACK)
 # leftWheg = Motor(LEFT_WHEG_FWD, LEFT_WHEG_BACK)
 
-# Pin locations
-LEFT_JOYSTICK = 0
-RIGHT_JOYSTICK = 0
-
-def drive():
-    # Main drive loop
-    print("vroom")
-
 """
 Class for manipulation Rover Camera
 """
@@ -105,7 +97,7 @@ class Camera:
                 break
 
         capture.release()
-        
+
     """
     Transmits Rover Video Data Over UDP sockets, acting as the server
     """
