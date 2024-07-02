@@ -81,21 +81,21 @@ RIGHT_JOYSTICK = 0
 def drive():
     # Main drive loop
     print("vroom")
-    
-class Camera:
+
 """
 Class for manipulation Rover Camera
 """
+class Camera:
     def __init__(self):
         print("initializing")
 
+    """
+    This function recieves rover camera feed
+    
+    this is probably unnecessary given transmitRoverFeed 
+    function
+    """
     def getRoverFeed():
-        """
-        This function recieves rover camera feed
-        
-        this is probably unnecessary given transmitRoverFeed 
-        function
-        """
         capture = cv.VideoCapture(1) # need origin of camera, 2 potentially works, potentially doesnt
         
         while True:
@@ -105,11 +105,11 @@ Class for manipulation Rover Camera
                 break
 
         capture.release()
-
+        
+    """
+    Transmits Rover Video Data Over UDP sockets, acting as the server
+    """
     def transmitRoverFeed():
-        """
-        Transmits Rover Video Data Over UDP sockets, acting as the server
-        """
         bufferSize = 65536
         serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
