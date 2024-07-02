@@ -10,6 +10,7 @@ Date last modified: 07/01/2024
 from gpiozero import Servo
 from gpiozero import Motor
 from gpiozero import RotaryEncoder
+import socket
 
 # Port locations
 RIGHT_TREAD_ONE_FWD = 0
@@ -69,6 +70,8 @@ controls = {
 rightSpeed = 0
 leftSpeed = 0
 
+s = socket.socket()
+port = 56789
 
 # Electronics declarations
 cameraX = Servo(CAMERA_X) # Camera swivel
@@ -85,12 +88,6 @@ rightTreadTwo = Motor(RIGHT_TREAD_TWO_FWD, RIGHT_TREAD_TWO_BACK)
 rightWheg = Motor(RIGHT_WHEG_FWD, RIGHT_WHEG_BACK)
 leftWheg = Motor(LEFT_WHEG_FWD, LEFT_WHEG_BACK)
 
-"""
-Function to connect to a certain IP address
-@param `ip` : IP address of either drone or rover
-"""
-def connect(ip):
-    print("fill out later")
 
 """
 State interface used to determine and switch control state (from direct to drone)
@@ -109,11 +106,11 @@ class ControlState:
         if control == 0:
             self._state = 1
             hostIp = '127.0.0.1' # change later
-            connect(hostIp)
+            s.connect((ip, port))
         elif control == 1:
             self._state = 0
             hostIp = '127.0.0.1' # change later
-            connect(hostIp)
+            s.connect((ip, port))
         else:
             pass # incorrect input
     
@@ -182,7 +179,7 @@ class Rover:
     """
     Initializes an instance of Rover 
     """
-    def __init__(self):
+    def __init__(self, ip):
         self.loopCount = 0
         self.cameraTypeState = CameraTypeState()
         self.cameraTelescopeState = CameraTelescopeState()
