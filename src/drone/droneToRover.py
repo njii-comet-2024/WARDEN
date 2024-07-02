@@ -27,7 +27,7 @@ def clientProgram():
     s = socket.socket()
     
     #Define port for connection
-    port = 56789
+    port = 54423
 
     #connect to the server on local computer
     s.connect(('10.255.0.140', port))

@@ -7,14 +7,13 @@ Date last modified: 07/1/2024
 
 # Libraries
 import socket
-import sys
 
 def serverProgram():
     #create a socket
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     #reserved a port on computer, can be anything
-    port = 56789
+    port = 54423
 
     #bind to the port, no ip in ip field which makes server listen to request
     s.bind(('10.255.0.140', port))
