@@ -1,7 +1,7 @@
 """
 Transmits rover controls either directly or through drone
 
-@author Zoe Rizzo [@zizz-0]
+@author [Zoe Rizzo] [@zizz-0]
 
 Date last modified: 07/01/2024
 """

@@ -3,7 +3,7 @@ Transmits rover video to central either directly or through drone
 Receives control code from central or drone and runs on rover
 
 @author [Zoe Rizzo] [@zizz-0]
-        [Christopher Prol] [prolvalone]
+        [Christopher Prol] [@prolvalone]
 
 Date last modified: 07/02/2024
 """

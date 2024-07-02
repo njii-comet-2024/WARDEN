@@ -1,7 +1,7 @@
 """
 Receives Rover Camera Feed
 
-@author [Christopher Prol] [prolvalone]
+@author [Christopher Prol] [@prolvalone]
 
 Date last modified: 07/02/2024
 """

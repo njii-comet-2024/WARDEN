@@ -1,7 +1,7 @@
 """
 Transmits control code to rover
 
-@author [Vito Tribuzio] [Snoopy-0]
+@author [Vito Tribuzio] [@Snoopy-0]
 
 Date last modified: 06/26/2024
 """

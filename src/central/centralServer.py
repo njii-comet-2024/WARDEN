@@ -1,6 +1,6 @@
 """
 sets up server for all vehicles to connect too
-@author [Vito Tribuzio] [Snoopy-0]
+@author [Vito Tribuzio] [@Snoopy-0]
 
 Date last modified: 07/1/2024
 """

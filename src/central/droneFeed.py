@@ -1,7 +1,7 @@
 """
 Receives video feed from drone
 
-@author [name] [github]
+@author [name] [@github]
 
 Date last modified: 06/26/2024
 """
