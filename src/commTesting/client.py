@@ -1,3 +1,10 @@
+"""
+Client Side Video testing
+
+@author  [Christopher Prol] [@prolvalone]
+
+Date last modified: 07/03/2024
+"""
 # This is client code to receive video frames over UDP
 import cv2, imutils, socket # type: ignore
 import numpy as np # type: ignore
