@@ -18,7 +18,7 @@ def recieveRoverFeed():
     clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
     hostName = socket.gethostname()
-    hostIp = '10.255.0.137'
+    hostIp = '172.168.10.137'
     print(hostIp)
     port = 9999
     message = b'Hello'
