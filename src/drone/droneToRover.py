@@ -27,10 +27,15 @@ def clientProgram():
     s = socket.socket()
     
     #Define port for connection
-    port = 54423
+    port = 12345
 
-    #connect to the server on local computer
-    s.connect(('10.255.0.140', port))
+    #connect to the server
+    try:
+        s.connect(('10.255.0.140', port))
+        print("successfully connected")
+    except socket.error as err:
+        print("socket creation failed with error: %s" %(err))
+
 
     while True:
         #recieve message from server and print
