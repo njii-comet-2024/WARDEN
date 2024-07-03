@@ -13,12 +13,15 @@ import base64
 def __init__(self):
     print("initializing")
 
-def recieveRoverFeed():
+def recieveRoverFeed(hostIp):
+    """
+    Recieves hostIP E.G. '10.255.0.137' 
+    this is the client side of the rover video
+    """
     bufferSize = 65536
     clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
     hostName = socket.gethostname()
-    hostIp = '172.168.10.137'
     print(hostIp)
     port = 9999
     message = b'Hello'
