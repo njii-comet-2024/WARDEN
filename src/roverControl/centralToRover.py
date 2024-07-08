@@ -154,7 +154,8 @@ class Transmitter:
                     controls["cameraSwivelRight"] = 1
                 if event.button == buttonKeys['touchpad']:
                     controls["end"] = 1
-                    print("End")
+                    self.sendContinuous()
+                    print("END")
                     self.on = False
 
             if event.type == pygame.JOYBUTTONUP:
@@ -202,7 +203,8 @@ class Transmitter:
                 else:
                     controls["rightTrigger"] = 0
             
-        self.sendContinuous()
+        if(self.on):
+            self.sendContinuous()
 
         # RESETTING TOGGLES -- otherwise they are continuous
         controls["cameraToggle"] = 0
@@ -214,7 +216,14 @@ class Transmitter:
 
         # self.c.send(serializedControls) # TCP
         self.sock.sendto(serializedControls, (IP, PORT))
-        print(controls.values())
+
+        val = False
+        for x in controls.values():
+            if x != 0:
+                val = True
+        
+        if(val):
+            print(controls.values())
         # print("Continuous")
 
 

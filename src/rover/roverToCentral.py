@@ -51,8 +51,8 @@ CAMERA = 0
 
 # Global variables
 
-DRONE_IP = '10.255.0.102'
-CENTRAL_IP = '10.255.0.102'
+DRONE_IP = '172.168.10.136'
+CENTRAL_IP = '172.168.10.136'
 ROVER_IP = '10.255.0.255'
 PORT = 56789
 
@@ -332,7 +332,8 @@ class Rover:
     Will receive controller input from central and use them to control electronics
     """
     def drive(self):
-        while True:
+        while self.on:
+            ctrls = []
             # if [no controls]:
             #   self.loop_count += 1
             serializedControls, addr = self.sock.recvfrom(1024)
@@ -345,14 +346,14 @@ class Rover:
             leftSpeed = controls["leftJoy"]
 
             if(controls["end"] > 0):
-                print("End")
+                print("END")
                 self.on = False
 
                 # RESETTING GROUND ROVER
                 if(self.cameraTelescopeState.getState() == 'UP'):
                     self.cameraTelescopeState.switch()
 
-                if(self.cameraTypeState == 'IR'):
+                if(self.cameraTypeState.getState() == 'IR'):
                     self.cameraTypeState.switch()
 
                 break
@@ -361,66 +362,82 @@ class Rover:
             if(controls["rightTrigger"] > 0):
                 # rightWheg.forward()
                 # leftWheg.forward()
-                print("Right whegs fwd")
+                # print("Right whegs fwd")
+                ctrls.append("Right whegs fwd")
             elif(controls["rightBumper"] > 0):
                 # rightWheg.forward()
                 # leftWheg.forward()
-                print("Right whegs back")
+                # print("Right whegs back")
+                ctrls.append("Right whegs back")
 
             if(controls["leftTrigger"] > 0):
                 # rightWheg.backward()
                 # leftWheg.backward()
-                print("Left whegs fwd")
+                # print("Left whegs fwd")
+                ctrls.append("Left whegs fwd")
             elif(controls["leftBumper"] > 0):
                 # rightWheg.forward()
                 # leftWheg.forward()
-                print("Left whegs back")
+                # print("Left whegs back")
+                ctrls.append("Left whegs back")
 
             if(controls["controlToggle"] > 0):
                 self.controlState.switch()
                 self.sock.close()
                 self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 self.sock.bind((IP, PORT))
-                print("Control toggle")
+                # print("Control toggle")
+                ctrls.append("Control toggle")
 
             # Camera controls
             if(controls["cameraToggle"] > 0):
                 self.cameraTypeState.switch()
-                print("Camera toggle")
+                # print("Camera toggle")
+                ctrls.append("Camera toggle")
 
             if(controls["cameraSwivelLeft"] > 0):
                 # cameraX.value(0.5)
-                print("Camera swivel left")
+                # print("Camera swivel left")
+                ctrls.append("Camera swivel left")
                 
             if(controls["cameraSwivelRight"] > 0):
                 # cameraX.value(-1)
-                print("Camera swivel right")
+                # print("Camera swivel right")
+                ctrls.append("Camera swivel right")
             
             if(controls["cameraTelescope"] > 0):
                 # if encoder steps < max steps
                 self.cameraTelescopeState.switch()
-                print("Camera telescope switch")
+                # print("Camera telescope switch")
+                ctrls.append("Camera telescope switch")
 
             # Tread controls
             if(rightSpeed < 0):
                 # rightTreadOne.forward(abs(rightSpeed))
                 # rightTreadTwo.forward(abs(rightSpeed))
-                print("Right treads fwd")
+                # print("Right treads fwd")
+                ctrls.append("Right treads fwd")
 
             if(leftSpeed < 0):
                 # leftTreadOne.forward(abs(leftSpeed))
                 # leftTreadTwo.forward(abs(leftSpeed))
-                print("Left treads fwd")
+                # print("Left treads fwd")
+                ctrls.append("Left treads fwd")
 
             if(rightSpeed > 0):
                 # rightTreadOne.backward(rightSpeed)
                 # rightTreadTwo.backward(rightSpeed)
-                print("Right treads back")
+                # print("Right treads back")
+                ctrls.append("Right treads back")
 
             if(leftSpeed > 0):
                 # leftTreadOne.backward(leftSpeed)
                 # leftTreadTwo.backward(leftSpeed)
-                print("Left treads back")
+                # print("Left treads back")
+                ctrls.append("Left treads back")
+            
+            if(ctrls):
+                print(ctrls)
 
 rover = Rover()
 rover.start()
