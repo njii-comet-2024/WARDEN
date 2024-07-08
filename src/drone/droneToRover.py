@@ -78,5 +78,5 @@ class Retransmitter:
 
         print("Retransmitting")
 
-retransmit = Retransmitter
+retransmit = Retransmitter()
 retransmit.start()
