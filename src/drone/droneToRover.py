@@ -1,52 +1,82 @@
 """
 Transmits control code to rover
 
-@author [Vito Tribuzio] [@Snoopy-0]
+@author [Zoe Rizzo] [@zizz-0]
 
-Date last modified: 06/26/2024
+Date last modified: 07/08/2024
 """
 
 # Libraries
 import socket
+import pickle
 
-#dictionary for controls
-controls = {
-    "rightJoy": 0,
-    "leftJoy": 0,
-    "rightTrigger": 0,
-    "leftTrigger": 0,
-    "cameraToggle": 0,
-    "controlToggle": 0,
-    "cameraTelescope": 0,
-    "cameraSwivelLeft": 0,
-    "cameraSwivelRight": 0
-}
+DRONE_IP = '172.168.10.136'
+CENTRAL_IP = '172.168.10.136'
+PORT = 56789
 
-def clientProgram():
-    #create socket object
-    s = socket.socket()
+"""
+State interface used to determine and switch control state (from direct to drone)
+Starts as direct control
+0 --> direct
+1 --> drone
+"""
+class ControlState:
+    def __init__(self):
+        self._state = 0
+
+    """
+    Switches control state from direct to drone (and vice versa)
+    """
+    def switch(self):
+        if self._state == 0:
+            self._state = 1
+            print("Switching to drone")
+        elif self._state == 1:
+            self._state = 0
+            print("Switching to central")
+        else:
+            pass # incorrect input
     
-    #Define port for connection
-    port = 12345
+    """
+    Returns the current state
+    """
+    def getState(self):
+        return self._state
 
-    #connect to the server
-    try:
-        s.connect(('192.168.110.78', port))
-        print("successfully connected")
-    except socket.error as err:
-        print("socket creation failed with error: %s" %(err))
+"""
+Class that defines a drone as retransmitter and its functionality in retransmitting controls to rover
+"""
+class Retransmitter:
+    """
+    Initializes an instance of Retransmitter 
+    """
+    def __init__(self):
+        self.recvsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.recvsock.bind((CENTRAL_IP, PORT))
+        
+        self.sendsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+        self.on = True
+        self.controlState = ControlState()
 
-    while True:
-        #recieve message from server and print
-        message = s.recv(1024).decode()
-        print("From server: " + message)
+    def start(self):
+        while self.on:
+            self.receive()
 
-        #if certain message is sent, terminate program
-        if message == 'endClient':
-            break
+    def receive(self):
+        self.serializedControls, addr = self.recvsock.recvfrom(1024)
+        controls = pickle.loads(self.serializedControls)
+        if(controls["controlToggle"] > 0):
+                self.controlState.switch()
 
-    #close the connection
-    s.close()
+        # Only retransmit if control state is drone
+        if(self.controlState.getState() == 1):
+            self.retransmit()
 
-clientProgram()
+    def retransmit(self):
+        self.sendsock.sendto(self.serializedControls, (DRONE_IP, PORT))
+
+        print("Retransmitting")
+
+retransmit = Retransmitter
+retransmit.start()

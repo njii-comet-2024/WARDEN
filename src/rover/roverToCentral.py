@@ -5,7 +5,7 @@ Receives control code from central or drone and runs on rover
 @author [Zoe Rizzo] [@zizz-0]
         [Christopher Prol] [@prolvalone]
 
-Date last modified: 07/02/2024
+Date last modified: 07/08/2024
 """
 # Libraries
 import cv2 as cv
