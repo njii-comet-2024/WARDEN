@@ -5,7 +5,7 @@ Receives control code from central or drone and runs on rover
 @author [Zoe Rizzo] [@zizz-0]
         [Christopher Prol] [@prolvalone]
 
-Date last modified: 07/02/2024
+Date last modified: 07/08/2024
 """
 # Libraries
 import cv2 as cv
@@ -18,6 +18,8 @@ import imutils
 from gpiozero import Servo
 from gpiozero import Motor
 from gpiozero import RotaryEncoder
+from picamera.array import PiRGBArray
+from picamera import PiCamera
 
 # Port locations
 RIGHT_TREAD_ONE_FWD = 0
@@ -49,9 +51,9 @@ CAMERA = 0
 
 # Global variables
 
-DRONE_IP = '172.168.10.136'
-CENTRAL_IP = '172.168.10.136'
-PORT = 56789
+DRONE_IP = '10.255.0.102'
+CENTRAL_IP = '10.255.0.102'
+ROVER_IP = '10.255.0.255'
 
 IP = CENTRAL_IP
 
@@ -100,9 +102,9 @@ class Camera:
         capture.release()
 
     """
-    Transmits Rover Video Data Over UDP sockets, acting as the server
+    Transmits Rover Video Data from a usb camera Over UDP sockets, acting as the server
     """
-    def transmitRoverFeed():
+    def transmitUSBCamFeed():
         bufferSize = 65536
         serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
@@ -141,6 +143,64 @@ class Camera:
                     except:
                         pass
                 cnt+=1
+    """
+    Transmits camera feed from PICAMERA to Central via UDP sockets
+    """
+    def transmitPiCamFeed():
+        bufferSize = 65536
+        serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
+        hostName = socket.gethostname()
+        hostIp = '10.255.0.255'# socket.gethostbyname(hostName)
+        print(hostIp)
+        port = 9999
+        socketAddress = (hostIp, port)
+        serverSocket.bind(socketAddress)
+        print('Listening at:', socketAddress)
+
+        # Initialize PiCamera
+        camera = PiCamera()
+        camera.resolution = (640, 480)
+        camera.framerate = 30
+        rawCapture = PiRGBArray(camera, size=(640, 480))
+        time.sleep(0.1)
+
+        fps, st, framesToCount, cnt = (0, 0, 20, 0)
+
+        while True:
+            msg, clientAddr = serverSocket.recvfrom(bufferSize)
+            print('GOT connection from ', clientAddr)
+            WIDTH = 400
+            for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+                image = frame.array
+                print('Captured frame size:', image.shape)
+                
+                image = imutils.resize(image, width=WIDTH)
+                print('Resized frame size:', image.shape)
+
+                encoded, buffer = cv2.imencode('.jpg', image, [cv2.IMWRITE_JPEG_QUALITY, 80])
+                message = base64.b64encode(buffer)
+                
+                serverSocket.sendto(message, clientAddr)
+                image = cv2.putText(image, 'FPS: ' + str(fps), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+                
+                cv2.imshow('TRANSMITTING VIDEO', image)
+                key = cv2.waitKey(1) & 0xFF
+                rawCapture.truncate(0)
+                
+                if key == ord('q'):
+                    serverSocket.close()
+                    camera.close()
+                    cv2.destroyAllWindows()
+                    print('Server stopped by user')
+                    exit(0)
+                
+                if cnt == framesToCount:
+                    fps = round(framesToCount / (time.time() - st))
+                    st = time.time()
+                    cnt = 0
+                
+                cnt += 1
 
 """
 State interface used to determine and switch control state (from direct to drone)
