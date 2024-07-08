@@ -3,11 +3,11 @@ Client Side Video testing
 
 @author  [Christopher Prol] [@prolvalone]
 
-Date last modified: 07/03/2024
+Date last modified: 07/08/2024
 """
 # This is client code to receive video frames over UDP
-import cv2, imutils, socket # type: ignore
-import numpy as np # type: ignore
+import cv2, imutils, socket 
+import numpy as np 
 import time
 import base64
 
@@ -15,7 +15,7 @@ bufferSize = 65536
 clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
 hostName = socket.gethostname()
-hostIp = '10.255.0.137'#  socket.gethostbyname(hostName)
+hostIp = '10.255.0.255'#  socket.gethostbyname(hostName)
 print(hostIp)
 port = 9999
 message = b'Hello'
