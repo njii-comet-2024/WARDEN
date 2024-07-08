@@ -181,14 +181,15 @@ class CameraTypeState:
 
     """
     Switches state from reg to IR (and vice versa)
-    @param `camera` : the current camera
     """
-    def switch(self, camera):
+    def switch(self):
         # TODO: add code to switch on microcontroller
-        if camera == 'REG':
+        if self._state == 'REG':
             self._state = 'IR'
-        elif camera == 'IR':
+            print("Camera IR")
+        elif self._state == 'IR':
             self._state = 'REG'
+            print("Camera REG")
         else:
             pass # incorrect input
     
@@ -199,23 +200,25 @@ class CameraTypeState:
         return self._state
 
 """
-State interface used to determine what position the camera is in 
+State interface used to determine what position the camera is in
+Starts down
 """
 class CameraTelescopeState:
     def __init__(self):
-        self._state = 'UP'
+        self._state = 'DOWN'
 
     """
     Switches state from up to down (and vice versa)
-    @param `pos` : the current position of the camera
     """
-    def switch(self, pos):
-        if pos == 'UP':
+    def switch(self):
+        if self._state == 'UP':
             self._state = 'DOWN'
             # cameraY.backward()
-        elif pos == 'DOWN':
+            print("Camera down")
+        elif self._state == 'DOWN':
             self._state = 'UP'
             # cameraY.forward()
+            print("Camera up")
         else:
             pass # incorrect input
 
@@ -279,6 +282,14 @@ class Rover:
             if(controls["end"] > 0):
                 print("End")
                 self.on = False
+
+                # RESETTING GROUND ROVER
+                if(self.cameraTelescopeState.getState() == 'UP'):
+                    self.cameraTelescopeState.switch()
+
+                if(self.cameraTypeState == 'IR'):
+                    self.cameraTypeState.switch()
+
                 break
 
             # Whegs controls
@@ -309,8 +320,7 @@ class Rover:
 
             # Camera controls
             if(controls["cameraToggle"] > 0):
-                camera = self.cameraTypeState.getState()
-                self.cameraTypeState.switch(camera)
+                self.cameraTypeState.switch()
                 print("Camera toggle")
 
             if(controls["cameraSwivelLeft"] > 0):
@@ -323,8 +333,7 @@ class Rover:
             
             if(controls["cameraTelescope"] > 0):
                 # if encoder steps < max steps
-                pos = self.cameraTelescopeState.getState()
-                self.cameraTelescopeState.switch(pos)
+                self.cameraTelescopeState.switch()
                 print("Camera telescope switch")
 
             # Tread controls
