@@ -54,6 +54,7 @@ CAMERA = 0
 DRONE_IP = '10.255.0.102'
 CENTRAL_IP = '10.255.0.102'
 ROVER_IP = '10.255.0.255'
+PORT = 56789
 
 IP = CENTRAL_IP
 
@@ -273,11 +274,15 @@ class CameraTelescopeState:
     def switch(self):
         if self._state == 'UP':
             self._state = 'DOWN'
-            # cameraY.backward()
+            # Move camera down until encoder at max steps
+            # while(cameraEncoder.value() < 1 and cameraEncoder.value() > -1):
+                # cameraY.backward()
             print("Camera down")
         elif self._state == 'DOWN':
             self._state = 'UP'
-            # cameraY.forward()
+            # Move camera up until encoder at max steps
+            # while(cameraEncoder.value() < 1 and cameraEncoder.value() > -1):
+                # cameraY.forward()
             print("Camera up")
         else:
             pass # incorrect input
