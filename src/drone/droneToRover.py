@@ -31,7 +31,7 @@ def clientProgram():
 
     #connect to the server
     try:
-        s.connect(('10.255.0.140', port))
+        s.connect(('192.168.110.78', port))
         print("successfully connected")
     except socket.error as err:
         print("socket creation failed with error: %s" %(err))

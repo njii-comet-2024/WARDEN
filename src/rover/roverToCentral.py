@@ -10,7 +10,6 @@ Date last modified: 07/02/2024
 # Libraries
 import cv2 as cv
 import pickle
-import struct
 import socket
 import numpy as np
 import base64
@@ -50,14 +49,14 @@ CAMERA = 0
 
 # Global variables
 
-DRONE_IP = '10.255.0.102'
-CENTRAL_IP = '10.255.0.102'
+DRONE_IP = '172.168.10.136'
+CENTRAL_IP = '172.168.10.136'
+PORT = 56789
 
 rightSpeed = 0
 leftSpeed = 0
 
-s = socket.socket()
-port = 56789
+# s = socket.socket() # TCP
 
 # Electronics declarations
 # cameraX = Servo(CAMERA_X) # Camera swivel
@@ -241,13 +240,19 @@ class Rover:
         self.cameraTelescopeState = CameraTelescopeState()
         self.controlState = ControlState()
         self.on = True # Rover running
-        s.connect((CENTRAL_IP, port))
+
+        # UDP
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock.bind((DRONE_IP, PORT))
+
+        # TCP
+        # s.connect((CENTRAL_IP, port))
 
     """
     Starts the rover and runs the drive loop
     @param `maxLoopCount` : how many loops to wait through in the event of an extended period of no controls transmitted
     """
-    def start(self, maxLoopCount=None):
+    def start(self, maxLoopCount=1):
         print("Starting rover...")
 
         while self.on:
@@ -264,7 +269,7 @@ class Rover:
         while True:
             # if [no controls]:
             #   self.loop_count += 1
-            serializedControls = s.recv(1024)
+            serializedControls, addr = self.sock.recvfrom(1024)
             controls = pickle.loads(serializedControls)
 
             # print(controls.values())
@@ -272,6 +277,11 @@ class Rover:
             # These will probably have to be converted from input to output values
             rightSpeed = controls["rightJoy"]
             leftSpeed = controls["leftJoy"]
+
+            if(controls["end"] > 0):
+                print("End")
+                self.on = False
+                break
 
             # Whegs controls
             if(controls["rightTrigger"] > 0):
