@@ -53,6 +53,8 @@ DRONE_IP = '172.168.10.136'
 CENTRAL_IP = '172.168.10.136'
 PORT = 56789
 
+IP = CENTRAL_IP
+
 rightSpeed = 0
 leftSpeed = 0
 
@@ -142,6 +144,7 @@ class Camera:
 
 """
 State interface used to determine and switch control state (from direct to drone)
+Starts as direct control
 0 --> direct
 1 --> drone
 """
@@ -151,20 +154,15 @@ class ControlState:
 
     """
     Switches control state from direct to drone (and vice versa)
-    @param `control` : the current control state
     """
-    def switch(self, control):
-        if control == 0:
+    def switch(self):
+        if self._state == 0:
             self._state = 1
-            s.close()
-            # time.sleep(2)
-            s.connect((DRONE_IP, port))
+            IP = DRONE_IP
             print("Switching to drone")
-        elif control == 1:
+        elif self._state == 1:
             self._state = 0
-            s.close()
-            # time.sleep(2)
-            s.connect((CENTRAL_IP, port))
+            IP = CENTRAL_IP
             print("Switching to central")
         else:
             pass # incorrect input
@@ -173,7 +171,7 @@ class ControlState:
     Returns the current state
     """
     def getState(self):
-        return self._state
+        return self._state, IP
 
 """
 State interface used to determine and switch camera state (from regular to IR)
@@ -243,7 +241,7 @@ class Rover:
 
         # UDP
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock.bind((DRONE_IP, PORT))
+        self.sock.bind((IP, PORT))
 
         # TCP
         # s.connect((CENTRAL_IP, port))
@@ -303,8 +301,10 @@ class Rover:
                 print("Left whegs back")
 
             if(controls["controlToggle"] > 0):
-                # ctrl = self.controlState.getState()
-                # self.controlState.switch(ctrl)
+                self.controlState.switch()
+                self.sock.close()
+                self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                self.sock.bind((IP, PORT))
                 print("Control toggle")
 
             # Camera controls

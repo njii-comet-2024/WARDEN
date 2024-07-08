@@ -3,7 +3,7 @@ Transmits rover controls either directly or through drone
 
 @author [Zoe Rizzo] [@zizz-0]
 
-Date last modified: 07/01/2024
+Date last modified: 07/08/2024
 """
 
 # import hid
@@ -15,6 +15,8 @@ import pickle
 DRONE_IP = '172.168.10.136'
 CENTRAL_IP = '172.168.10.136'
 PORT = 56789
+
+IP = CENTRAL_IP
 
 pygame.init()
 pygame.joystick.init()
@@ -61,27 +63,26 @@ controls = {
 
 """
 State interface used to determine and switch control state (from direct to drone)
+Starts as direct control
 0 --> direct
 1 --> drone
 """
 class ControlState:
     def __init__(self):
         self._state = 0
+        IP = DRONE_IP
 
     """
     Switches control state from direct to drone (and vice versa)
-    @param `control` : the current control state
     """
-    def switch(self, control):
-        if control == 0:
+    def switch(self):
+        if self._state == 0:
             self._state = 1
-            s.bind((DRONE_IP, port))
-            s.listen()
+            IP = DRONE_IP
             print("Switching to drone")
-        elif control == 1:
+        elif self._state == 1:
             self._state = 0
-            s.bind((CENTRAL_IP, port))
-            s.listen()
+            IP = CENTRAL_IP
             print("Switching to central")
         else:
             pass # incorrect input
@@ -90,7 +91,7 @@ class ControlState:
     Returns the current state
     """
     def getState(self):
-        return self._state
+        return self._state, IP
 
 """
 Class that defines a transmitter and its functionality in transmitting controls
@@ -135,6 +136,9 @@ class Transmitter:
                     self.toggle = True
                 if event.button == buttonKeys['square']:
                     controls["controlToggle"] = 1
+                    self.sock.close()
+                    self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                    self.controlState.switch()
                     self.toggle = True
                 if event.button == buttonKeys['triangle']:
                     controls["cameraTelescope"] = 1
@@ -197,20 +201,19 @@ class Transmitter:
                     controls["rightTrigger"] = analogKeys[5]
                 else:
                     controls["rightTrigger"] = 0
-
-            serializedControls = pickle.dumps(controls)
-
-            # self.c.send(serializedControls) # TCP
-            self.sock.sendto(serializedControls, (DRONE_IP, PORT))
-            print(controls.values())
             
         self.sendContinuous()
 
+        # RESETTING TOGGLES -- otherwise they are continuous
+        controls["cameraToggle"] = 0
+        controls["controlToggle"] = 0
+        controls["cameraTelescope"] = 0
+
     def sendContinuous(self):
-        # if(not self.toggle):
         serializedControls = pickle.dumps(controls)
 
-        self.sock.sendto(serializedControls, (DRONE_IP, PORT))
+        # self.c.send(serializedControls) # TCP
+        self.sock.sendto(serializedControls, (IP, PORT))
         print(controls.values())
         # print("Continuous")
 
