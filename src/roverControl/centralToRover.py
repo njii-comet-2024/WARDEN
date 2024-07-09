@@ -58,6 +58,8 @@ controls = {
     "cameraTelescope": 0,
     "cameraSwivelLeft": 0,
     "cameraSwivelRight": 0,
+    "cameraSwivelUp": 0,
+    "cameraSwivelDown": 0,
     "end": 0
 }
 
@@ -152,6 +154,11 @@ class Transmitter:
                     controls["cameraSwivelLeft"] = 1
                 if event.button == buttonKeys['rightArrow']: # continuously press
                     controls["cameraSwivelRight"] = 1
+                if event.button == buttonKeys['upArrow']: # continuously press
+                    controls["cameraSwivelUp"] = 1
+                if event.button == buttonKeys['downArrow']: # continuously press
+                    controls["cameraSwivelDown"] = 1
+
                 if event.button == buttonKeys['touchpad']:
                     controls["end"] = 1
                     self.sendContinuous()
@@ -177,6 +184,10 @@ class Transmitter:
                     controls["cameraSwivelLeft"] = 0
                 if event.button == buttonKeys['rightArrow']:
                     controls["cameraSwivelRight"] = 0
+                if event.button == buttonKeys['upArrow']:
+                    controls["cameraSwivelUp"] = 0
+                if event.button == buttonKeys['downArrow']:
+                    controls["cameraSwivelDown"] = 0
 
             if event.type == pygame.JOYAXISMOTION:
                 analogKeys[event.axis] = event.value

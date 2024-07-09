@@ -18,8 +18,8 @@ import imutils
 from gpiozero import Servo
 from gpiozero import Motor
 from gpiozero import RotaryEncoder
-from picamera.array import PiRGBArray
-from picamera import PiCamera
+# from picamera.array import PiRGBArray
+# from picamera import PiCamera
 
 # Port locations
 RIGHT_TREAD_ONE_FWD = 0
@@ -40,12 +40,13 @@ RIGHT_WHEG_BACK = 0
 LEFT_WHEG_FWD = 0
 LEFT_WHEG_BACK = 0
 
-CAMERA_X = 0 # Swivel
-CAMERA_ENCODER_ONE = 0
-CAMERA_ENCODER_TWO = 0
+# Swivel
+CAMERA_X = 0
+CAMERA_Y = 0
+
 # Telescoping
-CAMERA_Y_FWD = 0
-CAMERA_Y_BACK = 0
+CAMERA_UP = 0
+CAMERA_DOWN = 0
 
 CAMERA = 0
 
@@ -64,9 +65,11 @@ leftSpeed = 0
 # s = socket.socket() # TCP
 
 # Electronics declarations
-# cameraX = Servo(CAMERA_X) # Camera swivel
-# cameraEncoder = RotaryEncoder(CAMERA_ENCODER_ONE, CAMERA_ENCODER_TWO, max_steps=10)
-# cameraY = Motor(CAMERA_Y_FWD, CAMERA_Y_BACK) # Camera telecoping
+
+# Camera swivel
+# cameraX = Servo(CAMERA_X)
+# cameraY = Servo(CAMERA_Y)
+# cameraTelescope = Motor(CAMERA_UP, CAMERA_DOWN) # Camera telecoping
 
 # # Tread drive motors
 # leftTreadOne = Motor(LEFT_TREAD_ONE_FWD, LEFT_TREAD_ONE_BACK)
@@ -278,13 +281,13 @@ class CameraTelescopeState:
             self._state = 'DOWN'
             # Move camera down until encoder at max steps
             # while(cameraEncoder.value() < 1 and cameraEncoder.value() > -1):
-                # cameraY.backward()
+                # cameraTelescope.backward()
             print("Camera down")
         elif self._state == 'DOWN':
             self._state = 'UP'
             # Move camera up until encoder at max steps
             # while(cameraEncoder.value() < 1 and cameraEncoder.value() > -1):
-                # cameraY.forward()
+                # cameraTelescope.forward()
             print("Camera up")
         else:
             pass # incorrect input
@@ -364,23 +367,19 @@ class Rover:
             if(controls["rightTrigger"] > 0):
                 # rightWheg.forward()
                 # leftWheg.forward()
-                # print("Right whegs fwd")
                 ctrls.append("Right whegs fwd")
             elif(controls["rightBumper"] > 0):
                 # rightWheg.forward()
                 # leftWheg.forward()
-                # print("Right whegs back")
                 ctrls.append("Right whegs back")
 
             if(controls["leftTrigger"] > 0):
                 # rightWheg.backward()
                 # leftWheg.backward()
-                # print("Left whegs fwd")
                 ctrls.append("Left whegs fwd")
             elif(controls["leftBumper"] > 0):
                 # rightWheg.forward()
                 # leftWheg.forward()
-                # print("Left whegs back")
                 ctrls.append("Left whegs back")
 
             if(controls["controlToggle"] > 0):
@@ -388,54 +387,53 @@ class Rover:
                 self.sock.close()
                 self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 self.sock.bind((IP, PORT))
-                # print("Control toggle")
                 ctrls.append("Control toggle")
 
             # Camera controls
             if(controls["cameraToggle"] > 0):
                 self.cameraTypeState.switch()
-                # print("Camera toggle")
                 ctrls.append("Camera toggle")
 
             if(controls["cameraSwivelLeft"] > 0):
                 # cameraX.value(0.5)
-                # print("Camera swivel left")
                 ctrls.append("Camera swivel left")
                 
             if(controls["cameraSwivelRight"] > 0):
                 # cameraX.value(-1)
-                # print("Camera swivel right")
                 ctrls.append("Camera swivel right")
+
+            if(controls["cameraSwivelUp"] > 0):
+                # cameraY.value(0.5)
+                ctrls.append("Camera swivel up")
+
+            if(controls["cameraSwivelDown"] > 0):
+                # cameraY.value(-1)
+                ctrls.append("Camera swivel down")
             
             if(controls["cameraTelescope"] > 0):
                 # if encoder steps < max steps
                 self.cameraTelescopeState.switch()
-                # print("Camera telescope switch")
                 ctrls.append("Camera telescope switch")
 
             # Tread controls
             if(rightSpeed < 0):
                 # rightTreadOne.forward(abs(rightSpeed))
                 # rightTreadTwo.forward(abs(rightSpeed))
-                # print("Right treads fwd")
                 ctrls.append("Right treads fwd")
 
             if(leftSpeed < 0):
                 # leftTreadOne.forward(abs(leftSpeed))
                 # leftTreadTwo.forward(abs(leftSpeed))
-                # print("Left treads fwd")
                 ctrls.append("Left treads fwd")
 
             if(rightSpeed > 0):
                 # rightTreadOne.backward(rightSpeed)
                 # rightTreadTwo.backward(rightSpeed)
-                # print("Right treads back")
                 ctrls.append("Right treads back")
 
             if(leftSpeed > 0):
                 # leftTreadOne.backward(leftSpeed)
                 # leftTreadTwo.backward(leftSpeed)
-                # print("Left treads back")
                 ctrls.append("Left treads back")
             
             if(ctrls):
