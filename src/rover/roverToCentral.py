@@ -144,6 +144,7 @@ class Camera:
                     except:
                         pass
                 cnt+=1
+        
     """
     Transmits camera feed from PICAMERA to Central via UDP sockets
     """
@@ -179,14 +180,14 @@ class Camera:
                 image = imutils.resize(image, width=WIDTH)
                 print('Resized frame size:', image.shape)
 
-                encoded, buffer = cv2.imencode('.jpg', image, [cv2.IMWRITE_JPEG_QUALITY, 80])
+                encoded, buffer = cv.imencode('.jpg', image, [cv.IMWRITE_JPEG_QUALITY, 80])
                 message = base64.b64encode(buffer)
                 
                 serverSocket.sendto(message, clientAddr)
-                image = cv2.putText(image, 'FPS: ' + str(fps), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+                image = cv.putText(image, 'FPS: ' + str(fps), (10, 40), cv.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
                 
-                cv2.imshow('TRANSMITTING VIDEO', image)
-                key = cv2.waitKey(1) & 0xFF
+                cv.imshow('TRANSMITTING VIDEO', image)
+                key = cv.waitKey(1) & 0xFF
                 rawCapture.truncate(0)
                 
                 if key == ord('q'):
@@ -203,6 +204,8 @@ class Camera:
                 
                 cnt += 1
 
+        cv.destroyAllWindows()
+        
 """
 State interface used to determine and switch control state (from direct to drone)
 Starts as direct control
