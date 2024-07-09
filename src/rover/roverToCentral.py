@@ -153,7 +153,7 @@ class Camera:
         serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
         hostName = socket.gethostname()
-        hostIp = '10.255.0.255'# socket.gethostbyname(hostName)
+        hostIp = '192.168.110.255'# socket.gethostbyname(hostName)
         print(hostIp)
         port = 9999
         socketAddress = (hostIp, port)
@@ -193,7 +193,7 @@ class Camera:
                 if key == ord('q'):
                     serverSocket.close()
                     camera.close()
-                    cv2.destroyAllWindows()
+                    cv.destroyAllWindows()
                     print('Server stopped by user')
                     exit(0)
                 
@@ -204,8 +204,7 @@ class Camera:
                 
                 cnt += 1
 
-        cv.destroyAllWindows()
-        
+
 """
 State interface used to determine and switch control state (from direct to drone)
 Starts as direct control
