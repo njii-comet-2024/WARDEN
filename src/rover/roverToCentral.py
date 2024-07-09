@@ -18,8 +18,8 @@ import imutils
 from gpiozero import Servo
 from gpiozero import Motor
 from gpiozero import RotaryEncoder
-# from picamera.array import PiRGBArray
-# from picamera import PiCamera
+from picamera.array import PiRGBArray
+from picamera import PiCamera
 
 # Port locations
 RIGHT_TREAD_ONE_FWD = 0
