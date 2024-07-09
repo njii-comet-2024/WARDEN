@@ -70,4 +70,4 @@ while True:
         
         cnt += 1
 
-
+cv2.destroyAllWindows()
