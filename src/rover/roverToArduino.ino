@@ -28,19 +28,12 @@ void setup(){
     pinMode(ENB, OUTPUT);
 
     Serial.begin(9600);
-      
-      bool begin = radio.begin();
-
-      if(begin){
-          Serial.println("Connected");
-      }
-      else{
-          Serial.println("NOT CONNECTED");
-      }
-      
-      radio.openWritingPipe(address);
-      radio.setPALevel(RF24_PA_MAX);
-      radio.stopListening(); // set as transmitter
+    
+    bool begin = radio.begin();
+    
+    radio.openWritingPipe(address);
+    radio.setPALevel(RF24_PA_MAX);
+    radio.stopListening(); // set as transmitter
 }
 
 void loop(){
