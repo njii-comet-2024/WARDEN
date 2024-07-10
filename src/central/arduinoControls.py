@@ -34,6 +34,7 @@ while True:
                 print("DOWN")
                 
         if event.type == pygame.JOYBUTTONUP:
+            print(event)
             if event.button == 11:
                 controls["upArrow"] = 0
             if event.button == 12:
