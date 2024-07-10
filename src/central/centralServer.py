@@ -16,7 +16,12 @@ import time
 import base64
 
 
-
+"""
+This is some sort of test from      the man,
+                                    the myth,
+                                    the legend,
+                                    GIANVITO!!!!!!!
+"""
 def serverProgram():
     #create a socket
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
