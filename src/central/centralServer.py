@@ -16,6 +16,7 @@ import time
 import base64
 
 
+ROVER_IP = '192.168.110.255'
 """
 This is some sort of test from      the man,
                                     the myth,
@@ -103,6 +104,7 @@ class videoReciever:
                 except:
                     pass
             cnt+=1
+        cv.destroyWindow("RECEIVING VIDEO")
 
-
-serverProgram()
+#serverProgram()
+videoReciever.recieveRoverCam(ROVER_IP)
