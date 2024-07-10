@@ -12,8 +12,8 @@ import pygame
 import json, os
 import pickle
 
-DRONE_IP = '192.168.110.78'
-CENTRAL_IP = '192.168.110.78'
+DRONE_IP = '192.168.110.228'
+CENTRAL_IP = '192.168.110.228'
 PORT = 56789
 
 IP = CENTRAL_IP
