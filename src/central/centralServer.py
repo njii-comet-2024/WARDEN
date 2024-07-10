@@ -9,7 +9,8 @@ Date last modified: 07/9/2024
 # Libraries
 import socket
 import sys
-import cv2, imutils, socket 
+import cv2 as cv
+import imutils
 import numpy as np 
 import time
 import base64
@@ -60,7 +61,7 @@ class videoReciever:
     def __init__(self):
         print("initializing")
 
-        
+
     """
     This function recieves Rover Cam footage from the PI Camera.  
     """
@@ -80,12 +81,12 @@ class videoReciever:
             packet,_ = clientSocket.recvfrom(bufferSize)
             data = base64.b64decode(packet, ' /')
             npdata = np.fromstring(data, dtype=np.uint8)
-            frame = cv2.imdecode(npdata, 1)
-            frame = cv2.putText(frame, 'FPS: '+str(fps), (10,40), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2) # shows FPS, can likely be deleted
-            cv2.imshow("RECEIVING VIDEO", frame)    # display Video
+            frame = cv.imdecode(npdata, 1)
+            frame = cv.putText(frame, 'FPS: '+str(fps), (10,40), cv.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2) # shows FPS, can likely be deleted
+            cv.imshow("RECEIVING VIDEO", frame)    # display Video
 
         #Exit Key
-            key = cv2.waitKey(1) & 0xFF
+            key = cv.waitKey(1) & 0xFF
             if key == ord('q'):
                 clientSocket.close()
                 break
