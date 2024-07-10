@@ -53,9 +53,9 @@ CAMERA = 0
 # Global variables
 
 ROVER_IP = '10.255.0.255' # delete later and use `IP`
-PORT = 55555
 
-IP = '192.168.110.228' # change this later to rover's IP
+IP = '192.168.110.228' # change to rover IP
+PORT = 55555
 
 rightSpeed = 0
 leftSpeed = 0
