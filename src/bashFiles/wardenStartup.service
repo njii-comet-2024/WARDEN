@@ -1,0 +1,9 @@
+[Unit]
+Description = Runs rover.sh on startup
+After=multi-user.target 
+[Service]
+ExecStart= /usr/bin/python  /home/pi/Desktop/rover.sh
+User = pi
+
+[Install]
+wantedBy=multi-user.target
