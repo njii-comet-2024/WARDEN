@@ -15,6 +15,8 @@ import numpy as np
 import base64
 import time
 import imutils
+import serial
+import sys
 from gpiozero import Servo
 from gpiozero import Motor
 from gpiozero import RotaryEncoder
@@ -59,6 +61,8 @@ PORT = 55555
 
 rightSpeed = 0
 leftSpeed = 0
+
+ser = serial.Serial('/dev/ttyUSB0')
 
 # s = socket.socket() # TCP
 
@@ -309,6 +313,8 @@ class Rover:
             #   self.loop_count += 1
             serializedControls, addr = self.sock.recvfrom(1024)
             controls = pickle.loads(serializedControls)
+
+            ser.write(controls, sys.getsizeof(controls))
 
             # print(controls.values())
 
