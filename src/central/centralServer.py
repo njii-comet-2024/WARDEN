@@ -1,13 +1,20 @@
 """
 sets up server for all vehicles to connect too
 @author [Vito Tribuzio] [@Snoopy-0]
+        [Christopher Prol] [@prolvalone]
 
-Date last modified: 07/1/2024
+Date last modified: 07/9/2024
 """
 
 # Libraries
 import socket
 import sys
+import cv2, imutils, socket 
+import numpy as np 
+import time
+import base64
+
+
 
 def serverProgram():
     #create a socket
@@ -46,5 +53,50 @@ def serverProgram():
 
     #Close the connection
     c.close()
+"""
+This is a class for video reception
+"""
+class videoReciever:
+    def __init__(self):
+        print("initializing")
+
+        
+    """
+    This function recieves Rover Cam footage from the PI Camera.  
+    """
+    def recieveRoverCam(roverIP):
+        bufferSize = 65536
+        clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
+        hostName = socket.gethostname()
+        #roverIP = '192.168.110.255'     - - - -   could delete function Param for this instead
+        print(roverIP)
+        port = 9999                                 # can change based on possible interference, etc
+        message = b'Hello'                          # test message
+
+        clientSocket.sendto(message, (roverIP,port))
+        fps, st, framesToCount, cnt = (0,0,20,0)
+        while True:
+            packet,_ = clientSocket.recvfrom(bufferSize)
+            data = base64.b64decode(packet, ' /')
+            npdata = np.fromstring(data, dtype=np.uint8)
+            frame = cv2.imdecode(npdata, 1)
+            frame = cv2.putText(frame, 'FPS: '+str(fps), (10,40), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2) # shows FPS, can likely be deleted
+            cv2.imshow("RECEIVING VIDEO", frame)    # display Video
+
+        #Exit Key
+            key = cv2.waitKey(1) & 0xFF
+            if key == ord('q'):
+                clientSocket.close()
+                break
+            if cnt == framesToCount:
+                try:
+                    fps = round(framesToCount/(time.time()-st))
+                    st=time.time()
+                    cnt=0
+                except:
+                    pass
+            cnt+=1
+
 
 serverProgram()
