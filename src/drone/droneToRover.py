@@ -16,7 +16,7 @@ we probably don't need this!!!!
 
 # DRONE_IP = '172.168.10.136'
 # CENTRAL_IP = '172.168.10.136'
-# PORT = 56789
+# PORT = 55555
 
 # """
 # State interface used to determine and switch control state (from direct to drone)

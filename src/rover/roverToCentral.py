@@ -52,12 +52,10 @@ CAMERA = 0
 
 # Global variables
 
-DRONE_IP = '192.168.110.128'
-CENTRAL_IP = '192.168.110.128'
-ROVER_IP = '10.255.0.255'
-PORT = 56789
+ROVER_IP = '10.255.0.255' # delete later and use `IP`
+PORT = 55555
 
-IP = CENTRAL_IP
+IP = '192.168.110.228' # change this later to rover's IP
 
 rightSpeed = 0
 leftSpeed = 0
@@ -207,38 +205,6 @@ class Camera:
                 
                 cnt += 1
 
-
-"""
-State interface used to determine and switch control state (from direct to drone)
-Starts as direct control
-0 --> direct
-1 --> drone
-"""
-class ControlState:
-    def __init__(self):
-        self._state = 0
-
-    """
-    Switches control state from direct to drone (and vice versa)
-    """
-    def switch(self):
-        if self._state == 0:
-            self._state = 1
-            IP = DRONE_IP
-            print("Switching to drone")
-        elif self._state == 1:
-            self._state = 0
-            IP = CENTRAL_IP
-            print("Switching to central")
-        else:
-            pass # incorrect input
-    
-    """
-    Returns the current state
-    """
-    def getState(self):
-        return self._state, IP
-
 """
 State interface used to determine and switch camera state (from regular to IR)
 """
@@ -309,7 +275,7 @@ class Rover:
         self.loopCount = 0
         self.cameraTypeState = CameraTypeState()
         self.cameraTelescopeState = CameraTelescopeState()
-        self.controlState = ControlState()
+        self.control = 0 # control state -- even => central, odd => drone
         self.on = True # Rover running
 
         # UDP
@@ -383,10 +349,10 @@ class Rover:
                 ctrls.append("Left whegs back")
 
             if(controls["controlToggle"] > 0):
-                self.controlState.switch()
-                self.sock.close()
-                self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                self.sock.bind((IP, PORT))
+                if(self.control % 2 == 0):
+                    print("Switching to drone")
+                else:
+                    print("Switching to central")
                 ctrls.append("Control toggle")
 
             # Camera controls
