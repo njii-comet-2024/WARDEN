@@ -11,12 +11,28 @@ Date last modified: 07/11/2024
 #include <string.h>
 #include <iostream>
 
-int ENA = 5;
-int IN1 = 2;
-int IN2 = 3;
-int IN3 = 4;
-int IN4 = 7;
-int ENB = 6;
+// PINS
+// IN1 => CLOCKWISE
+// IN2 => COUNTER-CLOCKWISE
+// Motor 1 -- Right main treads
+#define M1_ENA = 0;
+#define M1_IN1 = 0;
+#define M1_IN2 = 0;
+
+// Motor 2 -- Left main treads
+#define M2_ENA = 0;
+#define M2_IN1 = 0;
+#define M2_IN2 = 0;
+
+// Motor 3 -- Right wheg treads
+#define M3_ENA = 0;
+#define M3_IN1 = 0;
+#define M3_IN2 = 0;
+
+// Motor 4 -- Left wheg treads
+#define M4_ENA = 0;
+#define M4_IN1 = 0;
+#define M4_IN2 = 0;
 
 struct inputControls = {
     float leftTread;
@@ -38,13 +54,21 @@ inputControls controls;
 int cameraControl = 0;
 int cameraType = 0;
 
+int rightSpeed = 0;
+int leftSpeed = 0;
+
 void setup(){
-    pinMode(ENA, OUTPUT);
-    pinMode(IN1, OUTPUT);
-    pinMode(IN2, OUTPUT);
-    pinMode(IN3, OUTPUT);
-    pinMode(IN4, OUTPUT);
-    pinMode(ENB, OUTPUT);
+    pinMode(M1_ENA, OUTPUT);
+    pinMode(M1_IN1, OUTPUT);
+    pinMode(M1_IN2, OUTPUT);
+
+    pinMode(M2_ENA, OUTPUT);
+    pinMode(M2_IN1, OUTPUT);
+    pinMode(M2_IN2, OUTPUT);
+
+    pinMode(M3_ENA, OUTPUT);
+    pinMode(M3_IN1, OUTPUT);
+    pinMode(M3_IN2, OUTPUT);
 
     Serial.begin(9600);
 }
@@ -87,10 +111,12 @@ void loop(){
         Serial.print("Received: ");
         Serial.println(input);
 
-        parseInputs();
     }
+
+    parseInputs();
+    drive();
     
-    delay(500)
+    delay(500);
 }
 
 /*
@@ -121,4 +147,102 @@ void parseInputs(){
     controls.cameraDown = std::stof(parsed[19]);
     controls.cameraLeft = std::stof(parsed[21]);
     controls.cameraRight = std::stof(parsed[23]);
+}
+
+/*
+Main drive function -- assigns values to motors and servos
+*/
+void drive(){
+    convertAnalog();
+
+    // Drive motors
+    if(controls.rightTread > 0){
+        // right tread motors fwd
+        digitalWrite(M1_IN1, HIGH);
+        digitalWrite(M1_IN2, LOW);
+        digitalWrite(M3_IN1, HIGH);
+        digitalWrite(M3_IN2, LOW);
+
+        analogWrite(M1_ENA, rightSpeed);
+        analogWrite(M3_ENA, rightSpeed);
+    }
+
+    if(controls.rightTread < 0){
+        // right tread motors back
+        digitalWrite(M1_IN1, LOW);
+        digitalWrite(M1_IN2, HIGH);
+        digitalWrite(M3_IN1, LOW);
+        digitalWrite(M3_IN2, HIGH);
+        
+        analogWrite(M1_ENA, rightSpeed);
+        analogWrite(M3_ENA, rightSpeed);
+    }
+
+    if(controls.leftTread > 0){
+        // left tread motors fwd
+        digitalWrite(M2_IN1, HIGH);
+        digitalWrite(M2_IN2, LOW);
+        digitalWrite(M4_IN1, HIGH);
+        digitalWrite(M4_IN2, LOW);
+        
+        analogWrite(M2_ENA, rightSpeed);
+        analogWrite(M4_ENA, rightSpeed);
+    }
+
+    if(controls.leftTread < 0){
+        // left tread motors back
+        digitalWrite(M2_IN1, LOW);
+        digitalWrite(M2_IN2, HIGH);
+        digitalWrite(M4_IN1, LOW);
+        digitalWrite(M4_IN2, HIGH);
+
+        analogWrite(M2_ENA, rightSpeed);
+        analogWrite(M4_ENA, rightSpeed);
+    }
+
+    if(controls.leftWhegFwd > 0){
+        // stepper motor
+    }
+
+    if(controls.leftWhegBack > 0){
+        // stepper motor
+    }
+
+    if(controls.rightWhegFwd > 0){
+        // stepper motor
+    }
+
+    if(controls.rightWhegBack > 0){
+        // stepper motor
+    }
+
+    if(controls.cameraUp > 0){
+        if(cameraControl == 0){
+            // telescope
+            // stepper motor
+        }
+        else{
+            // swivel
+            // servo
+        }
+    }
+
+    if(controls.cameraDown > 0){
+        if(cameraControl == 0){
+            // telescope
+            // stepper motor
+        }
+        else{
+            // swivel
+            // servo
+        }
+    }
+}
+
+/*
+Converts analog input from -1-1 to 0-255
+*/
+void convertAnalog(){
+    rightSpeed = abs(controls.rightTread * 255);
+    leftSpeed = abs(controls.leftTread * 255);
 }
