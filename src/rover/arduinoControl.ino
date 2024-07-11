@@ -245,50 +245,46 @@ void drive(){
 
     if(controls.leftWhegFwd > 0){ // 
         // stepper motor
-        digitalWrite(M6_ENA, HIGH)
-        digitalWrite(M6_DIR, HIGH)
+        digitalWrite(M6_ENA, HIGH);
+        digitalWrite(M6_DIR, HIGH);
 
         digitalWrite(M6_OPTO, HIGH); 
         digitalWrite(M6_OPTO, LOW);
-        
     }
 
     if(controls.leftWhegBack > 0){
         // stepper motor
-        digitalWrite(M6_ENA, HIGH)
-        digitalWrite(M6_DIR, LOW)
+        digitalWrite(M6_ENA, HIGH);
+        digitalWrite(M6_DIR, LOW);
 
         digitalWrite(M6_OPTO, HIGH); 
         digitalWrite(M6_OPTO, LOW);
-        
     }
 
     if(controls.rightWhegFwd > 0){
         // stepper motor
-        digitalWrite(M5_ENA, HIGH)
-        digitalWrite(M5_DIR, HIGH)
+        digitalWrite(M5_ENA, HIGH);
+        digitalWrite(M5_DIR, HIGH);
 
         digitalWrite(M5_OPTO, HIGH); 
         digitalWrite(M5_OPTO, LOW);
-        
     }
 
     if(controls.rightWhegBack > 0){
         // stepper motor
-        digitalWrite(M5_ENA, HIGH)
-        digitalWrite(M5_DIR, LOW)
+        digitalWrite(M5_ENA, HIGH);
+        digitalWrite(M5_DIR, LOW);
 
         digitalWrite(M3_OPTO, HIGH); 
         digitalWrite(M3_OPTO, LOW);
-        
     }
 
     if(controls.cameraUp > 0){
         if(cameraControl == 0){
             // telescope up
             // stepper motor
-            digitalWrite(M7_IN1, HIGH) // may be backwards, need to test
-            digitalWrite(M7_IN2, LOW)
+            digitalWrite(M7_IN1, HIGH); // may be backwards, need to test
+            digitalWrite(M7_IN2, LOW);
         }
         else{
             // tilt up 
