@@ -9,7 +9,6 @@ Date last modified: 07/11/2024
 // Libraries
 #include <stdio.h>
 #include <string.h>
-#include <iostream>
 #include <Servo.h>
 
 // PINS
