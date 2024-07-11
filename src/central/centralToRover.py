@@ -11,6 +11,7 @@ import socket
 import pygame
 import json, os
 import pickle
+import serial
 
 DRONE_IP = '192.168.110.228' # change to drone IP
 CENTRAL_IP = '192.168.110.228' # change to central IP
@@ -23,13 +24,6 @@ pygame.joystick.init()
 joystick = pygame.joystick.Joystick(0)
 print(joystick.get_name())
 joystick.init()
-
-with open(os.path.join("ps4Controls.json"), 'r+') as file:
-    buttonKeys = json.load(file)
-
-# 0: Left analog horizonal, 1: Left Analog Vertical, 2: Right Analog Horizontal
-# 3: Right Analog Vertical 4: Left Trigger, 5: Right Trigger
-analogKeys = {0:0, 1:0, 2:0, 3:0, 4:-1, 5: -1}
 
 # s = socket.socket() # TCP
 
@@ -46,54 +40,39 @@ analogKeys = {0:0, 1:0, 2:0, 3:0, 4:-1, 5: -1}
 # Y               --> control toggle [drone vs direct]
 
 # Controller inputs to transmit
-controls = {
-    "rightJoy": 0,
-    "leftJoy": 0,
-    "rightTrigger": 0,
-    "leftTrigger": 0,
-    "rightBumper": 0,
-    "leftBumper": 0,
-    "cameraToggle": 0,
-    "controlToggle": 0,
-    "cameraTelescope": 0,
-    "cameraSwivelLeft": 0,
-    "cameraSwivelRight": 0,
-    "cameraSwivelUp": 0,
-    "cameraSwivelDown": 0,
-    "end": 0
+inputs = {
+    "x" : 0,
+    "circle" : 1,
+    "triangle" : 2,
+    "square" : 3,
+    "leftBumper" : 4,
+    "rightBumper" : 5,
+    "leftTrigger" : 6,
+    "rightTrigger" : 7,
+    "leftCircle" : 8,
+    "rightCircle" : 9,
+    "leftJoyClick" : 12,
+    "rightJoyClick" : 13
 }
 
-"""
-State interface used to determine and switch control state (from direct to drone)
-Starts as direct control
-0 --> direct
-1 --> drone
-"""
-class ControlState:
-    def __init__(self):
-        self._state = 0
-        IP = DRONE_IP
+controls = {
+    "leftTread" : 0,
+    "rightTread" : 0,
+    "leftWhegFwd" : 0,
+    "leftWhegBack" : 0,
+    "rightWhegFwd" : 0,
+    "rightWhegBack" : 0,
+    "cameraTypeToggle" : 0,
+    "cameraControlToggle" : 0,
+    "cameraUp" : 0,
+    "cameraDown" : 0,
+    "cameraLeft" : 0,
+    "cameraRight" : 0
+}
 
-    """
-    Switches control state from direct to drone (and vice versa)
-    """
-    def switch(self):
-        if self._state == 0:
-            self._state = 1
-            IP = DRONE_IP
-            print("Switching to drone")
-        elif self._state == 1:
-            self._state = 0
-            IP = CENTRAL_IP
-            print("Switching to central")
-        else:
-            pass # incorrect input
-    
-    """
-    Returns the current state
-    """
-    def getState(self):
-        return self._state, IP
+# 0: Left analog horizonal, 1: Left Analog Vertical, 2: Right Analog Horizontal
+# 3: Right Analog Vertical 4: Left Trigger, 5: Right Trigger
+analogKeys = {0:0, 1:0, 2:0, 3:0, 4:-1, 5: -1}
 
 """
 Class that defines a transmitter and its functionality in transmitting controls
@@ -103,8 +82,6 @@ class Transmitter:
     Initializes an instance of Transmitter 
     """
     def __init__(self):
-        self.controlState = ControlState()
-        self.toggle = False
         self.on = True
         
         # UDP
@@ -133,61 +110,51 @@ class Transmitter:
                 break
             
             if event.type == pygame.JOYBUTTONDOWN:
-                if event.button == buttonKeys['circle']:
-                    controls["cameraToggle"] = 1
-                    self.toggle = True
-                if event.button == buttonKeys['square']:
-                    controls["controlToggle"] = 1
-                    self.sock.close()
-                    self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                    self.controlState.switch()
-                    self.toggle = True
-                if event.button == buttonKeys['triangle']:
-                    controls["cameraTelescope"] = 1
-                    self.toggle = True
+                # Camera controls
+                if event.button == inputs['circle']: # continuously press
+                    controls["cameraRight"] = 1
+                if event.button == inputs['square']: # continuously press
+                    controls["cameraLeft"] = 1
+                if event.button == inputs['triangle']: # continuously press
+                    controls["cameraUp"] = 1
+                if event.button == inputs['x']: # continuously press
+                    controls["cameraDown"] = 1
 
-                if event.button == buttonKeys['L1']: # continuously press
-                    controls["leftBumper"] = 1
-                if event.button == buttonKeys['R1']: # continuously press
-                    controls["rightBumper"] = 1
-                if event.button == buttonKeys['leftArrow']: # continuously press
-                    controls["cameraSwivelLeft"] = 1
-                if event.button == buttonKeys['rightArrow']: # continuously press
-                    controls["cameraSwivelRight"] = 1
-                if event.button == buttonKeys['upArrow']: # continuously press
-                    controls["cameraSwivelUp"] = 1
-                if event.button == buttonKeys['downArrow']: # continuously press
-                    controls["cameraSwivelDown"] = 1
+                # Camera toggles
+                if event.button == inputs['leftCircle']: # continuously press
+                    controls["leftWhegBack"] = 1
+                if event.button == inputs['rightCircle']: # continuously press
+                    controls["rightWhegBack"] = 1
 
-                if event.button == buttonKeys['touchpad']:
-                    controls["end"] = 1
-                    self.sendContinuous()
-                    print("END")
-                    self.on = False
+                # Wheg controls
+                if event.button == inputs['leftBumper']:
+                    controls["cameraTypeToggle"] = 1
+                if event.button == inputs['rightBumper']:
+                    controls["cameraControlToggle"] = 1
+
 
             if event.type == pygame.JOYBUTTONUP:
-                if event.button == buttonKeys['circle']:
-                    controls["cameraToggle"] = 0
-                    self.toggle = False
-                if event.button == buttonKeys['square']:
-                    controls["controlToggle"] = 0
-                    self.toggle = False
-                if event.button == buttonKeys['triangle']:
-                    controls["cameraTelescope"] = 0
-                    self.toggle = False
+                # Camera controls
+                if event.button == inputs['circle']: # continuously press
+                    controls["cameraRight"] = 0
+                if event.button == inputs['square']: # continuously press
+                    controls["cameraLeft"] = 0
+                if event.button == inputs['triangle']: # continuously press
+                    controls["cameraUp"] = 0
+                if event.button == inputs['x']: # continuously press
+                    controls["cameraDown"] = 0
 
-                if event.button == buttonKeys['L1']:
-                    controls["leftBumper"] = 0
-                if event.button == buttonKeys['R1']:
-                    controls["rightBumper"] = 0
-                if event.button == buttonKeys['leftArrow']:
-                    controls["cameraSwivelLeft"] = 0
-                if event.button == buttonKeys['rightArrow']:
-                    controls["cameraSwivelRight"] = 0
-                if event.button == buttonKeys['upArrow']:
-                    controls["cameraSwivelUp"] = 0
-                if event.button == buttonKeys['downArrow']:
-                    controls["cameraSwivelDown"] = 0
+                # Camera toggles
+                if event.button == inputs['leftCircle']: # continuously press
+                    controls["leftWhegBack"] = 0
+                if event.button == inputs['rightCircle']: # continuously press
+                    controls["rightWhegBack"] = 0
+
+                # Wheg controls
+                if event.button == inputs['leftBumper']:
+                    controls["cameraTypeToggle"] = 0
+                if event.button == inputs['rightBumper']:
+                    controls["cameraControlToggle"] = 0
 
             if event.type == pygame.JOYAXISMOTION:
                 analogKeys[event.axis] = event.value
@@ -200,27 +167,26 @@ class Transmitter:
 
                 if abs(analogKeys[3]) > .4:
                     if (analogKeys[3] < -.7) or (analogKeys[3] > .7):
-                        controls["rightJoy"] = analogKeys[3]
+                        controls["leftTread"] = analogKeys[3]
                 else:
-                    controls["rightJoy"] = 0
+                    controls["rightTread"] = 0
 
                 # Triggers
                 if analogKeys[4] > 0.05:  # Left trigger
-                    controls["leftTrigger"] = analogKeys[4]
+                    controls["leftWhegFwd"] = analogKeys[4]
                 else:
-                    controls["leftTrigger"] = 0
+                    controls["leftWhegFwd"] = 0
                 if analogKeys[5] > 0.05:  # Right Trigger
-                    controls["rightTrigger"] = analogKeys[5]
+                    controls["rightWhegFwd"] = analogKeys[5]
                 else:
-                    controls["rightTrigger"] = 0
+                    controls["rightWhegFwd"] = 0
             
         if(self.on):
             self.sendContinuous()
 
         # RESETTING TOGGLES -- otherwise they are continuous
-        controls["cameraToggle"] = 0
-        controls["controlToggle"] = 0
-        controls["cameraTelescope"] = 0
+        controls["cameraTypeToggle"] = 0
+        controls["cameraControlToggle"] = 0
 
     def sendContinuous(self):
         serializedControls = pickle.dumps(controls)

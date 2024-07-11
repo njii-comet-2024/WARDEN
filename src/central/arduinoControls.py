@@ -31,8 +31,8 @@ controls = {
     "leftTread" : 0,
     "rightTread" : 0,
     "leftWhegFwd" : 0,
-    "leftWhegBack" : 0,
     "rightWhegFwd" : 0,
+    "leftWhegBack" : 0,
     "rightWhegBack" : 0,
     "cameraTypeToggle" : 0,
     "cameraControlToggle" : 0,
@@ -153,16 +153,3 @@ while True:
     controls["cameraControlToggle"] = 0
     
     # time.sleep(0.1)
-
-# while True:
-#     for event in pygame.event.get():
-#         if event.type == pygame.JOYBUTTONDOWN:
-#             print(event)
-#         if event.type == pygame.JOYBUTTONUP:
-#             print(event)
-#         if event.type == pygame.JOYAXISMOTION:
-#             print(event)
-            
-                
-        
-    # ser.write(inputControls) # Sending controls as a integer array

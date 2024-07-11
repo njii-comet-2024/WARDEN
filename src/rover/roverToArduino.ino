@@ -36,6 +36,9 @@ struct inputControls = {
 
 inputControls controls;
 
+// add camera control state
+// add camera type state
+
 void setup(){
     pinMode(ENA, OUTPUT);
     pinMode(IN1, OUTPUT);

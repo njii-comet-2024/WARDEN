@@ -59,10 +59,8 @@ ROVER_IP = '10.255.0.255' # delete later and use `IP`
 IP = '192.168.110.228' # change to rover IP
 PORT = 55555
 
-rightSpeed = 0
-leftSpeed = 0
-
-ser = serial.Serial('/dev/ttyUSB0')
+arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+time.sleep(2)  # Allow some time for the Arduino to reset
 
 # s = socket.socket() # TCP
 
@@ -210,65 +208,6 @@ class Camera:
                 cnt += 1
 
 """
-State interface used to determine and switch camera state (from regular to IR)
-"""
-class CameraTypeState:
-    _state = 'REG'
-
-    """
-    Switches state from reg to IR (and vice versa)
-    """
-    def switch(self):
-        # TODO: add code to switch on microcontroller
-        if self._state == 'REG':
-            self._state = 'IR'
-            print("Camera IR")
-        elif self._state == 'IR':
-            self._state = 'REG'
-            print("Camera REG")
-        else:
-            pass # incorrect input
-    
-    """
-    Returns the current state
-    """
-    def getState(self):
-        return self._state
-
-"""
-State interface used to determine what position the camera is in
-Starts down
-"""
-class CameraTelescopeState:
-    def __init__(self):
-        self._state = 'DOWN'
-
-    """
-    Switches state from up to down (and vice versa)
-    """
-    def switch(self):
-        if self._state == 'UP':
-            self._state = 'DOWN'
-            # Move camera down until encoder at max steps
-            # while(cameraEncoder.value() < 1 and cameraEncoder.value() > -1):
-                # cameraTelescope.backward()
-            print("Camera down")
-        elif self._state == 'DOWN':
-            self._state = 'UP'
-            # Move camera up until encoder at max steps
-            # while(cameraEncoder.value() < 1 and cameraEncoder.value() > -1):
-                # cameraTelescope.forward()
-            print("Camera up")
-        else:
-            pass # incorrect input
-
-    """
-    Returns the current state
-    """
-    def getState(self):
-        return self._state
-
-"""
 Class that defines a rover and its functionality
 """
 class Rover:
@@ -277,8 +216,6 @@ class Rover:
     """
     def __init__(self):
         self.loopCount = 0
-        self.cameraTypeState = CameraTypeState()
-        self.cameraTelescopeState = CameraTelescopeState()
         self.control = 0 # control state -- even => central, odd => drone
         self.on = True # Rover running
 
@@ -304,112 +241,16 @@ class Rover:
 
     """
     Main drive loop
-    Will receive controller input from central and use them to control electronics
+    Will receive controller input from central and transmit to arduino
     """
     def drive(self):
         while self.on:
-            ctrls = []
-            # if [no controls]:
-            #   self.loop_count += 1
             serializedControls, addr = self.sock.recvfrom(1024)
             controls = pickle.loads(serializedControls)
-
-            ser.write(controls, sys.getsizeof(controls))
-
-            # print(controls.values())
-
-            # These will probably have to be converted from input to output values
-            rightSpeed = controls["rightJoy"]
-            leftSpeed = controls["leftJoy"]
-
-            if(controls["end"] > 0):
-                print("END")
-                self.on = False
-
-                # RESETTING GROUND ROVER
-                if(self.cameraTelescopeState.getState() == 'UP'):
-                    self.cameraTelescopeState.switch()
-
-                if(self.cameraTypeState.getState() == 'IR'):
-                    self.cameraTypeState.switch()
-
-                break
-
-            # Whegs controls
-            if(controls["rightTrigger"] > 0):
-                # rightWheg.forward()
-                # leftWheg.forward()
-                ctrls.append("Right whegs fwd")
-            elif(controls["rightBumper"] > 0):
-                # rightWheg.forward()
-                # leftWheg.forward()
-                ctrls.append("Right whegs back")
-
-            if(controls["leftTrigger"] > 0):
-                # rightWheg.backward()
-                # leftWheg.backward()
-                ctrls.append("Left whegs fwd")
-            elif(controls["leftBumper"] > 0):
-                # rightWheg.forward()
-                # leftWheg.forward()
-                ctrls.append("Left whegs back")
-
-            if(controls["controlToggle"] > 0):
-                if(self.control % 2 == 0):
-                    print("Switching to drone")
-                else:
-                    print("Switching to central")
-                ctrls.append("Control toggle")
-
-            # Camera controls
-            if(controls["cameraToggle"] > 0):
-                self.cameraTypeState.switch()
-                ctrls.append("Camera toggle")
-
-            if(controls["cameraSwivelLeft"] > 0):
-                # cameraX.value(0.5)
-                ctrls.append("Camera swivel left")
-                
-            if(controls["cameraSwivelRight"] > 0):
-                # cameraX.value(-1)
-                ctrls.append("Camera swivel right")
-
-            if(controls["cameraSwivelUp"] > 0):
-                # cameraY.value(0.5)
-                ctrls.append("Camera swivel up")
-
-            if(controls["cameraSwivelDown"] > 0):
-                # cameraY.value(-1)
-                ctrls.append("Camera swivel down")
             
-            if(controls["cameraTelescope"] > 0):
-                # if encoder steps < max steps
-                self.cameraTelescopeState.switch()
-                ctrls.append("Camera telescope switch")
-
-            # Tread controls
-            if(rightSpeed < 0):
-                # rightTreadOne.forward(abs(rightSpeed))
-                # rightTreadTwo.forward(abs(rightSpeed))
-                ctrls.append("Right treads fwd")
-
-            if(leftSpeed < 0):
-                # leftTreadOne.forward(abs(leftSpeed))
-                # leftTreadTwo.forward(abs(leftSpeed))
-                ctrls.append("Left treads fwd")
-
-            if(rightSpeed > 0):
-                # rightTreadOne.backward(rightSpeed)
-                # rightTreadTwo.backward(rightSpeed)
-                ctrls.append("Right treads back")
-
-            if(leftSpeed > 0):
-                # leftTreadOne.backward(leftSpeed)
-                # leftTreadTwo.backward(leftSpeed)
-                ctrls.append("Left treads back")
-            
-            if(ctrls):
-                print(ctrls)
+            inputCtrls = ",".join(f"{key}:{value}" for key, value in controls.items())
+            arduino.write(inputCtrls.encode())
+            print("Sent to Arduino: ", inputCtrls)
 
 rover = Rover()
 rover.start()
