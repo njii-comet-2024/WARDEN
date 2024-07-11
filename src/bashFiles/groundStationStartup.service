@@ -1,0 +1,9 @@
+[Unit]
+Description = Runs central.sh on startup
+After=multi-user.target 
+[Service]
+ExecStart= /usr/bin/python  /home/pi/Desktop/central.sh
+User = pi
+
+[Install]
+wantedBy=multi-user.target
