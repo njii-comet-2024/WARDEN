@@ -1,17 +1,14 @@
 """
-Transmits rover controls either directly or through drone
+Transmits rover controls from central
 
 @author [Zoe Rizzo] [@zizz-0]
 
-Date last modified: 07/09/2024
+Date last modified: 07/11/2024
 """
 
-# import hid
 import socket
 import pygame
-import json, os
 import pickle
-import serial
 
 DRONE_IP = '192.168.110.228' # change to drone IP
 CENTRAL_IP = '192.168.110.228' # change to central IP
@@ -50,9 +47,7 @@ inputs = {
     "leftTrigger" : 6,
     "rightTrigger" : 7,
     "leftCircle" : 8,
-    "rightCircle" : 9,
-    "leftJoyClick" : 12,
-    "rightJoyClick" : 13
+    "rightCircle" : 9
 }
 
 controls = {
@@ -72,7 +67,7 @@ controls = {
 
 # 0: Left analog horizonal, 1: Left Analog Vertical, 2: Right Analog Horizontal
 # 3: Right Analog Vertical 4: Left Trigger, 5: Right Trigger
-analogKeys = {0:0, 1:0, 2:0, 3:0, 4:-1, 5: -1}
+analogKeys = {0:0, 1:0, 2:0, 3:0, 4:-1, 5:-1}
 
 """
 Class that defines a transmitter and its functionality in transmitting controls
@@ -164,13 +159,13 @@ class Transmitter:
 
                 if abs(analogKeys[1]) > .4:
                     if (analogKeys[1] < -.7) or (analogKeys[1] > .7): # continuously pressed
-                        controls["leftJoy"] = analogKeys[1]
+                        controls["leftTread"] = analogKeys[1]
                 else:
-                    controls["leftJoy"] = 0
+                    controls["leftTread"] = 0
 
                 if abs(analogKeys[3]) > .4:
                     if (analogKeys[3] < -.7) or (analogKeys[3] > .7):
-                        controls["leftTread"] = analogKeys[3]
+                        controls["rightTread"] = analogKeys[3]
                 else:
                     controls["rightTread"] = 0
 
