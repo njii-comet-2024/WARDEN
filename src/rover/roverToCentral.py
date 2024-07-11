@@ -16,44 +16,11 @@ import base64
 import time
 import imutils
 import serial
-import sys
-from gpiozero import Servo
-from gpiozero import Motor
-from gpiozero import RotaryEncoder
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 
-# Port locations
-RIGHT_TREAD_ONE_FWD = 0
-RIGHT_TREAD_ONE_BACK = 0
-
-RIGHT_TREAD_TWO_FWD = 0
-RIGHT_TREAD_TWO_BACK = 0
-
-LEFT_TREAD_ONE_FWD = 0
-LEFT_TREAD_ONE_BACK = 0
-
-LEFT_TREAD_TWO_FWD = 0
-LEFT_TREAD_TWO_BACK = 0
-
-RIGHT_WHEG_FWD = 0
-RIGHT_WHEG_BACK = 0
-
-LEFT_WHEG_FWD = 0
-LEFT_WHEG_BACK = 0
-
-# Swivel
-CAMERA_X = 0
-CAMERA_Y = 0
-
-# Telescoping
-CAMERA_UP = 0
-CAMERA_DOWN = 0
-
-CAMERA = 0
 
 # Global variables
-
 ROVER_IP = '10.255.0.255' # delete later and use `IP`
 
 IP = '192.168.110.228' # change to rover IP
@@ -63,23 +30,6 @@ arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 time.sleep(2)  # Allow some time for the Arduino to reset
 
 # s = socket.socket() # TCP
-
-# Electronics declarations
-
-# Camera swivel
-# cameraX = Servo(CAMERA_X)
-# cameraY = Servo(CAMERA_Y)
-# cameraTelescope = Motor(CAMERA_UP, CAMERA_DOWN) # Camera telecoping
-
-# # Tread drive motors
-# leftTreadOne = Motor(LEFT_TREAD_ONE_FWD, LEFT_TREAD_ONE_BACK)
-# leftTreadTwo = Motor(LEFT_TREAD_TWO_FWD, LEFT_TREAD_TWO_BACK)
-# rightTreadOne = Motor(RIGHT_TREAD_ONE_FWD, RIGHT_TREAD_ONE_BACK)
-# rightTreadTwo = Motor(RIGHT_TREAD_TWO_FWD, RIGHT_TREAD_TWO_BACK)
-
-# # Wheg motors
-# rightWheg = Motor(RIGHT_WHEG_FWD, RIGHT_WHEG_BACK)
-# leftWheg = Motor(LEFT_WHEG_FWD, LEFT_WHEG_BACK)
 
 """
 Class for manipulation Rover Camera
