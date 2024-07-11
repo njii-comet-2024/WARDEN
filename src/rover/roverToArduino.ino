@@ -35,15 +35,8 @@ struct inputControls = {
 
 inputControls controls;
 
-// add camera control state
-// add camera type state
-
-/*
-Fake state pattern because I hate C++ state pattern
-*/
-void cameraControlState(){
-
-}
+int cameraControl = 0;
+int cameraType = 0;
 
 void setup(){
     pinMode(ENA, OUTPUT);
@@ -54,6 +47,38 @@ void setup(){
     pinMode(ENB, OUTPUT);
 
     Serial.begin(9600);
+}
+
+/*
+Fake state pattern because I hate C++ state pattern
+Keeps track of which state camera type is in [regular or IR] and switches
+Starts as regular
+0 => regular
+1 => IR
+*/
+void cameraControlState(){
+    if(cameraType == 0){
+        cameraType = 1;
+    }
+    else{
+        cameraType = 0;
+    }
+}
+
+/*
+Fake state pattern because I hate C++ state pattern
+Keeps track of which state camera control is in [telescope or tilt] and switches
+Starts as telescope
+0 => telescope
+1 => tilt
+*/
+void cameraTypeState(){
+    if(cameraControl == 0){
+        cameraControl = 1;
+    }
+    else{
+        cameraControl = 0;
+    }
 }
 
 void loop(){
