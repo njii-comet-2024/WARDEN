@@ -34,6 +34,7 @@ Date last modified: 07/11/2024
 #define M4_IN1 = 0;
 #define M4_IN2 = 0;
 
+// all floats to make converting from strings easier [same process for each value] 
 struct inputControls = {
     float leftTread;
     float rightTread;

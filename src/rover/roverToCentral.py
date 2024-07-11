@@ -196,9 +196,9 @@ class Rover:
     def drive(self):
         while self.on:
             serializedControls, addr = self.sock.recvfrom(1024)
-            controls = pickle.loads(serializedControls)
+            controls = pickle.loads(serializedControls) # unserializes controls
 
-            inputCtrls = ",".join(f"{key}:{value}" for key, value in controls.items())
+            inputCtrls = ",".join(f"{key}:{value}" for key, value in controls.items()) # turns serialized controls from dict to string
             arduino.write(inputCtrls.encode())
             print("Sent to Arduino: ", inputCtrls)
 
