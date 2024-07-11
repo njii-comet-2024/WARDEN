@@ -113,7 +113,7 @@ void loop(){
 
     }
 
-    parseInputs();
+    parseInput();
     drive();
     
     delay(500);
@@ -122,7 +122,7 @@ void loop(){
 /*
 Parses serial input from string to struct
 */
-void parseInputs(){
+void parseInput(){
     int i = 0;
     char* parsed[25]; // Holds all input values
 
@@ -218,24 +218,42 @@ void drive(){
 
     if(controls.cameraUp > 0){
         if(cameraControl == 0){
-            // telescope
+            // telescope up
             // stepper motor
         }
         else{
-            // swivel
+            // tilt up 
             // servo
         }
     }
 
     if(controls.cameraDown > 0){
         if(cameraControl == 0){
-            // telescope
+            // telescope down
             // stepper motor
         }
         else{
-            // swivel
+            // tilt down
             // servo
         }
+    }
+
+    if(controls.cameraLeft > 0){
+        // swivel left
+        // servo
+    }
+
+    if(controls.cameraRight > 0){
+        // swivel left
+        // servo
+    }
+
+    if(controls.cameraTypeToggle > 0){
+        cameraTypeState();
+    }
+
+    if(controls.cameraControlToggle > 0){
+        cameraControlState();
     }
 }
 
