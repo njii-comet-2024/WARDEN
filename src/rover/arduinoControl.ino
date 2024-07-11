@@ -125,7 +125,6 @@ void loop(){
         char input[] = Serial.readStringUntil('\n');
         Serial.print("Received: ");
         Serial.println(input);
-
     }
 
     parseInput();
