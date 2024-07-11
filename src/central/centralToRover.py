@@ -10,7 +10,7 @@ import socket
 import pygame
 import pickle
 
-DRONE_IP = '192.168.110.228' # change to drone IP
+ROVER_IP = '192.168.110.228' # change to rover IP
 CENTRAL_IP = '192.168.110.228' # change to central IP
 PORT = 55555
 

@@ -6,7 +6,7 @@ Requires=network.target
 [Service]
 Type=idle
 User=pi
-ExecStart= /usr/bin/python  /home/pi/Desktopclient.py
+ExecStart= /usr/bin/python  /home/pi/Desktop/centralServer.py
 Restart=always
 RestartSec=15
 

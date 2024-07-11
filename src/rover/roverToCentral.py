@@ -4,6 +4,7 @@ Receives control code from central and transmits to arduino
 
 @author [Zoe Rizzo] [@zizz-0]
         [Christopher Prol] [@prolvalone]
+        [vito tribuzio] [@Snoopy-0]
 
 Date last modified: 07/11/2024
 """
@@ -26,8 +27,16 @@ ROVER_IP = '10.255.0.255' # delete later and use `IP`
 IP = '192.168.110.228' # change to rover IP
 PORT = 55555
 
-arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
-time.sleep(2)  # Allow some time for the Arduino to reset
+#arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1) added function for connection to allow for easier use
+#time.sleep(2)  # Allow some time for the Arduino to reset
+
+try:
+    arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+    time.sleep(5)
+    print("Serial connection established")
+except serial.SerialException as e:
+    print(f"Error opening serial port {e}")
+    exit()
 
 # s = socket.socket() # TCP
 
@@ -197,9 +206,8 @@ class Rover:
         while self.on:
             serializedControls, addr = self.sock.recvfrom(1024)
             controls = pickle.loads(serializedControls) # unserializes controls
-
             inputCtrls = ",".join(f"{key}:{value}" for key, value in controls.items()) # turns serialized controls from dict to string
-            arduino.write(inputCtrls.encode())
+            arduino.write((inputCtrls + '\n').encode())
             print("Sent to Arduino: ", inputCtrls)
 
 rover = Rover()
