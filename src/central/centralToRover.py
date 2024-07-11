@@ -121,17 +121,18 @@ class Transmitter:
                     controls["cameraDown"] = 1
 
                 # Camera toggles
-                if event.button == inputs['leftCircle']: # continuously press
-                    controls["leftWhegBack"] = 1
-                if event.button == inputs['rightCircle']: # continuously press
-                    controls["rightWhegBack"] = 1
-
-                # Wheg controls
-                if event.button == inputs['leftBumper']:
+                if event.button == inputs['leftCircle']:
                     controls["cameraTypeToggle"] = 1
-                if event.button == inputs['rightBumper']:
+                if event.button == inputs['rightCircle']:
                     controls["cameraControlToggle"] = 1
 
+                # Wheg controls
+                if event.button == inputs['leftBumper']: # continuously press
+                    controls["leftWhegBack"] = 1
+                    pygame.joystick.Joystick.rumble(1, 1, 0)
+                if event.button == inputs['rightBumper']: # continuously press
+                    controls["rightWhegBack"] = 1
+                    pygame.joystick.Joystick.rumble(1, 1, 0)
 
             if event.type == pygame.JOYBUTTONUP:
                 # Camera controls
@@ -145,16 +146,18 @@ class Transmitter:
                     controls["cameraDown"] = 0
 
                 # Camera toggles
-                if event.button == inputs['leftCircle']: # continuously press
-                    controls["leftWhegBack"] = 0
-                if event.button == inputs['rightCircle']: # continuously press
-                    controls["rightWhegBack"] = 0
+                if event.button == inputs['leftCircle']:
+                    controls["cameraTypeToggle"] = 0
+                if event.button == inputs['rightCircle']:
+                    controls["cameraControlToggle"] = 0
 
                 # Wheg controls
                 if event.button == inputs['leftBumper']:
-                    controls["cameraTypeToggle"] = 0
+                    controls["leftWhegBack"] = 0
+                    pygame.joystick.Joystick.stop_rumble()
                 if event.button == inputs['rightBumper']:
-                    controls["cameraControlToggle"] = 0
+                    controls["rightWhegBack"] = 0
+                    pygame.joystick.Joystick.stop_rumble()
 
             if event.type == pygame.JOYAXISMOTION:
                 analogKeys[event.axis] = event.value
@@ -174,12 +177,16 @@ class Transmitter:
                 # Triggers
                 if analogKeys[4] > 0.05:  # Left trigger
                     controls["leftWhegFwd"] = analogKeys[4]
+                    pygame.joystick.Joystick.rumble(1, 1, 0)
                 else:
                     controls["leftWhegFwd"] = 0
+                    pygame.joystick.Joystick.stop_rumble()
                 if analogKeys[5] > 0.05:  # Right Trigger
                     controls["rightWhegFwd"] = analogKeys[5]
+                    pygame.joystick.Joystick.rumble(1, 1, 0)
                 else:
                     controls["rightWhegFwd"] = 0
+                    pygame.joystick.Joystick.stop_rumble()
             
         if(self.on):
             self.sendContinuous()
