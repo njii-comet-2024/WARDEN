@@ -129,8 +129,6 @@ void loop(){
 
     parseInput();
     drive();
-    
-    delay(500);
 }
 
 /*
