@@ -10,6 +10,7 @@ Date last modified: 07/11/2024
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
+#include <Servo.h>
 
 // PINS
 // IN1 => CLOCKWISE
@@ -33,6 +34,14 @@ Date last modified: 07/11/2024
 #define M4_ENA = 0;
 #define M4_IN1 = 0;
 #define M4_IN2 = 0;
+
+// Servo 1 -- Camera tilt
+#define S1_PIN = 0;
+Servo cameraTilt;
+
+// Servo 2 -- Camera swivel
+#define S2_PIN = 0;
+Servo cameraSwivel;
 
 // all floats to make converting from strings easier [same process for each value] 
 struct inputControls = {
@@ -58,6 +67,9 @@ int cameraType = 0;
 int rightSpeed = 0;
 int leftSpeed = 0;
 
+int tiltPos = 90;
+int swivelPos = 90;
+
 void setup(){
     pinMode(M1_ENA, OUTPUT);
     pinMode(M1_IN1, OUTPUT);
@@ -70,6 +82,9 @@ void setup(){
     pinMode(M3_ENA, OUTPUT);
     pinMode(M3_IN1, OUTPUT);
     pinMode(M3_IN2, OUTPUT);
+
+    cameraTilt.attach(S1_PIN);
+    cameraSwivel.attach(S2_PIN);
 
     Serial.begin(9600);
 }
@@ -224,7 +239,8 @@ void drive(){
         }
         else{
             // tilt up 
-            // servo
+            tiltPos += 1;
+            cameraTilt.write(tiltPos);
         }
     }
 
@@ -235,18 +251,21 @@ void drive(){
         }
         else{
             // tilt down
-            // servo
+            tiltPos -= 1;
+            cameraTilt.write(tiltPos);
         }
     }
 
     if(controls.cameraLeft > 0){
         // swivel left
-        // servo
+        swivelPos -= 1;
+        cameraSwivel.write(swivelPos);
     }
 
     if(controls.cameraRight > 0){
-        // swivel left
-        // servo
+        // swivel right
+        swivelPos += 1;
+        cameraSwivel.write(swivelPos);
     }
 
     if(controls.cameraTypeToggle > 0){
