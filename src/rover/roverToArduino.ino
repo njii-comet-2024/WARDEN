@@ -1,16 +1,15 @@
-// map<string, int> controls;
+/*
+Receives control code from raspberry pi and runs on rover
 
-//controls["upArrow"] = 0;
-//controls["downArrow"] = 0;
+@author [Zoe Rizzo] [@zizz-0]
+        [Vito Tribuzio] [@Snoopy-0]
 
+Date last modified: 07/11/2024
+*/
+// Libraries
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
-
-// RF24 radio(7, 8);
-// const byte address[5] = {'R','x','a','A','z'};
-
-// byte recv[2];
 
 int ENA = 5;
 int IN1 = 2;
@@ -39,6 +38,13 @@ inputControls controls;
 // add camera control state
 // add camera type state
 
+/*
+Fake state pattern because I hate C++ state pattern
+*/
+void cameraControlState(){
+
+}
+
 void setup(){
     pinMode(ENA, OUTPUT);
     pinMode(IN1, OUTPUT);
@@ -48,18 +54,10 @@ void setup(){
     pinMode(ENB, OUTPUT);
 
     Serial.begin(9600);
-    
-    // bool begin = radio.begin();
-    
-    // radio.openWritingPipe(address);
-    // radio.setPALevel(RF24_PA_MAX);
-    // radio.stopListening(); // set as transmitter
 }
 
 void loop(){
     if(Serial.available() > 0){
-        // recv = Serial.read();
-        // radio.write(&recv, sizeof(recv));
         char input[] = Serial.readStringUntil('\n');
         Serial.print("Received: ");
         Serial.println(input);
@@ -98,6 +96,4 @@ void parseInputs(){
     controls.cameraDown = std::stof(parsed[19]);
     controls.cameraLeft = std::stof(parsed[21]);
     controls.cameraRight = std::stof(parsed[23]);
-
-    return controls;
 }

@@ -1,11 +1,11 @@
 """
-Transmits rover video to central either directly or through drone
-Receives control code from central or drone and runs on rover
+Transmits rover video to central
+Receives control code from central and transmits to arduino
 
 @author [Zoe Rizzo] [@zizz-0]
         [Christopher Prol] [@prolvalone]
 
-Date last modified: 07/09/2024
+Date last modified: 07/11/2024
 """
 # Libraries
 import cv2 as cv
@@ -247,7 +247,7 @@ class Rover:
         while self.on:
             serializedControls, addr = self.sock.recvfrom(1024)
             controls = pickle.loads(serializedControls)
-            
+
             inputCtrls = ",".join(f"{key}:{value}" for key, value in controls.items())
             arduino.write(inputCtrls.encode())
             print("Sent to Arduino: ", inputCtrls)
