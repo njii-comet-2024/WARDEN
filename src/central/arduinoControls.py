@@ -140,6 +140,8 @@ def getCtrls():
             else:
                 controls["rightWhegFwd"] = 0
 
+    return controls
+
 while True:
     ctrls = getCtrls()
     inputCtrls = ",".join(f"{key}:{value}" for key, value in ctrls.items())
