@@ -49,8 +49,6 @@ Date last modified: 07/11/2024
 #define M7_IN1 = 0;
 #define M7_IN2 = 0;
 
-
-
 const int stepsPerRevolution = 200; // for steppers == adjust based on steppers
 
 // Servo 1 -- Camera tilt
@@ -65,21 +63,17 @@ Servo cameraSwivel;
 struct inputControls = {
     float leftTread;
     float rightTread;
-    float leftWhegFwd;
-    float rightWhegFwd;
-    float leftWhegBack;
-    float rightWhegBack;
+    float leftWheg;
+    float rightWheg;
     float cameraTypeToggle;
-    float cameraControlToggle;
-    float cameraUp;
-    float cameraDown;
+    float cameraTelescope;
+    float cameraTilt;
     float cameraLeft;
     float cameraRight;
 };
 
 inputControls controls;
 
-int cameraControl = 0;
 int cameraType = 0;
 
 int rightSpeed = 0;
@@ -117,6 +111,14 @@ void setup(){
     cameraSwivel.attach(S2_PIN);
 
     Serial.begin(9600);
+
+    try:
+        arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+        time.sleep(5)
+        print("Serial connection established")
+    except serial.SerialException as e:
+        print(f"Error opening serial port {e}")
+        exit()
 }
 
 /*
@@ -126,28 +128,12 @@ Starts as regular
 0 => regular
 1 => IR
 */
-void cameraControlState(){
+void cameraTypeState(){
     if(cameraType == 0){
         cameraType = 1;
     }
     else{
         cameraType = 0;
-    }
-}
-
-/*
-Fake state pattern because I hate C++ state pattern
-Keeps track of which state camera control is in [telescope or tilt] and switches
-Starts as telescope
-0 => telescope
-1 => tilt
-*/
-void cameraTypeState(){
-    if(cameraControl == 0){
-        cameraControl = 1;
-    }
-    else{
-        cameraControl = 0;
     }
 }
 
@@ -160,6 +146,8 @@ void loop(){
 
     parseInput();
     drive();
+
+    arduino.write(swivelPos);
 }
 
 /*
@@ -167,7 +155,7 @@ Parses serial input from string to struct
 */
 void parseInput(){
     int i = 0;
-    char* parsed[25]; // Holds all input values
+    char* parsed[18]; // Holds all input values
 
     // Splits string by `:` and `,`
     char* tokens = strtok(input, ": ,");
@@ -180,16 +168,13 @@ void parseInput(){
     // Assigns values to struct
     controls.leftTread = std::stof(parsed[1]);
     controls.rightTread = std::stof(parsed[3]);
-    controls.leftWhegFwd = std::stof(parsed[5]);
-    controls.rightWhegFwd = std::stof(parsed[7]);
-    controls.leftWhegBack = std::stof(parsed[9]);
-    controls.rightWhegBack = std::stof(parsed[11]);
-    controls.cameraTypeToggle = std::stof(parsed[13]);
-    controls.cameraControlToggle = std::stof(parsed[15]);
-    controls.cameraUp = std::stof(parsed[17]);
-    controls.cameraDown = std::stof(parsed[19]);
-    controls.cameraLeft = std::stof(parsed[21]);
-    controls.cameraRight = std::stof(parsed[23]);
+    controls.leftWheg = std::stof(parsed[5]);
+    controls.rightWheg = std::stof(parsed[7]);
+    controls.cameraTypeToggle = std::stof(parsed[9]);
+    controls.cameraTelescope = std::stof(parsed[11]);
+    controls.cameraTilt = std::stof(parsed[13]);
+    controls.cameraLeft = std::stof(parsed[15]);
+    controls.cameraRight = std::stof(parsed[17]);
 }
 
 /*
@@ -243,7 +228,10 @@ void drive(){
         analogWrite(M4_ENA, rightSpeed);
     }
 
-    if(controls.leftWhegFwd > 0){ // 
+    // 3-way switches backwards -- 
+    // fwd => -1
+    // back => 1
+    if(controls.leftWheg < 0){
         // stepper motor
         digitalWrite(M6_ENA, HIGH);
         digitalWrite(M6_DIR, HIGH);
@@ -252,7 +240,7 @@ void drive(){
         digitalWrite(M6_OPTO, LOW);
     }
 
-    if(controls.leftWhegBack > 0){
+    if(controls.leftWheg > 0){
         // stepper motor
         digitalWrite(M6_ENA, HIGH);
         digitalWrite(M6_DIR, LOW);
@@ -261,7 +249,7 @@ void drive(){
         digitalWrite(M6_OPTO, LOW);
     }
 
-    if(controls.rightWhegFwd > 0){
+    if(controls.rightWheg < 0){
         // stepper motor
         digitalWrite(M5_ENA, HIGH);
         digitalWrite(M5_DIR, HIGH);
@@ -270,7 +258,7 @@ void drive(){
         digitalWrite(M5_OPTO, LOW);
     }
 
-    if(controls.rightWhegBack > 0){
+    if(controls.rightWheg > 0){
         // stepper motor
         digitalWrite(M5_ENA, HIGH);
         digitalWrite(M5_DIR, LOW);
@@ -279,52 +267,54 @@ void drive(){
         digitalWrite(M3_OPTO, LOW);
     }
 
-    if(controls.cameraUp > 0){
-        if(cameraControl == 0){
-            // telescope up
-            // stepper motor
-            digitalWrite(M7_IN1, HIGH); // may be backwards, need to test
-            digitalWrite(M7_IN2, LOW);
-        }
-        else{
-            // tilt up 
-            tiltPos += 1;
-            cameraTilt.write(tiltPos);
-        }
+    if(controls.cameraTelescope < 0){
+        // telescope up
+        // stepper motor
+        digitalWrite(M7_IN1, HIGH); // may be backwards, need to test
+        digitalWrite(M7_IN2, LOW);
     }
 
-    if(controls.cameraDown > 0){
-        if(cameraControl == 0){
-            // telescope down
-            // stepper motor
-            digitalWrite(M7_IN1, LOW) // may be backwards, need to test
-            digitalWrite(M7_IN2, HIGH)
+    if(controls.cameraTelescope > 0){
+        // telescope down
+        // stepper motor
+        digitalWrite(M7_IN1, LOW) // may be backwards, need to test
+        digitalWrite(M7_IN2, HIGH)
+    }
+
+    if(controls.cameraTilt < 0){
+        // tilt up
+        if(tiltPos < 180){
+            tiltPos += 1;
         }
-        else{
-            // tilt down
+        cameraTilt.write(tiltPos);
+    }
+
+    if(controls.cameraTilt > 0){
+        // tilt down
+        if(tiltPost > 0){
             tiltPos -= 1;
-            cameraTilt.write(tiltPos);
         }
+        cameraTilt.write(tiltPos);
     }
 
     if(controls.cameraLeft > 0){
         // swivel left
-        swivelPos -= 1;
+        if(swivelPos > 0){
+            swivelPos -= 1;
+        }
         cameraSwivel.write(swivelPos);
     }
 
     if(controls.cameraRight > 0){
         // swivel right
-        swivelPos += 1;
+        if(swivelPos < 180){
+            swivelPos += 1;
+        }
         cameraSwivel.write(swivelPos);
     }
 
     if(controls.cameraTypeToggle > 0){
         cameraTypeState();
-    }
-
-    if(controls.cameraControlToggle > 0){
-        cameraControlState();
     }
 }
 
