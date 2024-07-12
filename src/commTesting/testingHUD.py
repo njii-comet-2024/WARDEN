@@ -36,13 +36,16 @@ class testCam:
         #read the image files
         hudTop = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
         hudSide = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassVertical.png', cv.IMREAD_UNCHANGED)
-        hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/vanillaCone.png', cv.IMREAD_UNCHANGED)
+        hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
+        hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
         #rotate and resize
         hudTop = cv.rotate(hudTop, cv.ROTATE_180)
         hudSide = cv.rotate(hudSide, cv.ROTATE_180)
+        hudSideIndicator = cv.rotate(hudSideIndicator, cv.ROTATE_90_COUNTERCLOCKWISE)
         hudTop = cv.resize(hudTop, (0, 0), None, 4, 4)
         hudSide = cv.resize(hudSide, (0, 0), None, 4, 4)
-        hudTopIndicator = cv.resize(hudTopIndicator, (0, 0), None, .8, .8)
+        hudTopIndicator = cv.resize(hudTopIndicator, (0, 0), None, .1, .1)
+        hudSideIndicator = cv.resize(hudSideIndicator, (0,0), None, .1, .1)
        
         #topH, topW, topC = hudTop.shape
         #hb, wb, cb = frame.shape
@@ -69,8 +72,10 @@ class testCam:
             imgResult = cvzone.overlayPNG(imgResult, hudSide, [SIDE_HORIZ, SIDE_VERT]) #adds side hud
             #test text
             imgResult = cv.putText(imgResult, 'ValueY: ' + str(yAxisCam) + '  ValueX: ' + str(xAxisCam), (10, 40), cv.FONT_HERSHEY_COMPLEX, 0.7, (0,0,255),2)
+            
             #overlay indicator
             imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [xAxisCam * 3, TOP_VERT + 350])#adds moving vertical
+            imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ + 350, yAxisCam * 2])
             cv.imshow('TESTING HUD', imgResult)
             if cv.waitKey(20) &0xFF == ord('q'):
                 capture.release()
