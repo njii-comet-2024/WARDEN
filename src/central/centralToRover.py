@@ -26,48 +26,46 @@ joystick.init()
 
 # Controls:
 #
-# Right joystick  --> right treads
-# Left joystick   --> left treads
-# Right trigger   --> whegs fwd
-# Left trigger    --> whegs back
-# Right bumper    --> camera swivel right
-# Left bumper     --> camera swivel left
-# B               --> camera type toggle
-# X               --> camera telescope toggle
-# Y               --> control toggle [drone vs direct]
+# LJOY [Left joystick]          => left treads
+# RJOY [Right joystick]         => right treads
+# SE [Top left 3-way switch]    => left pivoting tread
+# SF [Top right 3-way switch]   => right pivoting tread
+# SB [Left 3-way switch]        => camera tilt
+# SC [Right 3-way switch]       => camera telescope
+# SA [Left button]              => camera swivel left
+# SD [Right button]             => camera swivel right
+# S1 [Left slider]              => camera type toggle
+# S2 [Right slider]             => EMPTY
 
 # Controller inputs to transmit
-inputs = {
-    "x" : 0,
-    "circle" : 1,
-    "triangle" : 2,
-    "square" : 3,
-    "leftBumper" : 4,
-    "rightBumper" : 5,
-    "leftTrigger" : 6,
-    "rightTrigger" : 7,
-    "leftCircle" : 8,
-    "rightCircle" : 9
+buttonInputs = {
+    "SA" : 0,
+    "SD" : 1,
+    "S1" : 2,
+    "S2" : 3
 }
+
+# 0 => RJOY, 1 => LJOY
+# 2 => SE, 3 => SF
+# 4 => SB, 5 => SC
+axisInputs = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0}
 
 controls = {
     "leftTread" : 0,
     "rightTread" : 0,
-    "leftWhegFwd" : 0,
-    "leftWhegBack" : 0,
-    "rightWhegFwd" : 0,
-    "rightWhegBack" : 0,
+    "leftWheg" : 0,
+    "rightWheg" : 0,
     "cameraTypeToggle" : 0,
-    "cameraControlToggle" : 0,
-    "cameraUp" : 0,
-    "cameraDown" : 0,
+    "cameraTelescope" : 0,
+    "cameraTilt" : 0,
     "cameraLeft" : 0,
     "cameraRight" : 0
 }
 
+# PS4
 # 0: Left analog horizonal, 1: Left Analog Vertical, 2: Right Analog Horizontal
 # 3: Right Analog Vertical 4: Left Trigger, 5: Right Trigger
-analogKeys = {0:0, 1:0, 2:0, 3:0, 4:-1, 5:-1}
+# analogKeys = {0:0, 1:0, 2:0, 3:0, 4:-1, 5:-1}
 
 """
 Class that defines a transmitter and its functionality in transmitting controls
@@ -101,94 +99,76 @@ class Transmitter:
     """
     def sendControls(self):
         for event in pygame.event.get(): # get the events (update the joystick)
+            # print(event)
             if event.type == pygame.QUIT:
                 break
             
             if event.type == pygame.JOYBUTTONDOWN:
-                # Camera controls
-                if event.button == inputs['circle']: # continuously press
-                    controls["cameraRight"] = 1
-                if event.button == inputs['square']: # continuously press
+                if event.button == buttonInputs["SA"]:
                     controls["cameraLeft"] = 1
-                if event.button == inputs['triangle']: # continuously press
-                    controls["cameraUp"] = 1
-                if event.button == inputs['x']: # continuously press
-                    controls["cameraDown"] = 1
-
-                # Camera toggles
-                if event.button == inputs['leftCircle']:
+                    # print("SA DOWN")
+                if event.button == buttonInputs["SD"]:
+                    controls["cameraRight"] = 1
+                    # print("SD DOWN")
+                if event.button == buttonInputs["S1"]:
                     controls["cameraTypeToggle"] = 1
-                if event.button == inputs['rightCircle']:
-                    controls["cameraControlToggle"] = 1
-
-                # Wheg controls
-                if event.button == inputs['leftBumper']: # continuously press
-                    controls["leftWhegBack"] = 1
-                    pygame.joystick.Joystick.rumble(1, 1, 0)
-                if event.button == inputs['rightBumper']: # continuously press
-                    controls["rightWhegBack"] = 1
-                    pygame.joystick.Joystick.rumble(1, 1, 0)
+                    # print("S1 DOWN")
 
             if event.type == pygame.JOYBUTTONUP:
-                # Camera controls
-                if event.button == inputs['circle']: # continuously press
-                    controls["cameraRight"] = 0
-                if event.button == inputs['square']: # continuously press
+                if event.button == buttonInputs["SA"]:
                     controls["cameraLeft"] = 0
-                if event.button == inputs['triangle']: # continuously press
-                    controls["cameraUp"] = 0
-                if event.button == inputs['x']: # continuously press
-                    controls["cameraDown"] = 0
-
-                # Camera toggles
-                if event.button == inputs['leftCircle']:
-                    controls["cameraTypeToggle"] = 0
-                if event.button == inputs['rightCircle']:
-                    controls["cameraControlToggle"] = 0
-
-                # Wheg controls
-                if event.button == inputs['leftBumper']:
-                    controls["leftWhegBack"] = 0
-                    pygame.joystick.Joystick.stop_rumble()
-                if event.button == inputs['rightBumper']:
-                    controls["rightWhegBack"] = 0
-                    pygame.joystick.Joystick.stop_rumble()
+                    # print("SA UP")
+                if event.button == buttonInputs["SD"]:
+                    controls["cameraRight"] = 0
+                    # print("SD UP")
+                if event.button == buttonInputs["S1"]:
+                    controls["cameraTypeToggle"] = 1
+                    # print("S1 UP")
 
             if event.type == pygame.JOYAXISMOTION:
-                analogKeys[event.axis] = event.value
+                axisInputs[event.axis] = event.value
 
-                if abs(analogKeys[1]) > .4:
-                    if (analogKeys[1] < -.7) or (analogKeys[1] > .7): # continuously pressed
-                        controls["leftTread"] = analogKeys[1]
+                if abs(axisInputs[0]) > 0.1:
+                    controls["leftTread"] = axisInputs[0]
+                    # print("LJOY: ", axisInputs[0])
                 else:
                     controls["leftTread"] = 0
 
-                if abs(analogKeys[3]) > .4:
-                    if (analogKeys[3] < -.7) or (analogKeys[3] > .7):
-                        controls["rightTread"] = analogKeys[3]
+                if abs(axisInputs[1]) > 0.1:
+                    controls["rightTread"] = axisInputs[1]
+                    # print("RJOY: ", axisInputs[1])
                 else:
                     controls["rightTread"] = 0
 
-                # Triggers
-                if analogKeys[4] > 0.05:  # Left trigger
-                    controls["leftWhegFwd"] = analogKeys[4]
-                    pygame.joystick.Joystick.rumble(1, 1, 0)
+                if abs(axisInputs[2]) > 0.5:
+                    controls["leftWheg"] = axisInputs[2]
+                    # print("SE: ", axisInputs[2])
                 else:
-                    controls["leftWhegFwd"] = 0
-                    pygame.joystick.Joystick.stop_rumble()
-                if analogKeys[5] > 0.05:  # Right Trigger
-                    controls["rightWhegFwd"] = analogKeys[5]
-                    pygame.joystick.Joystick.rumble(1, 1, 0)
+                    controls["leftWheg"] = 0
+
+                if abs(axisInputs[3]) > 0.5:
+                    controls["rightWheg"] = axisInputs[3]
+                    # print("SF: ", axisInputs[3])
                 else:
-                    controls["rightWhegFwd"] = 0
-                    pygame.joystick.Joystick.stop_rumble()
+                    controls["rightWheg"] = 0
+
+                if abs(axisInputs[4]) > 0.5:
+                    controls["cameraTilt"] = axisInputs[4]
+                    # print("SB: ", axisInputs[4])
+                else:
+                    controls["cameraTilt"] = 0
+
+                if abs(axisInputs[5]) > 0.5:
+                    controls["cameraTelescope"] = axisInputs[5]
+                    # print("SD: ", axisInputs[5])
+                else:
+                    controls["cameraTelescope"] = 0
             
-        if(self.on):
-            self.sendContinuous()
+        # if(self.on):
+        #     self.sendContinuous()
 
         # RESETTING TOGGLES -- otherwise they are continuous
         controls["cameraTypeToggle"] = 0
-        controls["cameraControlToggle"] = 0
 
     def sendContinuous(self):
         serializedControls = pickle.dumps(controls)
