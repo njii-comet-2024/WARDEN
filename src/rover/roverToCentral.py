@@ -198,6 +198,10 @@ class Rover:
             if(self.loopCount > maxLoopCount):
                 self.on = False
 
+            if(arduino.available() > 0):
+                swivelPos = arduino.readStringUntil('\n')
+                # send swivelPos back to central
+
     """
     Main drive loop
     Will receive controller input from central and transmit to arduino
