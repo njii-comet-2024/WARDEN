@@ -17,7 +17,7 @@ https://github.com/njii-comet-2024/WARDEN
 This repository holds the control code for the COMET 2024 internship project. 
 
 
-This system is a deployable field recon ground vehicle. The objective is to extend the range of the ground vehicle by using an air vehicle, thus being able to cover more ground. 
+The project, called W.A.R.D.E.N., is a deployable field recon system. It is comprised of a ground rover and aerial vehicle. The objective of the aerial vehicle is to extend the communication range of the ground rover for recon.
 
 
 This project is still a work in progress. 
@@ -36,7 +36,7 @@ This project is still a work in progress.
 **Drone:** The air vehicle used to extend the rover's range.
 
 
-**Central:** The laptop used to receive video footage from both vehicles.
+**Central:** The Raspberry Pi used to receive video footage from both vehicles.
 
 
 **Rover Control:** The controller used to transmit movement controls to the rover.
@@ -45,7 +45,19 @@ This project is still a work in progress.
 **Drone Control:** The controller used to transmit movement controls to the drone.
 
 
-**Ground Station:** Refers to all command controllers and receivers-- central, rover control, and drone control.
+**Ground Station:** Refers to all command controllers and receivers and Wi-Fi network-- Lcentral, rover control, drone control, and router.
+
+---
+
+## Controller Components
+
+**Central Raspberry Pi:** Runs programs `centralToRover.py` and `centralServer.py` to send controls to and receive video from Rover Raspberry Pi and receive video from Drone VTX.
+
+**Rover Raspberry Pi:** Runs program `roverToCentral.py` to receive controls from Central Raspberry Pi and send them to Rover Arduino.
+
+**Rover Arduino:** Runs program `arduinoControls.ino` to receive controls from Rover Raspberry Pi and run rover control code.
+
+**Drone VTX:** Transmits drone video at a certain frequency for Central Raspberry Pi to receive.
 
 ---
 
@@ -53,7 +65,7 @@ This project is still a work in progress.
 
 - Communicate with both the ground and air vehicles to control them.
 - Receive video feed from both the ground and air vehicles.
-- Send commands to the ground vehicle through the air vehicle when connection is lost.
+- Extend the Wi-Fi range using the drone after the rover has lost connection.
 
 ---
 
