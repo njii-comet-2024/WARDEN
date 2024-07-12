@@ -27,6 +27,8 @@ ROVER_IP = '10.255.0.255' # delete later and use `IP`
 IP = '192.168.110.228' # change to rover IP
 PORT = 55555
 
+swivelPos = 0
+
 #arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1) added function for connection to allow for easier use
 #time.sleep(2)  # Allow some time for the Arduino to reset
 
