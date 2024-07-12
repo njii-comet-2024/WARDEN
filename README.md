@@ -3,7 +3,7 @@
 
 ---
 
-# WARDEN -- COMET 2024
+# W.A.R.D.E.N. -- COMET 2024
 Wireless Assessment Rover with Drone Extended Network
 
 </br>
