@@ -20,7 +20,8 @@ class testCam:
         hudTop = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
         hudSide = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassVertical.png', cv.IMREAD_UNCHANGED)
         
-        hudTop = cv.resize(hudTop, (0,0), None, 0.3, 0.3)
+        hudTop = cv.resize(hudTop, (0, 0), None, 4, 4)
+        hudSide = cv.resize(hudSide, (0, 0), None, 4, 4)
         topH, topW, topC = hudTop.shape
         hb, wb, cb = frame.shape
         sideH, sideW, sideC = hudSide.shape
@@ -28,8 +29,8 @@ class testCam:
 
         while True:
             ret, frame = capture.read()
-            imgResult = cvzone.overlayPNG(frame, hudTop, [0, hb - topH])
-            imgResult2 = cvzone.overlayPNG(imgResult, hudSide, [0, hb - sideH])
+            imgResult = cvzone.overlayPNG(frame, hudTop, [-250, -350])
+            imgResult2 = cvzone.overlayPNG(imgResult, hudSide, [-350, -350])
             cv.imshow('TESTING HUD', imgResult2)
             if cv.waitKey(20) &0xFF == ord('q'):
                 capture.release()
