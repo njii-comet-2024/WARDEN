@@ -1,7 +1,7 @@
 /*
 Receives control code from raspberry pi and runs on rover
 
-@author [Zoe Rizzo] [@zizz-0]
+@author [Zoe Rizzo]     [@zizz-0]
         [Vito Tribuzio] [@Snoopy-0]
         [Chris Prol]    [@prolvalone]
 

@@ -2,9 +2,9 @@
 Transmits rover video to central
 Receives control code from central and transmits to arduino
 
-@author [Zoe Rizzo] [@zizz-0]
-        [Christopher Prol] [@prolvalone]
-        [vito tribuzio] [@Snoopy-0]
+@author [Zoe Rizzo]         [@zizz-0]
+        [Christopher Prol]  [@prolvalone]
+        [vito tribuzio]     [@Snoopy-0]
 
 Date last modified: 07/11/2024
 """
