@@ -1,9 +1,9 @@
 """
-server testing for video transmission
+Server testing for video transmission
 
 @author [Christopher Prol] [@prolvalone]
 
-Date last modified: 07/08/2024
+Date last modified: 07/11/2024
 """
 # This is server code to send video frames over UDP
 import cv2
@@ -12,8 +12,12 @@ import socket
 import numpy as np
 import time
 import base64
+import struct
 from picamera.array import PiRGBArray
 from picamera import PiCamera
+
+# State networking info
+camLocation = 9 # test for dual transmission
 
 bufferSize = 65536
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -49,7 +53,13 @@ while True:
         encoded, buffer = cv2.imencode('.jpg', image, [cv2.IMWRITE_JPEG_QUALITY, 80])
         message = base64.b64encode(buffer)
         
-        serverSocket.sendto(message, clientAddr)
+        # Pack the integer value
+        int_value = struct.pack('!I', camLocation)
+        # Concatenate the integer value with the message
+        packet = int_value + message
+        
+        serverSocket.sendto(packet, clientAddr)
+        
         image = cv2.putText(image, 'FPS: ' + str(fps), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         
         cv2.imshow('TRANSMITTING VIDEO', image)
