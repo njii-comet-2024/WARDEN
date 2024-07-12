@@ -2,9 +2,9 @@
 Transmits rover video to central
 Receives control code from central and transmits to arduino
 
-@author [Zoe Rizzo]         [@zizz-0]
-        [Christopher Prol]  [@prolvalone]
-        [vito tribuzio]     [@Snoopy-0]
+@author [Zoe Rizzo] [@zizz-0]
+        [Christopher Prol] [@prolvalone]
+        [vito tribuzio] [@Snoopy-0]
 
 Date last modified: 07/11/2024
 """
@@ -17,10 +17,9 @@ import base64
 import time
 import imutils
 import serial
-from picamera2 import Picamera2
-from picamera2.encoders import JpegEncoder
-from picamera2.outputs import FileOutput
-from picamera2 import Preview
+from picamera.array import PiRGBArray
+from picamera import PiCamera
+
 
 # Global variables
 ROVER_IP = '10.255.0.255' # delete later and use `IP`
@@ -51,7 +50,7 @@ class Camera:
         print("initializing")
 
     """
-    This function receives rover camera feed
+    This function recieves rover camera feed
     
     this is probably unnecessary given transmitRoverFeed 
     function
@@ -111,25 +110,26 @@ class Camera:
                 cnt+=1
         
     """
-    Transmits camera feed from PiCamera2 to Central via UDP sockets
+    Transmits camera feed from PICAMERA to Central via UDP sockets
     """
     def transmitPiCamFeed():
         bufferSize = 65536
         serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
         hostName = socket.gethostname()
-        hostIp = '192.168.110.255' # socket.gethostbyname(hostName)
+        hostIp = '192.168.110.255'# socket.gethostbyname(hostName)
         print(hostIp)
         port = 9999
         socketAddress = (hostIp, port)
         serverSocket.bind(socketAddress)
         print('Listening at:', socketAddress)
 
-        # Initialize PiCamera2
-        picam2 = Picamera2()
-        config = picam2.create_video_configuration(main={"size": (640, 480)})
-        picam2.configure(config)
-        picam2.start()
+        # Initialize PiCamera
+        camera = PiCamera()
+        camera.resolution = (640, 480)
+        camera.framerate = 30
+        rawCapture = PiRGBArray(camera, size=(640, 480))
+        time.sleep(0.1)
 
         fps, st, framesToCount, cnt = (0, 0, 20, 0)
 
@@ -137,31 +137,36 @@ class Camera:
             msg, clientAddr = serverSocket.recvfrom(bufferSize)
             print('GOT connection from ', clientAddr)
             WIDTH = 400
+            for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+                image = frame.array
+                print('Captured frame size:', image.shape)
+                
+                image = imutils.resize(image, width=WIDTH)
+                print('Resized frame size:', image.shape)
 
-            frame = picam2.capture_array()
-            image = imutils.resize(frame, width=WIDTH)
-            encoded, buffer = cv.imencode('.jpg', image, [cv.IMWRITE_JPEG_QUALITY, 80])
-            message = base64.b64encode(buffer)
-            
-            serverSocket.sendto(message, clientAddr)
-            image = cv.putText(image, 'FPS: ' + str(fps), (10, 40), cv.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            
-            cv.imshow('TRANSMITTING VIDEO', image)
-            key = cv.waitKey(1) & 0xFF
-            
-            if key == ord('q'):
-                serverSocket.close()
-                picam2.close()
-                cv.destroyAllWindows()
-                print('Server stopped by user')
-                exit(0)
-            
-            if cnt == framesToCount:
-                fps = round(framesToCount / (time.time() - st))
-                st = time.time()
-                cnt = 0
-            
-            cnt += 1
+                encoded, buffer = cv.imencode('.jpg', image, [cv.IMWRITE_JPEG_QUALITY, 80])
+                message = base64.b64encode(buffer)
+                
+                serverSocket.sendto(message, clientAddr)
+                image = cv.putText(image, 'FPS: ' + str(fps), (10, 40), cv.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+                
+                cv.imshow('TRANSMITTING VIDEO', image)
+                key = cv.waitKey(1) & 0xFF
+                rawCapture.truncate(0)
+                
+                if key == ord('q'):
+                    serverSocket.close()
+                    camera.close()
+                    cv.destroyAllWindows()
+                    print('Server stopped by user')
+                    exit(0)
+                
+                if cnt == framesToCount:
+                    fps = round(framesToCount / (time.time() - st))
+                    st = time.time()
+                    cnt = 0
+                
+                cnt += 1
 
 """
 Class that defines a rover and its functionality
@@ -194,10 +199,6 @@ class Rover:
             # If no commands are sent for an extended period of time
             if(self.loopCount > maxLoopCount):
                 self.on = False
-
-            if(arduino.available() > 0):
-                swivelPos = arduino.readStringUntil('\n')
-                # send swivelPos back to central
 
     """
     Main drive loop
