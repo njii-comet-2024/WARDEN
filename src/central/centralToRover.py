@@ -32,20 +32,20 @@ joystick.init()
 # SA [Left button]              => camera swivel left
 # SD [Right button]             => camera swivel right
 # S1 [Left slider]              => camera type toggle
-# S2 [Right slider]             => EMPTY
+# S2 [Right slider]             => camera zoom
 
 # Controller inputs to transmit
 buttonInputs = {
     "SA" : 0,
     "SD" : 1,
-    "S1" : 2,
-    "S2" : 3
+    "S1" : 2
 }
 
 # 0 => RJOY, 1 => LJOY
 # 2 => SE, 3 => SF
 # 4 => SB, 5 => SC
-axisInputs = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0}
+# 7 => S2
+axisInputs = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 7:0}
 
 controls = {
     "leftTread" : 0,
@@ -56,7 +56,8 @@ controls = {
     "cameraTelescope" : 0,
     "cameraTilt" : 0,
     "cameraLeft" : 0,
-    "cameraRight" : 0
+    "cameraRight" : 0,
+    "cameraZoom" : 0
 }
 
 # PS4
@@ -160,9 +161,15 @@ class Transmitter:
                     # print("SD: ", axisInputs[5])
                 else:
                     controls["cameraTelescope"] = 0
+
+                if abs(axisInputs[7]) > 0.5:
+                    controls["cameraZoom"] = axisInputs[7]
+                    # print("SD: ", axisInputs[5])
+                else:
+                    controls["cameraZoom"] = 0
             
-        # if(self.on):
-        #     self.sendContinuous()
+        if(self.on):
+            self.sendContinuous()
 
         # RESETTING TOGGLES -- otherwise they are continuous
         controls["cameraTypeToggle"] = 0
