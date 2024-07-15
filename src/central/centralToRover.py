@@ -11,10 +11,7 @@ import pygame
 import pickle
 
 ROVER_IP = '192.168.110.228' # change to rover IP
-CENTRAL_IP = '192.168.110.228' # change to central IP
 PORT = 55555
-
-IP = CENTRAL_IP
 
 pygame.init()
 pygame.joystick.init()
@@ -174,7 +171,7 @@ class Transmitter:
         serializedControls = pickle.dumps(controls)
 
         # self.c.send(serializedControls) # TCP
-        self.sock.sendto(serializedControls, (IP, PORT))
+        self.sock.sendto(serializedControls, (ROVER_IP, PORT))
 
         val = False
         for x in controls.values():
