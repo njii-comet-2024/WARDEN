@@ -1,5 +1,5 @@
 """
-sets up server for all vehicles to connect too
+sets up server for all vehicles to connect too - - - acts as client
 @author [Vito Tribuzio]     [@Snoopy-0]
         [Christopher Prol]  [@prolvalone]
 
