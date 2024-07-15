@@ -15,7 +15,6 @@ import socket
 import numpy as np
 import base64
 import time
-import imutils
 import serial
 from picamera.array import PiRGBArray
 from picamera import PiCamera
@@ -90,11 +89,11 @@ class Camera:
             WIDTH=400
             while(vid.isOpened()):
                 _,frame = vid.read()
-                frame = imutils.resize(frame,width=WIDTH)
-                encoded, buffer = cv.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY,80])
+                frame = cv.resize(frame, (WIDTH, -1), fx=1.0, fy=None)
+                encoded, buffer = cv.imencode('.jpg', frame, [cv.IMWRITE_JPEG_QUALITY,80])
                 message = base64.b64encode(buffer)
                 serverSocket.sendto(message,clientAddr)
-                frame = cv.putText(frame, 'FPS: '+str(fps), (10,40), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255), 2)
+                frame = cv.putText(frame, 'FPS: '+str(fps), (10,40), cv.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255), 2)
                 cv.imshow('TRANSMITTING VIDEO', frame)
                 key = cv.waitKey(1) & 0xFF
                 if key == ord('q'):
@@ -140,8 +139,7 @@ class Camera:
             for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
                 image = frame.array
                 print('Captured frame size:', image.shape)
-                
-                image = imutils.resize(image, width=WIDTH)
+                image = cv.resize(image, (WIDTH, int(WIDTH * image.shape[1] / image.shape[0])), interpolation=cv.INTER_AREA)
                 print('Resized frame size:', image.shape)
 
                 encoded, buffer = cv.imencode('.jpg', image, [cv.IMWRITE_JPEG_QUALITY, 80])
