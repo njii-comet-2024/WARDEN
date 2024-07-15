@@ -81,6 +81,9 @@ int leftSpeed = 0;
 
 int tiltPos = 90;
 int swivelPos = 90;
+int telePos = 0;
+
+byte cameraPos[] = {tiltPos, swivelPos, telePos};
 
 void setup(){
     pinMode(M1_ENA, OUTPUT);
@@ -147,7 +150,7 @@ void loop(){
     parseInput();
     drive();
 
-    arduino.write(swivelPos);
+    arduino.write(cameraPos);
 }
 
 /*
@@ -272,6 +275,8 @@ void drive(){
         // stepper motor
         digitalWrite(M7_IN1, HIGH); // may be backwards, need to test
         digitalWrite(M7_IN2, LOW);
+        // if telePos < MAX NUM -- FIND OUT MAX
+        telePos += 1;
     }
 
     if(controls.cameraTelescope > 0){
@@ -279,6 +284,10 @@ void drive(){
         // stepper motor
         digitalWrite(M7_IN1, LOW) // may be backwards, need to test
         digitalWrite(M7_IN2, HIGH)
+
+        if(telePos > 0){
+            telePos -= 1;
+        }
     }
 
     if(controls.cameraTilt < 0){
