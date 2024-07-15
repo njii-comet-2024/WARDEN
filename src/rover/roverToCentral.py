@@ -85,7 +85,7 @@ class Camera:
 
         while True:
             if arduino.in_waiting():
-                arduino.readinto(cameraPos) #bytearray
+                arduino.readinto(cameraPos) # bytearray
 
             msg,clientAddr = serverSocket.recvfrom(bufferSize)
             print('GOT connection from ', clientAddr)
@@ -212,8 +212,6 @@ class Rover:
             inputCtrls = ",".join(f"{key}:{value}" for key, value in controls.items()) # turns serialized controls from dict to string
             arduino.write((inputCtrls + '\n').encode())
             print("Sent to Arduino: ", inputCtrls)
-
-            swivelPos = arduino.read() # send this back to central
 
 rover = Rover()
 rover.start()
