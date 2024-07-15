@@ -16,55 +16,55 @@ Date last modified: 07/11/2024
 // IN1 => CLOCKWISE
 // IN2 => COUNTER-CLOCKWISE
 // Motor 1 -- Right main treads
-#define M1_ENA = 0;
-#define M1_IN1 = 0;
-#define M1_IN2 = 0;
+#define M1_ENA 0
+#define M1_IN1 0
+#define M1_IN2 0
 
 // Motor 2 -- Left main treads
-#define M2_ENA = 0;
-#define M2_IN1 = 0;
-#define M2_IN2 = 0;
+#define M2_ENA 0
+#define M2_IN1 0
+#define M2_IN2 0
 
 // Motor 3 -- Left main treads
-#define M3_ENA = 0;
-#define M3_IN1 = 0;
-#define M3_IN2 = 0;
+#define M3_ENA 0
+#define M3_IN1 0
+#define M3_IN2 0
 
 // Motor 4 -- Left main treads
-#define M4_ENA = 0;
-#define M4_IN1 = 0;
-#define M4_IN2 = 0;
+#define M4_ENA 0
+#define M4_IN1 0
+#define M4_IN2 0
 
 // Motor 5 -- Right wheg treads (DM456AI)
-#define M5_ENA = 0;
-#define M5_OPTO = 0;
-#define M5_DIR = 0;
+#define M5_ENA 0
+#define M5_OPTO 0
+#define M5_DIR 0
 
 // Motor 6 -- Left wheg treads  (DM456AI)
-#define M6_ENA = 0;
-#define M6_OPTO = 0;
-#define M6_DIR = 0;
+#define M6_ENA 0
+#define M6_OPTO 0
+#define M6_DIR 0
 
 // Motor 7 -- Camera Telescope Linear Actuator
-#define M7_IN1 = 0;
-#define M7_IN2 = 0;
+#define M7_IN1 0
+#define M7_IN2 0
 
 const int stepsPerRevolution = 200; // for steppers == adjust based on steppers
 
 // Servo 1 -- Camera tilt
-#define S1_PIN = 0;
+#define S1_PIN 0
 Servo tiltServo;
 
 // Servo 2 -- Camera swivel
-#define S2_PIN = 0;
+#define S2_PIN 0
 Servo swivelServo;
 
 // Servo 3 -- Camera zoom
-#define S3_PIN = 0;
+#define S3_PIN 0
 Servo zoomServo;
 
 // all floats to make converting from strings easier [same process for each value] 
-struct inputControls = {
+struct inputControls {
     float leftTread;
     float rightTread;
     float leftWheg;
@@ -110,23 +110,15 @@ void setup(){
     pinMode(M6_OPTO, OUTPUT);
     pinMode(M6_DIR, OUTPUT);
 
-    pinMode(M7_ENA, OUTPUT);
+    // pinMode(M7_ENA, OUTPUT);
     pinMode(M7_IN1, OUTPUT);
-    PinMode(M7_IN2, OUTPUT);
+    // PinMode(M7_IN2, OUTPUT);
 
     tiltServo.attach(S1_PIN);
     swivelServo.attach(S2_PIN);
     zoomServo.attach(S3_PIN);
 
     Serial.begin(9600);
-
-    try:
-        arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
-        time.sleep(5)
-        print("Serial connection established")
-    except serial.SerialException as e:
-        print(f"Error opening serial port {e}")
-        exit()
 }
 
 /*
@@ -147,46 +139,44 @@ void cameraTypeState(){
 
 void loop(){
     if(Serial.available() > 0){
-        char input[] = Serial.readStringUntil('\n');
+        String input = Serial.readStringUntil('\n');
         Serial.print("Received: ");
         Serial.println(input);
+
+      // parseInput(input.c_str);
+      // drive();
     }
 
-    // Serial.println(input);
-
-    // parseInput();
-    // drive();
-
     // byte cameraPos[] = {byte(tiltPos), byte(swivelPos), byte(telePos), byte(zoomPos)};
-    // arduino.write(cameraPos);
+    // Serial.println(cameraPos);
 }
 
 /*
 Parses serial input from string to struct
 */
-void parseInput(){
+void parseInput(const char* input){
     int i = 0;
-    char* parsed[20]; // Holds all input values
+    char parsed[20][10]; // Holds all input values
 
     // Splits string by `:` and `,`
     char* tokens = strtok(input, ": ,");
     while(tokens != NULL){
-        parsed[i] = tokens;
+        strcpy(parsed[i], tokens);
         tokens = strtok(NULL, ": ,");
         i++;
     }
 
     // Assigns values to struct
-    controls.leftTread = std::stof(parsed[1]);
-    controls.rightTread = std::stof(parsed[3]);
-    controls.leftWheg = std::stof(parsed[5]);
-    controls.rightWheg = std::stof(parsed[7]);
-    controls.cameraTypeToggle = std::stof(parsed[9]);
-    controls.cameraTelescope = std::stof(parsed[11]);
-    controls.cameraTilt = std::stof(parsed[13]);
-    controls.cameraLeft = std::stof(parsed[15]);
-    controls.cameraRight = std::stof(parsed[17]);
-    controls.cameraZoom = std::stof(parsed[19]);
+    controls.leftTread = atof(parsed[1]);
+    controls.rightTread = atof(parsed[3]);
+    controls.leftWheg = atof(parsed[5]);
+    controls.rightWheg = atof(parsed[7]);
+    controls.cameraTypeToggle = atof(parsed[9]);
+    controls.cameraTelescope = atof(parsed[11]);
+    controls.cameraTilt = atof(parsed[13]);
+    controls.cameraLeft = atof(parsed[15]);
+    controls.cameraRight = atof(parsed[17]);
+    controls.cameraZoom = atof(parsed[19]);
 }
 
 /*
@@ -275,8 +265,8 @@ void drive(){
         digitalWrite(M5_ENA, HIGH);
         digitalWrite(M5_DIR, LOW);
 
-        digitalWrite(M3_OPTO, HIGH); 
-        digitalWrite(M3_OPTO, LOW);
+        // digitalWrite(M3_OPTO, HIGH); 
+        // digitalWrite(M3_OPTO, LOW);
     }
 
     if(controls.cameraTelescope < 0){
@@ -291,8 +281,8 @@ void drive(){
     if(controls.cameraTelescope > 0){
         // telescope down
         // stepper motor
-        digitalWrite(M7_IN1, LOW) // may be backwards, need to test
-        digitalWrite(M7_IN2, HIGH)
+        digitalWrite(M7_IN1, LOW); // may be backwards, need to test
+        digitalWrite(M7_IN2, HIGH);
 
         if(telePos > 0){
             telePos -= 1;
@@ -306,7 +296,7 @@ void drive(){
         }
 
         // tilt down
-        if(tiltPost > 0){
+        if(tiltPos > 0){
             tiltPos -= 1;
         }
 
