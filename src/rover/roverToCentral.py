@@ -42,23 +42,6 @@ class Camera:
         print("initializing")
 
     """
-    This function receives rover camera feed
-    
-    this is probably unnecessary given transmitRoverFeed 
-    function
-    """
-    def getRoverFeed():
-        capture = cv.VideoCapture(1)  # need origin of camera, 2 potentially works, potentially doesn't
-        
-        while True:
-            isTrue, frame = capture.read()
-            cv.imshow('frame', frame)
-            if cv.waitKey(20) & 0xFF == ord('q'):
-                break
-
-        capture.release()
-
-    """
     Transmits Rover Video Data from a usb camera Over UDP sockets, acting as the server
     """
     def transmitUSBCamFeed():
@@ -142,8 +125,6 @@ class Camera:
                 combined = cameraPos + message
                 serverSocket.sendto(combined, clientAddr)
                 
-                frame = cv.putText(frame, 'FPS: ' + str(fps), (10, 40), cv.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-                
                 cv.imshow('TRANSMITTING VIDEO', frame)
                 key = cv.waitKey(1) & 0xFF
                 
@@ -154,12 +135,6 @@ class Camera:
                     print('Server stopped by user')
                     exit(0)
                 
-                if cnt == framesToCount:
-                    fps = round(framesToCount / (time.time() - st))
-                    st = time.time()
-                    cnt = 0
-                
-                cnt += 1
 
 
 """
