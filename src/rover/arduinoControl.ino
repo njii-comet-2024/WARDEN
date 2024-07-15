@@ -59,6 +59,10 @@ Servo cameraTilt;
 #define S2_PIN = 0;
 Servo cameraSwivel;
 
+// Servo 3 -- Camera zoom
+#define S3_PIN = 0;
+Servo cameraZoom;
+
 // all floats to make converting from strings easier [same process for each value] 
 struct inputControls = {
     float leftTread;
@@ -70,6 +74,7 @@ struct inputControls = {
     float cameraTilt;
     float cameraLeft;
     float cameraRight;
+    float cameraZoom;
 };
 
 inputControls controls;
@@ -81,9 +86,10 @@ int leftSpeed = 0;
 
 int tiltPos = 90;
 int swivelPos = 90;
+int zoomPos = 90;
 int telePos = 0;
 
-byte cameraPos[] = {tiltPos, swivelPos, telePos};
+byte cameraPos[] = {tiltPos, swivelPos, telePos, zoomPos};
 
 void setup(){
     pinMode(M1_ENA, OUTPUT);
@@ -112,6 +118,7 @@ void setup(){
 
     cameraTilt.attach(S1_PIN);
     cameraSwivel.attach(S2_PIN);
+    cameraZoom.attach(S3_PIN);
 
     Serial.begin(9600);
 
@@ -158,7 +165,7 @@ Parses serial input from string to struct
 */
 void parseInput(){
     int i = 0;
-    char* parsed[18]; // Holds all input values
+    char* parsed[20]; // Holds all input values
 
     // Splits string by `:` and `,`
     char* tokens = strtok(input, ": ,");
@@ -178,6 +185,7 @@ void parseInput(){
     controls.cameraTilt = std::stof(parsed[13]);
     controls.cameraLeft = std::stof(parsed[15]);
     controls.cameraRight = std::stof(parsed[17]);
+    controls.cameraZoom = std::stof(parsed[19]);
 }
 
 /*
@@ -324,6 +332,22 @@ void drive(){
 
     if(controls.cameraTypeToggle > 0){
         cameraTypeState();
+    }
+
+    if(controls.cameraZoom > 0){
+        if(zoomPos < 180){
+            zoomPos += 1;
+        }
+
+        cameraZoom.write(zoomPos);
+    }
+
+    if(controls.cameraZoom < 0){
+        if(zoomPos < 180){
+            zoomPos -= 1;
+        }
+
+        cameraZoom.write(zoomPos);
     }
 }
 
