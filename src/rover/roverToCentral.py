@@ -99,11 +99,9 @@ class Camera:
 
         # Initialize Picamera2
         picam2 = Picamera2()
-        video_config = picam2.create_video_configuration(main={"size": (640, 480)})
-        picam2.configure(video_config)
+        videoConfig = picam2.create_video_configuration(main={"size": (640, 480)})
+        picam2.configure(videoConfig)
         picam2.start()
-
-        fps, st, framesToCount, cnt = (0, 0, 20, 0)
         cameraPos = bytearray(4)
 
         while True:
