@@ -20,8 +20,6 @@ from picamera2.encoders import JpegEncoder
 from picamera2.outputs import FileOutput
 
 # Global variables
-ROVER_IP = '172.168.10.137'  # delete later and use `IP`
-
 IP = '172.168.10.137'  # change to rover IP
 PORT = 55555
 
