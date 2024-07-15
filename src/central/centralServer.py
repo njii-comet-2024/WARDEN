@@ -10,7 +10,6 @@ Date last modified: 07/15/2024
 import socket
 import cv2 as cv
 import numpy as np 
-import time
 import base64
 import cvzone
 
