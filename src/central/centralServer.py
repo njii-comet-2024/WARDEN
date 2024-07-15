@@ -82,15 +82,16 @@ class videoReciever:
     This function recieves Rover Cam footage from the PI Camera.  
     """
     def recieveRoverCam(roverIP):
+        #camera locations
         yAxisCam = 0
         xAxisCam = 50
         dirValY = 1
         dirValX = 1
+        #socket information
         bufferSize = 65536
         clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
-        hostName = socket.gethostname()
-        #roverIP = '192.168.110.255'     - - - -   could delete function Param for this instead
+       # hostName = socket.gethostname() - - - - unused with pass of roverIP
         print(roverIP)
         port = 9999                                 # can change based on possible interference, etc
         message = b'Hello'                          # test message
@@ -101,16 +102,20 @@ class videoReciever:
         hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
         hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
 
+        #connect to server socket
         clientSocket.sendto(message, (roverIP,port))
         fps, st, framesToCount, cnt = (0,0,20,0)
 
+        #rotate and resize images to be properly aligned
         hudTop = cv.rotate(hudTop, cv.ROTATE_180)
-        hudSide = cv.rotate(hudSide, cv.ROTATE_180)
-        hudSideIndicator = cv.rotate(hudSideIndicator, cv.ROTATE_90_COUNTERCLOCKWISE)
         hudTop = cv.resize(hudTop, (0, 0), None, 4, 4)
+        hudSide = cv.rotate(hudSide, cv.ROTATE_180)
         hudSide = cv.resize(hudSide, (0, 0), None, 4, 4)
-        hudTopIndicator = cv.resize(hudTopIndicator, (0, 0), None, .1, .1)
+        hudSideIndicator = cv.rotate(hudSideIndicator, cv.ROTATE_90_COUNTERCLOCKWISE)
         hudSideIndicator = cv.resize(hudSideIndicator, (0,0), None, .1, .1)
+        hudTopIndicator = cv.resize(hudTopIndicator, (0, 0), None, .1, .1)
+
+        #loop for displaying video
         while True:
             #DELETE FROM HERE TO NEXT COMMENT ONCE INTEGRATED
             #This is a placeholder for the SERVO input
@@ -124,7 +129,8 @@ class videoReciever:
             
             
             #DELETE ABOVE THIS
-
+           
+            #recieve Packet
             packet,_ = clientSocket.recvfrom(bufferSize)
             data = base64.b64decode(packet, ' /')
             npdata = np.fromstring(data, dtype=np.uint8)
@@ -142,9 +148,11 @@ class videoReciever:
             #overlay indicator
             imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [xAxisCam * 3, TOP_VERT + 350])#adds moving vertical
             imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ + 350, yAxisCam * 2])
+            #display video
             cv.namedWindow('TESTING HUD', cv.WINDOW_NORMAL)
             cv.imshow('TESTING HUD', imgResult)
             cv.resizeWindow('TESTING HUD', 1024, 600)
+            #exit key
             if cv.waitKey(20) &0xFF == ord('q'):
                 cv.destroyWindow('TESTING HUD')
 
