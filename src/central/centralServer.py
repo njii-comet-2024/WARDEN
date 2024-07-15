@@ -27,10 +27,7 @@ SIDE_VERT = -370
 SIDE_HORIZ = -340
 
 """
-This is some sort of test from      the man,
-                                    the myth,
-                                    the legend,
-                                    GIANVITO!!!!!!!
+This is some sort of test 
 """
 def serverProgram():
     #create a socket
