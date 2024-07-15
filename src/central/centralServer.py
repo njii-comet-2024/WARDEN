@@ -20,7 +20,7 @@ import cvzone
 #ret, frame = capture.read()
 
 
-ROVER_IP = '172.168.10.136'
+ROVER_IP = '192.168.110.253'
 TOP_HORIZ = -293
 TOP_VERT = -340
 SIDE_VERT = -370
