@@ -16,26 +16,27 @@ import numpy as np
 import base64
 import time
 import serial
-from picamera.array import PiRGBArray
-from picamera import PiCamera
+import imutils
+# from picamera.array import PiRGBArray
+# from picamera import PiCamera
 
 
 # Global variables
-ROVER_IP = '10.255.0.255' # delete later and use `IP`
+ROVER_IP = '172.168.10.137' # delete later and use `IP`
 
-IP = '192.168.110.228' # change to rover IP
+IP = '172.168.10.137' # change to rover IP
 PORT = 55555
 
 #arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1) added function for connection to allow for easier use
 #time.sleep(2)  # Allow some time for the Arduino to reset
 
-try:
-    arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
-    time.sleep(5)
-    print("Serial connection established")
-except serial.SerialException as e:
-    print(f"Error opening serial port {e}")
-    exit()
+# try:
+#     arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+#     time.sleep(5)
+#     print("Serial connection established")
+# except serial.SerialException as e:
+#     print(f"Error opening serial port {e}")
+#     exit()
 
 # s = socket.socket() # TCP
 
@@ -78,7 +79,7 @@ class Camera:
         serverSocket.bind(socketAddress)
         print('Listening at:', socketAddress)
 
-        vid = cv.VideoCapture(1) #  replace 'rocket.mp4' with 0 for webcam
+        vid = cv.VideoCapture(0) #  replace 'rocket.mp4' with 0 for webcam
         fps, st, framesToCount, cnt = (0,0,20,0)
         cameraPos = bytearray([10, 69, 90, 170])
 
@@ -91,7 +92,8 @@ class Camera:
             WIDTH=400
             while(vid.isOpened()):
                 _,frame = vid.read()
-                frame = cv.resize(frame, (WIDTH, -1), fx=1.0, fy=None)
+                # frame = cv.resize(frame, (WIDTH, -1), fx=1.0, fy=None)
+                frame = imutils.resize(frame, width=WIDTH)
                 encoded, buffer = cv.imencode('.jpg', frame, [cv.IMWRITE_JPEG_QUALITY,80])
 
                 message = base64.b64encode(buffer)
@@ -215,5 +217,8 @@ class Rover:
             arduino.write((inputCtrls + '\n').encode())
             print("Sent to Arduino: ", inputCtrls)
 
-rover = Rover()
-rover.start()
+# rover = Rover()
+# rover.start()
+
+cam = Camera
+cam.transmitUSBCamFeed()
