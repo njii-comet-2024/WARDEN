@@ -10,7 +10,7 @@ Date last modified: 07/11/2024
 // Libraries
 #include <stdio.h>
 #include <string.h>
-#include <Servo.h>
+// #include <Servo.h>
 
 // PINS
 // IN1 => CLOCKWISE
@@ -53,15 +53,15 @@ const int stepsPerRevolution = 200; // for steppers == adjust based on steppers
 
 // Servo 1 -- Camera tilt
 #define S1_PIN = 0;
-Servo cameraTilt;
+// Servo cameraTilt;
 
 // Servo 2 -- Camera swivel
 #define S2_PIN = 0;
-Servo cameraSwivel;
+// Servo cameraSwivel;
 
 // Servo 3 -- Camera zoom
 #define S3_PIN = 0;
-Servo cameraZoom;
+// Servo cameraZoom;
 
 // all floats to make converting from strings easier [same process for each value] 
 struct inputControls = {
@@ -114,9 +114,9 @@ void setup(){
     pinMode(M7_IN1, OUTPUT);
     PinMode(M7_IN2, OUTPUT);
 
-    cameraTilt.attach(S1_PIN);
-    cameraSwivel.attach(S2_PIN);
-    cameraZoom.attach(S3_PIN);
+    // cameraTilt.attach(S1_PIN);
+    // cameraSwivel.attach(S2_PIN);
+    // cameraZoom.attach(S3_PIN);
 
     Serial.begin(9600);
 
