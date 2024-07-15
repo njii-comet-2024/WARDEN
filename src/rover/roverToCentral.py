@@ -26,8 +26,6 @@ ROVER_IP = '10.255.0.255' # delete later and use `IP`
 IP = '192.168.110.228' # change to rover IP
 PORT = 55555
 
-cameraPos = bytearray()
-
 #arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1) added function for connection to allow for easier use
 #time.sleep(2)  # Allow some time for the Arduino to reset
 
@@ -82,10 +80,11 @@ class Camera:
 
         vid = cv.VideoCapture(1) #  replace 'rocket.mp4' with 0 for webcam
         fps, st, framesToCount, cnt = (0,0,20,0)
+        cameraPos = bytearray([10, 69, 90, 170])
 
         while True:
-            if arduino.in_waiting():
-                arduino.readinto(cameraPos) # bytearray
+            # if arduino.in_waiting():
+            #     arduino.readinto(cameraPos) # bytearray
 
             msg,clientAddr = serverSocket.recvfrom(bufferSize)
             print('GOT connection from ', clientAddr)
@@ -94,8 +93,11 @@ class Camera:
                 _,frame = vid.read()
                 frame = cv.resize(frame, (WIDTH, -1), fx=1.0, fy=None)
                 encoded, buffer = cv.imencode('.jpg', frame, [cv.IMWRITE_JPEG_QUALITY,80])
+
                 message = base64.b64encode(buffer)
-                serverSocket.sendto(message,clientAddr)
+                combined = cameraPos + message
+                serverSocket.sendto(combined,clientAddr)
+                
                 frame = cv.putText(frame, 'FPS: '+str(fps), (10,40), cv.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255), 2)
                 cv.imshow('TRANSMITTING VIDEO', frame)
                 key = cv.waitKey(1) & 0xFF
