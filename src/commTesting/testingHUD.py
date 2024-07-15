@@ -16,6 +16,7 @@ TOP_HORIZ = -293
 TOP_VERT = -340
 SIDE_VERT = -370
 SIDE_HORIZ = -340
+SIDE_ACTU = 340
 #values for moving overlawys
 
 
@@ -30,18 +31,22 @@ class testCam:
         #variables
         yAxisCam = 0
         xAxisCam = 50
+        actuatorHeight = 40
         dirValY = 1
         dirValX = 1
+        dirValActuator = 1
+        
 
 
         #initial capture
         capture  = cv.VideoCapture(0)
         ret, frame = capture.read()
-        #read the image files
+        #read the image files    - - - - will need to be edited once on pi
         hudTop = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
         hudSide = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassVertical.png', cv.IMREAD_UNCHANGED)
         hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
         hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
+        actuatorIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrowRed.png', cv.IMREAD_UNCHANGED)
         #rotate and resize
         hudTop = cv.rotate(hudTop, cv.ROTATE_180)
         hudSide = cv.rotate(hudSide, cv.ROTATE_180)
@@ -50,17 +55,20 @@ class testCam:
         hudSide = cv.resize(hudSide, (0, 0), None, 4, 4)
         hudTopIndicator = cv.resize(hudTopIndicator, (0, 0), None, .1, .1)
         hudSideIndicator = cv.resize(hudSideIndicator, (0,0), None, .1, .1)
-       
+        actuatorIndicator = cv.resize(actuatorIndicator, (0,0), None, .1, .1)
         while True:
             #DELETE FROM HERE TO NEXT COMMENT ONCE INTEGRATED
             #This is a placeholder for the SERVO input
             
             yAxisCam += dirValY
             xAxisCam += dirValX
+            dirValActuator += dirValActuator
             if(yAxisCam >= 210 or yAxisCam <= 0):
                 dirValY *= -1
             if(xAxisCam >= 200 or xAxisCam <= 0):
                 dirValX *= -1
+            if(actuatorHeight >=200 or actuatorHeight <=0):
+                dirValActuator *=1
             
             
             #DELETE ABOVE THIS
@@ -70,6 +78,7 @@ class testCam:
             #overlay satic gui parts
             imgResult = cvzone.overlayPNG(frame, hudTop, [TOP_HORIZ, TOP_VERT]) # adds top Hud
             imgResult = cvzone.overlayPNG(imgResult, hudSide, [SIDE_HORIZ, SIDE_VERT]) #adds side hud
+            imgResult = cvzone.overlayPNG(imgResult, actuatorIndicator, [SIDE_ACTU, SIDE_VERT]) #adds actuator arrow
             #display location coords
             imgResult = cv.putText(imgResult, 'ValueY: ' + str(yAxisCam) + '  ValueX: ' + str(xAxisCam), (10, 460), cv.FONT_HERSHEY_COMPLEX, 0.6, (255,0,0),2)
             #display max limit messages
