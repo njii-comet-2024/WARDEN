@@ -103,7 +103,6 @@ class videoReciever:
 
         #connect to server socket
         clientSocket.sendto(message, (roverIP,port))
-        fps, st, framesToCount, cnt = (0,0,20,0)
 
         #rotate and resize images to be properly aligned
         hudTop = cv.rotate(hudTop, cv.ROTATE_180)
