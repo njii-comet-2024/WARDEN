@@ -130,11 +130,19 @@ class videoReciever:
            
             #recieve Packet
             packet,_ = clientSocket.recvfrom(bufferSize)
-            data = base64.b64decode(packet, ' /')
+
+            cameraPosLength = 4
+            cameraPos = packet[:cameraPosLength]
+            imgData = packet[cameraPosLength:]
+
+            data = base64.b64decode(imgData, ' /')
             npdata = np.fromstring(data, dtype=np.uint8)
             frame = cv.imdecode(npdata, 1)
             imgResult = cvzone.overlayPNG(frame, hudTop, [TOP_HORIZ, TOP_VERT]) # adds top Hud
             imgResult = cvzone.overlayPNG(imgResult, hudSide, [SIDE_HORIZ, SIDE_VERT]) #adds side hud
+
+            cameraPosData = [float(b) for b in cameraPos]
+
             #display location coords
             imgResult = cv.putText(imgResult, 'ValueY: ' + str(yAxisCam) + '  ValueX: ' + str(xAxisCam), (10, 460), cv.FONT_HERSHEY_COMPLEX, 0.6, (255,0,0),2)
             #display max limit messages
