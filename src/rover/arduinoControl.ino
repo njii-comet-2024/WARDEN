@@ -89,8 +89,6 @@ int swivelPos = 90;
 int zoomPos = 90;
 int telePos = 0;
 
-byte cameraPos[] = {tiltPos, swivelPos, telePos, zoomPos};
-
 void setup(){
     pinMode(M1_ENA, OUTPUT);
     pinMode(M1_IN1, OUTPUT);
@@ -157,6 +155,7 @@ void loop(){
     parseInput();
     drive();
 
+    byte cameraPos[] = {byte(tiltPos), byte(swivelPos), byte(telePos), byte(zoomPos)};
     arduino.write(cameraPos);
 }
 

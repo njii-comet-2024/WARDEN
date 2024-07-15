@@ -17,8 +17,8 @@ import base64
 import time
 import serial
 import imutils
-# from picamera.array import PiRGBArray
-# from picamera import PiCamera
+from picamera.array import PiRGBArray
+from picamera import PiCamera
 
 
 # Global variables
@@ -30,13 +30,13 @@ PORT = 55555
 #arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1) added function for connection to allow for easier use
 #time.sleep(2)  # Allow some time for the Arduino to reset
 
-# try:
-#     arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
-#     time.sleep(5)
-#     print("Serial connection established")
-# except serial.SerialException as e:
-#     print(f"Error opening serial port {e}")
-#     exit()
+try:
+    arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+    time.sleep(5)
+    print("Serial connection established")
+except serial.SerialException as e:
+    print(f"Error opening serial port {e}")
+    exit()
 
 # s = socket.socket() # TCP
 
@@ -81,11 +81,11 @@ class Camera:
 
         vid = cv.VideoCapture(0) #  replace 'rocket.mp4' with 0 for webcam
         fps, st, framesToCount, cnt = (0,0,20,0)
-        cameraPos = bytearray([10, 69, 90, 170])
+        cameraPos = bytearray(4)
 
         while True:
-            # if arduino.in_waiting():
-            #     arduino.readinto(cameraPos) # bytearray
+            if arduino.in_waiting():
+                arduino.readinto(cameraPos) # bytearray
 
             msg,clientAddr = serverSocket.recvfrom(bufferSize)
             print('GOT connection from ', clientAddr)
@@ -138,8 +138,12 @@ class Camera:
         time.sleep(0.1)
 
         fps, st, framesToCount, cnt = (0, 0, 20, 0)
+        cameraPos = bytearray(4)
 
         while True:
+            if arduino.in_waiting():
+                arduino.readinto(cameraPos) # bytearray
+
             msg, clientAddr = serverSocket.recvfrom(bufferSize)
             print('GOT connection from ', clientAddr)
             WIDTH = 400
@@ -150,9 +154,11 @@ class Camera:
                 print('Resized frame size:', image.shape)
 
                 encoded, buffer = cv.imencode('.jpg', image, [cv.IMWRITE_JPEG_QUALITY, 80])
+
                 message = base64.b64encode(buffer)
+                combined = cameraPos + message
+                serverSocket.sendto(combined,clientAddr)
                 
-                serverSocket.sendto(message, clientAddr)
                 image = cv.putText(image, 'FPS: ' + str(fps), (10, 40), cv.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
                 
                 cv.imshow('TRANSMITTING VIDEO', image)
