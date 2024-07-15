@@ -120,9 +120,9 @@ class videoReciever:
             
             yAxisCam += dirValY
             xAxisCam += dirValX
-            if(yAxisCam >= 180 or yAxisCam <= 0):
+            if(yAxisCam >= 250 or yAxisCam <= 0):
                 dirValY *= -1
-            if(xAxisCam >= 180 or xAxisCam <= 0):
+            if(xAxisCam >= 250 or xAxisCam <= 0):
                 dirValX *= -1
             
             

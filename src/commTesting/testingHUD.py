@@ -3,7 +3,7 @@ Screwing around with HUD
 
 @author  [Christopher Prol] [@prolvalone]
 
-Date last modified: 07/12/2024
+Date last modified: 07/15/2024
 """
 
 import cv2 as cv
@@ -57,9 +57,9 @@ class testCam:
             
             yAxisCam += dirValY
             xAxisCam += dirValX
-            if(yAxisCam >= 180 or yAxisCam <= 0):
+            if(yAxisCam >= 210 or yAxisCam <= 0):
                 dirValY *= -1
-            if(xAxisCam >= 180 or xAxisCam <= 0):
+            if(xAxisCam >= 200 or xAxisCam <= 0):
                 dirValX *= -1
             
             
