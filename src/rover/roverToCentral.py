@@ -1,18 +1,17 @@
 """
-Transmits rover video to central
+Transmits rover video to central - - -  acts as server
 Receives control code from central and transmits to arduino
 
 @author [Zoe Rizzo] [@zizz-0]
         [Christopher Prol] [@prolvalone]
         [vito tribuzio] [@Snoopy-0]
 
-Date last modified: 07/11/2024
+Date last modified: 07/15/2024
 """
 # Libraries
 import cv2 as cv
 import pickle
 import socket
-import numpy as np
 import base64
 import time
 import serial
@@ -79,7 +78,7 @@ class Camera:
         serverSocket.bind(socketAddress)
         print('Listening at:', socketAddress)
 
-        vid = cv.VideoCapture(0) #  replace 'rocket.mp4' with 0 for webcam
+        vid = cv.VideoCapture(0) 
         fps, st, framesToCount, cnt = (0,0,20,0)
         cameraPos = bytearray(4)
 
@@ -90,10 +89,11 @@ class Camera:
             msg,clientAddr = serverSocket.recvfrom(bufferSize)
             print('GOT connection from ', clientAddr)
             WIDTH=400
+            HEIGHT = 1080
             while(vid.isOpened()):
                 _,frame = vid.read()
-                # frame = cv.resize(frame, (WIDTH, -1), fx=1.0, fy=None)
-                frame = imutils.resize(frame, width=WIDTH)
+                frame = cv.resize(frame, (WIDTH, HEIGHT))
+               # frame = imutils.resize(frame, width=WIDTH)
                 encoded, buffer = cv.imencode('.jpg', frame, [cv.IMWRITE_JPEG_QUALITY,80])
 
                 message = base64.b64encode(buffer)

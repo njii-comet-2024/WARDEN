@@ -1,5 +1,5 @@
 """
-sets up server for all vehicles to connect too
+sets up server for all vehicles to connect too - - - acts as client
 @author [Vito Tribuzio]     [@Snoopy-0]
         [Christopher Prol]  [@prolvalone]
 
@@ -20,7 +20,7 @@ import cvzone
 #ret, frame = capture.read()
 
 
-ROVER_IP = '192.168.110.255'
+ROVER_IP = '172.168.10.136'
 TOP_HORIZ = -293
 TOP_VERT = -340
 SIDE_VERT = -370
@@ -142,7 +142,7 @@ class videoReciever:
             imgResult = cvzone.overlayPNG(imgResult, hudSide, [SIDE_HORIZ, SIDE_VERT]) #adds side hud
 
             cameraPosData = [float(b) for b in cameraPos]
-
+            print(cameraPosData)
             #display location coords
             imgResult = cv.putText(imgResult, 'ValueY: ' + str(yAxisCam) + '  ValueX: ' + str(xAxisCam), (10, 460), cv.FONT_HERSHEY_COMPLEX, 0.6, (255,0,0),2)
             #display max limit messages
