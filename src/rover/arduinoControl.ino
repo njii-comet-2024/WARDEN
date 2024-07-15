@@ -152,11 +152,13 @@ void loop(){
         Serial.println(input);
     }
 
-    parseInput();
-    drive();
+    // Serial.println(input);
 
-    byte cameraPos[] = {byte(tiltPos), byte(swivelPos), byte(telePos), byte(zoomPos)};
-    arduino.write(cameraPos);
+    // parseInput();
+    // drive();
+
+    // byte cameraPos[] = {byte(tiltPos), byte(swivelPos), byte(telePos), byte(zoomPos)};
+    // arduino.write(cameraPos);
 }
 
 /*

@@ -203,9 +203,13 @@ class Rover:
             arduino.write((inputCtrls + '\n').encode())
             print("Sent to Arduino: ", inputCtrls)
 
+            if arduino.in_waiting > 0:
+                line = arduino.readline().decode('utf-8').rstrip()
+                print(line)
 
-# rover = Rover()
-# rover.start()
 
-cam = Camera
-cam.transmitUSBCamFeed()
+rover = Rover()
+rover.start()
+
+# cam = Camera
+# cam.transmitUSBCamFeed()
