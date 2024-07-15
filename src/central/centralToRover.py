@@ -10,7 +10,7 @@ import socket
 import pygame
 import pickle
 
-ROVER_IP = '192.168.110.228' # change to rover IP
+ROVER_IP = '192.168.110.19' # change to rover IP
 PORT = 55555
 
 pygame.init()
