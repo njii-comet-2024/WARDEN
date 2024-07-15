@@ -15,7 +15,6 @@ import socket
 import base64
 import time
 import serial
-import imutils
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 
@@ -79,7 +78,6 @@ class Camera:
         print('Listening at:', socketAddress)
 
         vid = cv.VideoCapture(0) 
-        fps, st, framesToCount, cnt = (0,0,20,0)
         cameraPos = bytearray(4)
 
         while True:
@@ -100,20 +98,14 @@ class Camera:
                 combined = cameraPos + message
                 serverSocket.sendto(combined,clientAddr)
                 
-                frame = cv.putText(frame, 'FPS: '+str(fps), (10,40), cv.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255), 2)
+               
                 cv.imshow('TRANSMITTING VIDEO', frame)
                 key = cv.waitKey(1) & 0xFF
                 if key == ord('q'):
                     serverSocket.close()
                     break
-                if cnt == framesToCount:
-                    try:
-                        fps = round(framesToCount/(time.time()-st))
-                        st=time.time()
-                        cnt=0
-                    except:
-                        pass
-                cnt+=1
+                
+               
         
     """
     Transmits camera feed from PICAMERA to Central via UDP sockets
