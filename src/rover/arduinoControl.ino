@@ -53,15 +53,15 @@ const int stepsPerRevolution = 200; // for steppers == adjust based on steppers
 
 // Servo 1 -- Camera tilt
 #define S1_PIN = 0;
-Servo cameraTilt;
+Servo tiltServo;
 
 // Servo 2 -- Camera swivel
 #define S2_PIN = 0;
-Servo cameraSwivel;
+Servo swivelServo;
 
 // Servo 3 -- Camera zoom
 #define S3_PIN = 0;
-Servo cameraZoom;
+Servo zoomServo;
 
 // all floats to make converting from strings easier [same process for each value] 
 struct inputControls = {
@@ -114,9 +114,9 @@ void setup(){
     pinMode(M7_IN1, OUTPUT);
     PinMode(M7_IN2, OUTPUT);
 
-    cameraTilt.attach(S1_PIN);
-    cameraSwivel.attach(S2_PIN);
-    cameraZoom.attach(S3_PIN);
+    tiltServo.attach(S1_PIN);
+    swivelServo.attach(S2_PIN);
+    zoomServo.attach(S3_PIN);
 
     Serial.begin(9600);
 
@@ -299,20 +299,18 @@ void drive(){
         }
     }
 
-    if(controls.cameraTilt < 0){
+    if(controls.cameraTilt != 0){
         // tilt up
         if(tiltPos < 180){
             tiltPos += 1;
         }
-        cameraTilt.write(tiltPos);
-    }
 
-    if(controls.cameraTilt > 0){
         // tilt down
         if(tiltPost > 0){
             tiltPos -= 1;
         }
-        cameraTilt.write(tiltPos);
+
+        tiltServo.write(tiltPos);
     }
 
     if(controls.cameraLeft > 0){
@@ -320,7 +318,7 @@ void drive(){
         if(swivelPos > 0){
             swivelPos -= 1;
         }
-        cameraSwivel.write(swivelPos);
+        swivelServo.write(swivelPos);
     }
 
     if(controls.cameraRight > 0){
@@ -328,27 +326,18 @@ void drive(){
         if(swivelPos < 180){
             swivelPos += 1;
         }
-        cameraSwivel.write(swivelPos);
+        swivelServo.write(swivelPos);
     }
 
     if(controls.cameraTypeToggle > 0){
         cameraTypeState();
     }
 
-    if(controls.cameraZoom > 0){
-        if(zoomPos < 180){
-            zoomPos += 1;
-        }
+    if(controls.cameraZoom != 0){
+                    // value, fromLow, fromHigh, toLow, toHigh
+        zoomPos = map(controls.cameraZoom, -1, 1, 0, 180);
 
-        cameraZoom.write(zoomPos);
-    }
-
-    if(controls.cameraZoom < 0){
-        if(zoomPos < 180){
-            zoomPos -= 1;
-        }
-
-        cameraZoom.write(zoomPos);
+        zoomServo.write(zoomPos);
     }
 }
 
