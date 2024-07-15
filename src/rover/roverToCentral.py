@@ -27,7 +27,7 @@ ROVER_IP = '10.255.0.255' # delete later and use `IP`
 IP = '192.168.110.228' # change to rover IP
 PORT = 55555
 
-swivelPos = 0
+swivelPos = 90
 
 #arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1) added function for connection to allow for easier use
 #time.sleep(2)  # Allow some time for the Arduino to reset
@@ -211,6 +211,8 @@ class Rover:
             inputCtrls = ",".join(f"{key}:{value}" for key, value in controls.items()) # turns serialized controls from dict to string
             arduino.write((inputCtrls + '\n').encode())
             print("Sent to Arduino: ", inputCtrls)
+
+            swivelPos = arduino.read() # send this back to central
 
 rover = Rover()
 rover.start()
