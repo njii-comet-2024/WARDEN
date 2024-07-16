@@ -20,7 +20,7 @@ port = 55555
 
 # Initializing camera variable
 camera = cv2.VideoCapture(0)  # 0 = device index
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect((centralIP, port))
 
 while True:
@@ -31,4 +31,4 @@ while True:
     data = pickle.dumps(frame)
     message_size = struct.pack("L", len(data))
 
-    s.sendall(message_size + data)
+    s.sendto(message_size + data, (centralIP, port))
