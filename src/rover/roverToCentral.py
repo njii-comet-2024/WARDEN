@@ -295,35 +295,36 @@ class Rover:
             rightWhegTread.backward(rightSpeed)
             ctrls.append("Right back")
 
+        # not fully sure about PUL pins or ENA pins (some online code says LOW to enable but some says HIGH)
         if(controls["leftWheg"] > 0):
-            GPIO.output(M5_ENA, GPIO.HIGH)
+            GPIO.output(M5_ENA, GPIO.LOW)
             GPIO.output(M5_DIR, GPIO.HIGH)
 
-            GPIO.output(M6_PUL, GPIO.HIGH) # not fully sure about this
+            GPIO.output(M6_PUL, GPIO.HIGH)
             GPIO.output(M6_PUL, GPIO.LOW)
             ctrls.append("Left wheg up")
 
         if(controls["leftWheg"] < 0):
-            GPIO.output(M5_ENA, GPIO.HIGH)
+            GPIO.output(M5_ENA, GPIO.LOW)
             GPIO.output(M5_DIR, GPIO.LOW)
 
-            GPIO.output(M6_PUL, GPIO.HIGH) # not fully sure about this
+            GPIO.output(M6_PUL, GPIO.HIGH)
             GPIO.output(M6_PUL, GPIO.LOW)
             ctrls.append("Left wheg down")
         
         if(controls["rightWheg"] > 0):
-            GPIO.output(M6_ENA, GPIO.HIGH)
+            GPIO.output(M6_ENA, GPIO.LOW)
             GPIO.output(M6_DIR, GPIO.HIGH)
 
-            GPIO.output(M6_PUL, GPIO.HIGH) # not fully sure about this
+            GPIO.output(M6_PUL, GPIO.HIGH)
             GPIO.output(M6_PUL, GPIO.LOW)
             ctrls.append("Right wheg up")
 
         if(controls["rightWheg"] < 0):
-            GPIO.output(M6_ENA, GPIO.HIGH)
+            GPIO.output(M6_ENA, GPIO.LOW)
             GPIO.output(M6_DIR, GPIO.LOW)
 
-            GPIO.output(M6_PUL, GPIO.HIGH) # not fully sure about this
+            GPIO.output(M6_PUL, GPIO.HIGH)
             GPIO.output(M6_PUL, GPIO.LOW)
             ctrls.append("Right wheg down")
 
