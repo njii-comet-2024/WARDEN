@@ -14,55 +14,52 @@ import pickle
 
 PORT = 55555
 
-# Sets up the server as well as sends the camera feed to the central server
-def serverSetup():
-    # Create a socket
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    # Bind to the port, no IP in IP field which makes server listen to requests
-    s.bind(('', PORT))
-    print(f"Socket binded to {PORT}")
+# Create a socket
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    # Put socket into listening mode
-    s.listen(5)
-    print("Socket is listening")
+# Bind to the port, no IP in IP field which makes server listen to requests
+s.bind(('', PORT))
+print(f"Socket binded to {PORT}")
 
-    # Accept new connection
-    c, addr = s.accept()
-    print('Got connection from', addr)
+# Put socket into listening mode
+s.listen(5)
+print("Socket is listening")
 
-    data = b''
-    payload_size = struct.calcsize("L")
+# Accept new connection
+c, addr = s.accept()
+print('Got connection from', addr)
 
-    while True:
-        # Retrieve message size
-        while len(data) < payload_size:
-            packet = c.recv(4096)
-            if not packet:
-                break
-            data += packet
+data = b''
+payload_size = struct.calcsize("L")
 
-        if len(data) < payload_size:
+while True:
+    # Retrieve message size
+    while len(data) < payload_size:
+        packet = c.recv(4096)
+        if not packet:
             break
+        data += packet
 
-        packed_msg_size = data[:payload_size]
-        data = data[payload_size:]
-        msg_size = struct.unpack("L", packed_msg_size)[0]
+    if len(data) < payload_size:
+        break
+
+    packedMsgSize = data[:payload_size]
+    data = data[payload_size:]
+    msgSize = struct.unpack("L", packedMsgSize)[0]
 
         # Retrieve all data based on message size
-        while len(data) < msg_size:
-            data += c.recv(4096)
+    while len(data) < msgSize:
+        data += c.recv(4096)
 
-        frame_data = data[:msg_size]
-        data = data[msg_size:]
+    frame_data = data[:msgSize]
+    data = data[msgSize:]
 
-        frame = pickle.loads(frame_data)
+    frame = pickle.loads(frame_data)
 
-        cv.imshow('frame', frame)
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
+    cv.imshow('frame', frame)
+    if cv.waitKey(1) & 0xFF == ord('q'):
+        break
 
-    c.close()
-    cv.destroyAllWindows()
-
-serverSetup()
+c.close()
+cv.destroyAllWindows()
