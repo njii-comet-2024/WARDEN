@@ -82,7 +82,7 @@ swivel = Servo(S2_PIN)
 zoom = Servo(S3_PIN)
 
 # Global variables
-IP = '192.168.110.19'  # change to rover IP
+IP = '192.168.110.78'  # change to rover IP
 PORT = 55555
 
 cameraType = 0
