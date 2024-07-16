@@ -260,7 +260,7 @@ class Rover:
             rightWhegTread.backward(rightSpeed)
             ctrls.append("Right back")
 
-        # not fully sure about PUL pins or ENA pins (some online code says LOW to enable but some says HIGH)
+        # not fully sure about OPTO pins or ENA pins (some online code says LOW to enable but some says HIGH)
         if(controls["leftWheg"] > 0):
             GPIO.output(STEP_ENA, GPIO.LOW)
             GPIO.output(STEP_DIR, GPIO.HIGH)
