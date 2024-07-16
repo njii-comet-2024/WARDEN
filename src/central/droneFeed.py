@@ -70,4 +70,4 @@ def serverSetup():
     #Close the connection
     c.close()
 
-serverProgram()
+serverSetup()
