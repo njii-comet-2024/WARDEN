@@ -20,6 +20,8 @@ from gpiozero import Servo
 from picamera2 import Picamera2
 from picamera2.encoders import JpegEncoder
 from picamera2.outputs import FileOutput
+import RPi.GPIO as GPIO
+import time
 
 # PINS
 # IN1 => CLOCKWISE
@@ -45,14 +47,14 @@ M4_IN1 = 0
 M4_IN2 = 0
 
 # Motor 5 -- Right wheg treads (DM456AI)
-M5_ENA = 0
-M5_OPTO = 0
-M5_DIR = 0
+M5_DIR = 0 # direction
+M5_PUL = 0 # pulse
+M5_ENA = 0 # enable
 
 # Motor 6 -- Left wheg treads  (DM456AI)
-M6_ENA = 0
-M6_OPTO = 0
-M6_DIR = 0
+M6_DIR = 0 # direction
+M6_PUL = 0 # pulse
+M6_ENA = 0 # enable
 
 # Motor 7 -- Camera Telescope Linear Actuator
 M7_IN1 = 0
@@ -80,6 +82,18 @@ telescope = Motor(M7_IN1, M7_IN2)
 tilt = Servo(S1_PIN)
 swivel = Servo(S2_PIN)
 zoom = Servo(S3_PIN)
+
+# Wheg stepper motors
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(M5_DIR,GPIO.OUT)
+GPIO.setup(M5_PUL,GPIO.OUT)
+GPIO.setup(M5_ENA,GPIO.OUT)
+
+GPIO.setup(M6_DIR,GPIO.OUT)
+GPIO.setup(M6_PUL,GPIO.OUT)
+GPIO.setup(M6_ENA,GPIO.OUT)
 
 # Global variables
 IP = '192.168.110.78'  # change to rover IP
@@ -282,15 +296,35 @@ class Rover:
             ctrls.append("Right back")
 
         if(controls["leftWheg"] > 0):
+            GPIO.output(M5_ENA, GPIO.HIGH)
+            GPIO.output(M5_DIR, GPIO.HIGH)
+
+            GPIO.output(M6_PUL, GPIO.HIGH) # not fully sure about this
+            GPIO.output(M6_PUL, GPIO.LOW)
             ctrls.append("Left wheg up")
 
         if(controls["leftWheg"] < 0):
+            GPIO.output(M5_ENA, GPIO.HIGH)
+            GPIO.output(M5_DIR, GPIO.LOW)
+
+            GPIO.output(M6_PUL, GPIO.HIGH) # not fully sure about this
+            GPIO.output(M6_PUL, GPIO.LOW)
             ctrls.append("Left wheg down")
         
         if(controls["rightWheg"] > 0):
+            GPIO.output(M6_ENA, GPIO.HIGH)
+            GPIO.output(M6_DIR, GPIO.HIGH)
+
+            GPIO.output(M6_PUL, GPIO.HIGH) # not fully sure about this
+            GPIO.output(M6_PUL, GPIO.LOW)
             ctrls.append("Right wheg up")
 
         if(controls["rightWheg"] < 0):
+            GPIO.output(M6_ENA, GPIO.HIGH)
+            GPIO.output(M6_DIR, GPIO.LOW)
+
+            GPIO.output(M6_PUL, GPIO.HIGH) # not fully sure about this
+            GPIO.output(M6_PUL, GPIO.LOW)
             ctrls.append("Right wheg down")
 
         if(controls["cameraTypeToggle"] > 0):
