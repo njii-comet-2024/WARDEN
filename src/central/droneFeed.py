@@ -22,10 +22,7 @@ import pickle
 DRONE_IP = '192.168.110.19'
 PORT = 55555
 
-"""
-This is some sort of test 
-"""
-def serverProgram():
+def serverSetup():
     #create a socket
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
