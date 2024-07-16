@@ -265,8 +265,8 @@ class Rover:
             GPIO.output(STEP_ENA, GPIO.LOW)
             GPIO.output(STEP_DIR, GPIO.HIGH)
 
-            GPIO.output(STEP_PUL, GPIO.HIGH)
-            GPIO.output(STEP_PUL, GPIO.LOW)
+            GPIO.output(STEP_OPTO, GPIO.HIGH)
+            GPIO.output(STEP_OPTO, GPIO.LOW)
             ctrls.append("Left wheg up")
 
         if(controls["leftWheg"] < 0):
