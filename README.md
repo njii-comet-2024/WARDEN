@@ -24,7 +24,7 @@ This project is still a work in progress.
 
 ![WARDEN](docs/WARDEN.png)
 ![Domain Model](docs/WARDENDomainModel.png)
-![Controls](docs/controller_diagram_NEW.png)
+![Controls](docs/controller_diagram.png)
 
 ---
 

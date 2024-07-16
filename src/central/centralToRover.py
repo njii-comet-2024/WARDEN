@@ -31,14 +31,12 @@ joystick.init()
 # SC [Right 3-way switch]       => camera telescope
 # SA [Left button]              => camera swivel left
 # SD [Right button]             => camera swivel right
-# S1 [Left slider]              => camera type toggle
 # S2 [Right slider]             => camera zoom
 
 # Controller inputs to transmit
 buttonInputs = {
     "SA" : 0,
-    "SD" : 1,
-    "S1" : 2
+    "SD" : 1
 }
 
 # 0 => RJOY, 1 => LJOY
@@ -52,7 +50,6 @@ controls = {
     "rightTread" : 0,
     "leftWheg" : 0,
     "rightWheg" : 0,
-    "cameraTypeToggle" : 0,
     "cameraTelescope" : 0,
     "cameraTilt" : 0,
     "cameraLeft" : 0,
@@ -96,9 +93,6 @@ class Transmitter:
                 if event.button == buttonInputs["SD"]:
                     controls["cameraRight"] = 1
                     # print("SD DOWN")
-                if event.button == buttonInputs["S1"]:
-                    controls["cameraTypeToggle"] = 1
-                    # print("S1 DOWN")
 
             if event.type == pygame.JOYBUTTONUP:
                 if event.button == buttonInputs["SA"]:
@@ -107,9 +101,6 @@ class Transmitter:
                 if event.button == buttonInputs["SD"]:
                     controls["cameraRight"] = 0
                     # print("SD UP")
-                if event.button == buttonInputs["S1"]:
-                    controls["cameraTypeToggle"] = 1
-                    # print("S1 UP")
 
             if event.type == pygame.JOYAXISMOTION:
                 axisInputs[event.axis] = event.value

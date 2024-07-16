@@ -245,22 +245,22 @@ class Rover:
         leftSpeed = abs(controls["leftTread"])
         rightSpeed = abs(controls["rightTread"])
 
-        if(controls["leftTreads"] > 0):
+        if(controls["leftTread"] > 0):
             leftMainTread.forward(leftSpeed)
             leftWhegTread.forward(leftSpeed)
             ctrls.append("Left fwd")
 
-        if(controls["rightTreads"] < 0):
+        if(controls["rightTread"] < 0):
             leftMainTread.backward(leftSpeed)
             leftWhegTread.backward(leftSpeed)
             ctrls.append("Left back")
 
-        if(controls["rightTreads"] > 0):
+        if(controls["rightTread"] > 0):
             rightMainTread.forward(rightSpeed)
             rightWhegTread.forward(rightSpeed)
             ctrls.append("Right fwd")
 
-        if(controls["rightTreads"] < 0):
+        if(controls["rightTread"] < 0):
             rightMainTread.backward(rightSpeed)
             rightWhegTread.backward(rightSpeed)
             ctrls.append("Right back")
