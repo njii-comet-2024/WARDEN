@@ -5,6 +5,7 @@ Receives control code from central and runs on rover
 @author [Zoe Rizzo] [@zizz-0]
         [Christopher Prol] [@prolvalone]
         [vito tribuzio] [@Snoopy-0]
+        [Soumya Khera] [@soumya-khera]
 
 Date last modified: 07/16/2024
 """
@@ -101,6 +102,20 @@ zoomPos = 0
 telePos = 0 # change to middle position
 
 """
+Class that manages camera states, switching
+"""
+class CameraTypeState:
+    def __init__(self):
+        self.camera_types = ['pi1', 'pi2']
+        self.current_index = 0  # Default to the first camera in the list (USB)
+    
+    def switch(self):
+        self.current_index = (self.current_index + 1) % len(self.camera_types)
+    
+    def get_current_camera(self):
+        return self.camera_types[self.current_index]
+
+"""
 Class that defines a rover and its functionality
 Receives drive controls, runs them on rover, and transmits video feed and camera positions back to central
 """
@@ -118,11 +133,26 @@ class Rover:
         self.videoSock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, self.bufferSize)
         self.videoSock.bind((IP, VIDEO_PORT))
 
+
         # Initialize Picamera2
+        # def initialize_camera(self):
         self.picam2 = Picamera2()
         videoConfig = self.picam2.create_video_configuration(main={"size": (640, 480)})
         self.picam2.configure(videoConfig)
         self.picam2.start()
+    """
+    def update_camera_configuration(self):
+            Update the camera configuration based on the currently selected camera.
+        current_camera = self.camera_state.get_current_camera()  # Get the current camera type
+        videoConfig = self.picam2.create_video_configuration(main={"size": (640, 480)})
+        self.picam2.configure(videoConfig)  # Configure the camera with the specified video settings
+        self.picam2.start()  # Start the camera stream
+
+    def switch_camera(self):
+        Switch to the next camera in the CameraTypeState and update the configuration.
+        self.camera_state.switch()  # Switch the current camera state
+        self.update_camera_configuration()  
+    """
     
     """
     Maps a number from one range to another
