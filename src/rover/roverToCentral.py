@@ -1,12 +1,12 @@
 """
 Transmits rover video to central - - -  acts as server
-Receives control code from central and transmits to arduino
+Receives control code from central and runs on rover
 
 @author [Zoe Rizzo] [@zizz-0]
         [Christopher Prol] [@prolvalone]
         [vito tribuzio] [@Snoopy-0]
 
-Date last modified: 07/15/2024
+Date last modified: 07/16/2024
 """
 # Libraries
 import cv2 as cv
@@ -129,9 +129,21 @@ class Camera:
         print("initializing")
 
     """
+    Maps a number from one range to another
+    @param `num` : number to re-map
+    @param `inMin` : original range min
+    @param `inMax` : original range max
+    @param `outMin` : target range min
+    @param `outMax` : target range max
+    """
+    def numToRange(num, inMin, inMax, outMin, outMax):
+        return outMin + (float(num - inMin) / float(inMax - inMin) * (outMax
+                        - outMin))
+
+    """
     Transmits Rover Video Data from a usb camera Over UDP sockets, acting as the server
     """
-    def transmitUSBCamFeed():
+    def transmitUSBCamFeed(self):
         bufferSize = 65536
         serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
@@ -146,7 +158,12 @@ class Camera:
         vid = cv.VideoCapture(0)
 
         while True:
-            cameraPos = [tiltPos, swivelPos, telePos, zoomPos]
+            # re-maps camera values and converts to bytearray
+            newTilt = self.numToRange(tiltPos, -1, 1, 0, 210)
+            newSwivel = self.numToRange(swivelPos, -1, 1, 0, 210)
+            newTele = self.numToRange(telePos, 0, 1, 0, 210) # figure out actual max
+            newZoom = self.numToRange(zoomPos, -1, 1, 0, 210)
+            cameraPos = [newTilt, newSwivel, newTele, newZoom]
             cameraPosByte = bytearray(cameraPos)
 
             msg, clientAddr = serverSocket.recvfrom(bufferSize)

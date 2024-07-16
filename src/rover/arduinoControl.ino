@@ -5,7 +5,7 @@ Receives control code from raspberry pi and runs on rover
         [Vito Tribuzio] [@Snoopy-0]
         [Chris Prol]    [@prolvalone]
 
-Date last modified: 07/11/2024
+Date last modified: 07/16/2024
 */
 // Libraries
 #include <stdio.h>
