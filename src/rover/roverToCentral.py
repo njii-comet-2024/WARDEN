@@ -20,7 +20,7 @@ from picamera2.encoders import JpegEncoder
 from picamera2.outputs import FileOutput
 
 # Global variables
-IP = '172.168.10.137'  # change to rover IP
+IP = '192.168.110.19'  # change to rover IP
 PORT = 55555
 
 # try:
@@ -148,6 +148,8 @@ class Rover:
         # UDP
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind((IP, PORT))
+        msg, clientAddr = self.sock.recvfrom(65536)
+        print('GOT connection from ', clientAddr)
 
     """
     Starts the rover and runs the drive loop
