@@ -53,11 +53,9 @@ This project is still a work in progress.
 
 **Central Raspberry Pi:** Runs programs `centralToRover.py` and `centralServer.py` to send controls to and receive video from Rover Raspberry Pi and receive video from Drone VTX.
 
-**Rover Raspberry Pi:** Runs program `roverToCentral.py` to receive controls from Central Raspberry Pi and send them to Rover Arduino.
+**Rover Raspberry Pi:** Runs program `roverToCentral.py` to receive controls from Central Raspberry Pi and runs them on rover.
 
-**Rover Arduino:** Runs program `arduinoControls.ino` to receive controls from Rover Raspberry Pi and run rover control code.
-
-**Drone VTX:** Transmits drone video at a certain frequency for Central Raspberry Pi to receive.
+**Drone VTX:** Transmits drone video at a specific frequency for Central Raspberry Pi to receive.
 
 ---
 
