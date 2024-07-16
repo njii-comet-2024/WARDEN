@@ -46,6 +46,7 @@ class videoReciever:
         hudSide = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassVertical.png', cv.IMREAD_UNCHANGED)
         hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
         hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
+        hudHeightIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrowRed.png', cv.IMREAD_UNCHANGED)
 
         #rotate and resize images to be properly aligned
         hudTop = cv.rotate(hudTop, cv.ROTATE_180)
@@ -55,7 +56,7 @@ class videoReciever:
         hudSideIndicator = cv.rotate(hudSideIndicator, cv.ROTATE_90_COUNTERCLOCKWISE)
         hudSideIndicator = cv.resize(hudSideIndicator, (0,0), None, .1, .1)
         hudTopIndicator = cv.resize(hudTopIndicator, (0, 0), None, .1, .1)
-        
+        hudHeightIndicator = cv.resize(hudHeightIndicator, (0, 0), None, .4, .1)
         #loop for displaying video
         while True:
             #recieve Packet
@@ -80,7 +81,7 @@ class videoReciever:
             print(cameraPosData)
 
             #display location coords
-            imgResult = cv.putText(imgResult,'Height: ' + str(cameraHeight) + ' Zoom: ' + str(cameraZoom), (10, 360), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
+            imgResult = cv.putText(imgResult,'Height: ' + str(cameraHeight) + ' Zoom: ' + str(cameraZoom) + 'x', (10, 360), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
             imgResult = cv.putText(imgResult, 'ValueY: ' + str(cameraTilt) + '  ValueX: ' + str(cameraRotation), (10, 380), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
             #display max limit messages
             if(cameraTilt == 0 or cameraTilt == 180):
@@ -94,6 +95,7 @@ class videoReciever:
             #overlay indicator
             imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [cameraRotation * 5, TOP_VERT + 350])#adds moving vertical
             imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ + 350, cameraTilt * 2])
+            imgResult = cvzone.overlayPNG(imgResult, hudHeightIndicator, [960, cameraHeight * 2])
             #display video
             cv.imshow('TESTING HUD', frame)
 
