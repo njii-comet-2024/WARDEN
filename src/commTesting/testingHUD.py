@@ -12,10 +12,10 @@ import cvzone
 
 
 #values for stationary overlays
-TOP_HORIZ = -293
-TOP_VERT = -340
-SIDE_VERT = -370
-SIDE_HORIZ = -340
+TOP_HORIZ = -85
+TOP_VERT = 0
+SIDE_VERT = -160
+SIDE_HORIZ = -2
 SIDE_ACTU = 340
 #values for moving overlawys
 
@@ -43,16 +43,16 @@ class testCam:
         ret, frame = capture.read()
         #read the image files    - - - - will need to be edited once on pi
         hudTop = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudSide = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassVertical.png', cv.IMREAD_UNCHANGED)
+        hudSide = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
         hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
         hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
         actuatorIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrowRed.png', cv.IMREAD_UNCHANGED)
         #rotate and resize
         hudTop = cv.rotate(hudTop, cv.ROTATE_180)
-        hudSide = cv.rotate(hudSide, cv.ROTATE_180)
+        hudSide = cv.rotate(hudSide, cv.ROTATE_90_CLOCKWISE)
         hudSideIndicator = cv.rotate(hudSideIndicator, cv.ROTATE_90_COUNTERCLOCKWISE)
-        hudTop = cv.resize(hudTop, (0, 0), None, 4, 4)
-        hudSide = cv.resize(hudSide, (0, 0), None, 4, 4)
+        hudTop = cv.resize(hudTop, (0, 0), None, 1, 1)
+        hudSide = cv.resize(hudSide, (0, 0), None, 1, 1)
         hudTopIndicator = cv.resize(hudTopIndicator, (0, 0), None, .1, .1)
         hudSideIndicator = cv.resize(hudSideIndicator, (0,0), None, .1, .1)
         actuatorIndicator = cv.resize(actuatorIndicator, (0,0), None, .1, .1)
@@ -88,8 +88,8 @@ class testCam:
             if(xAxisCam == 0 or xAxisCam == 180):
                 imgResult = cv.putText(imgResult, 'X AXIS LIMIT REACHED' , (410, 460), cv.FONT_HERSHEY_COMPLEX, 0.6, (0,0,255),2)
             #overlay indicator
-            imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [xAxisCam * 3, TOP_VERT + 350])#adds moving vertical
-            imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ + 350, yAxisCam * 2])
+            imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [xAxisCam * 3, TOP_VERT])#adds moving vertical
+            imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ, yAxisCam * 2])
             cv.namedWindow('TESTING HUD', cv.WINDOW_NORMAL)
             cv.imshow('TESTING HUD', imgResult)
             cv.resizeWindow('TESTING HUD', 1024, 600)
