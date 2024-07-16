@@ -95,7 +95,8 @@ GPIO.setup(M6_ENA, GPIO.OUT)
 
 # Global variables
 IP = '192.168.110.78'  # change to rover IP
-PORT = 55555
+CONTROLS_PORT = 55555
+VIDEO_PORT = 9999
 
 cameraType = 0
 
@@ -118,10 +119,13 @@ class Rover:
         self.on = True  # Rover running
 
         # UDP
-        self.bufferSize = 65536
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, self.bufferSize)
-        self.sock.bind((IP, PORT))
+        self.controlSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.controlSock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, self.bufferSize)
+        self.controlSock.bind((IP, CONTROLS_PORT))
+
+        self.videoSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.videoSock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, self.bufferSize)
+        self.videoSock.bind((IP, VIDEO_PORT))
 
         # Initialize Picamera2
         self.picam2 = Picamera2()
@@ -209,7 +213,7 @@ class Rover:
             cameraPos = [newTilt, newSwivel, newTele, newZoom]
             cameraPosByte = bytearray(cameraPos)
 
-            msg, clientAddr = self.sock.recvfrom(self.bufferSize)
+            msg, clientAddr = self.videoSock.recvfrom(self.bufferSize)
             print('GOT connection from ', clientAddr)
             WIDTH = 400
             while True:
@@ -222,13 +226,13 @@ class Rover:
 
                 message = base64.b64encode(buffer)
                 combined = cameraPosByte + message
-                self.sock.sendto(combined, clientAddr)
+                self.videoSock.sendto(combined, clientAddr)
                 
                 cv.imshow('TRANSMITTING VIDEO', frame)
                 key = cv.waitKey(1) & 0xFF
                 
                 if key == ord('q'):
-                    self.sock.close()
+                    self.videoSock.close()
                     self.picam2.stop()
                     cv.destroyAllWindows()
                     print('Server stopped by user')
@@ -239,7 +243,7 @@ class Rover:
     """
     def drive(self):
         ctrls = []
-        serializedControls, addr = self.sock.recvfrom(1024)
+        serializedControls, addr = self.controlSock.recvfrom(1024)
         controls = pickle.loads(serializedControls)  # unserializes controls
 
         leftSpeed = abs(controls["leftTread"])
