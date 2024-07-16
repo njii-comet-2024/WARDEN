@@ -15,7 +15,7 @@ import pickle
 PORT = 55555
 
 # Create a socket
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 # Bind to the port, no IP in IP field which makes server listen to requests
 s.bind(('', PORT))
