@@ -23,13 +23,13 @@ from picamera2.outputs import FileOutput
 IP = '192.168.110.19'  # change to rover IP
 PORT = 55555
 
-# try:
-#     arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
-#     time.sleep(5)
-#     print("Serial connection established")
-# except serial.SerialException as e:
-#     print(f"Error opening serial port {e}")
-#     exit()
+try:
+    arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+    time.sleep(5)
+    print("Serial connection established")
+except serial.SerialException as e:
+    print(f"Error opening serial port {e}")
+    exit()
 
 
 """
@@ -58,8 +58,8 @@ class Camera:
         cameraPos = bytearray(4)
 
         while True:
-            # if arduino.in_waiting:
-            #     arduino.readinto(cameraPos)  # bytearray
+            if arduino.in_waiting:
+                arduino.readinto(cameraPos)  # bytearray
 
             msg, clientAddr = serverSocket.recvfrom(bufferSize)
             print('GOT connection from ', clientAddr)
@@ -103,8 +103,8 @@ class Camera:
         cameraPos = bytearray(4)
 
         while True:
-            # if arduino.in_waiting:
-            #     arduino.readinto(cameraPos)  # bytearray
+            if arduino.in_waiting:
+                arduino.readinto(cameraPos)  # bytearray
 
             msg, clientAddr = serverSocket.recvfrom(bufferSize)
             print('GOT connection from ', clientAddr)
@@ -173,13 +173,13 @@ class Rover:
             serializedControls, addr = self.sock.recvfrom(1024)
             controls = pickle.loads(serializedControls)  # unserializes controls
             inputCtrls = ",".join(f"{key}:{value}" for key, value in controls.items())  # turns serialized controls from dict to string
-            print(inputCtrls)
-            # arduino.write((inputCtrls + '\n').encode())
-            # print("Sent to Arduino: ", inputCtrls)
+            # print(inputCtrls)
+            arduino.write((inputCtrls + '\n').encode())
+            print("Sent to Arduino: ", inputCtrls)
 
-            # if arduino.in_waiting > 0:
-            #     line = arduino.readline().decode('utf-8').rstrip()
-            #     print(line)
+            if arduino.in_waiting > 0:
+                line = arduino.readline().decode('utf-8').rstrip()
+                print(line)
 
 
 rover = Rover()
