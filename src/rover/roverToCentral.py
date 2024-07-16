@@ -82,9 +82,7 @@ swivel = Servo(S2_PIN)
 zoom = Servo(S3_PIN)
 
 # Global variables
-ROVER_IP = '192.168.110.19'  # change to rover IP
-CENTRAL_IP = '192.168.110.19' # change to central IP
-
+IP = '192.168.110.78'  # change to rover IP
 PORT = 55555
 
 cameraType = 0
@@ -139,7 +137,7 @@ class Rover:
         self.bufferSize = 65536
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, self.bufferSize)
-        self.sock.bind((ROVER_IP, PORT))
+        self.sock.bind((IP, PORT))
 
         # Initialize Picamera2
         self.picam2 = Picamera2()

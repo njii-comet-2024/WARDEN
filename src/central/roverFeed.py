@@ -1,7 +1,6 @@
 """
-sets up server for all vehicles to connect too - - - acts as client
-@author [Vito Tribuzio]     [@Snoopy-0]
-        [Christopher Prol]  [@prolvalone]
+sets up server for rover to connect to
+@author [Christopher Prol]  [@prolvalone]
 
 Date last modified: 07/15/2024
 """
@@ -12,67 +11,22 @@ import cv2 as cv
 import numpy as np 
 import base64
 import cvzone
+import struct
+import pickle
 
-
-
-#initial capture
-#capture  = cv.VideoCapture(0)
-#ret, frame = capture.read()
-
-
-ROVER_IP = '192.168.110.253'
 TOP_HORIZ = -293
 TOP_VERT = -340
 SIDE_VERT = -370
 SIDE_HORIZ = -340
 
-"""
-This is some sort of test 
-"""
-def serverProgram():
-    #create a socket
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    #reserved a port on computer, can be anything
-    port = 12345
-
-    #bind to the port, no ip in ip field which makes server listen to request
-    s.bind(('', port))
-    print ("socket binded to %s" %(port))
-
-    #put socket into listening mode
-    s.listen(5)
-    print ("socket is listening")
-
-    #accept new connection
-    c, addr = s.accept()
-    print ('Got connection from', addr)
-
-    data = input(' -> ')
-
-    while True:
-        #recieve data from client and print it
-        #data = c.recv(1024).decode()
-        #print("from connected user: " + str(data))
-
-        #send data to the client
-        c.send(data.encode())
-
-        #if statement to break the cycle
-        if data == 'endServer':
-            break
-
-        data = input(' -> ')
-
-    #Close the connection
-    c.close()
+ROVER_IP = '192.168.110.253'
 """
 This is a class for video reception
 """
+
 class videoReciever:
     def __init__(self):
         print("initializing")
-
 
     """
     This function recieves Rover Cam footage from the PI Camera.  

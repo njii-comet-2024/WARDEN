@@ -30,16 +30,13 @@ class Camera:
         print('Listening at:', socketAddress)
 
         vid = cv.VideoCapture(0)
-        cameraPos = bytearray([10, 69, 90, 170])
+        cameraPos = bytearray([180, 0, 205, 10]) # height, tilt, rotation, zoom
 
         while True:
-            # if arduino.in_waiting:
-            #     arduino.readinto(cameraPos)  # bytearray
-
             msg, clientAddr = serverSocket.recvfrom(bufferSize)
             print('GOT connection from ', clientAddr)
-            WIDTH = 400
-            HEIGHT = 1080
+            WIDTH = 1080
+            HEIGHT = 400
             while vid.isOpened():
                 _, frame = vid.read()
                 frame = cv.resize(frame, (WIDTH, HEIGHT))
@@ -48,8 +45,9 @@ class Camera:
                 message = base64.b64encode(buffer)
                 combined = cameraPos + message
                 serverSocket.sendto(combined, clientAddr)
+            
+                cv.imshow('TESTING HUD', frame)
                 
-                cv.imshow('TRANSMITTING VIDEO', frame)
                 key = cv.waitKey(1) & 0xFF
                 if key == ord('q'):
                     serverSocket.close()
