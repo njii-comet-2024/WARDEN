@@ -3,81 +3,57 @@ Server testing for video transmission
 
 @author [Christopher Prol] [@prolvalone]
 
-Date last modified: 07/11/2024
+Date last modified: 07/16/2024
 """
 # This is server code to send video frames over UDP
-import cv2
-import imutils
+import cv2 as cv
 import socket
-import numpy as np
-import time
 import base64
-import struct
-from picamera.array import PiRGBArray
-from picamera import PiCamera
 
-# State networking info
-camLocation = 9 # test for dual transmission
+class Camera:
+    def __init__(self):
+        print("initializing")
 
-bufferSize = 65536
-serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
-hostName = socket.gethostname()
-hostIp = socket.gethostbyname(hostName)
-print(hostIp)
-port = 9999
-socketAddress = (hostIp, port)
-serverSocket.bind(socketAddress)
-print('Listening at:', socketAddress)
+    """
+    Transmits Rover Video Data from a usb camera Over UDP sockets, acting as the server
+    """
+    def transmitUSBCamFeed():
+        bufferSize = 65536
+        serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
+        hostName = socket.gethostname()
+        hostIp = socket.gethostbyname(hostName)
+        print(hostIp)
+        port = 9999
+        socketAddress = (hostIp, port)
+        serverSocket.bind(socketAddress)
+        print('Listening at:', socketAddress)
 
-# Initialize PiCamera
-camera = PiCamera()
-camera.resolution = (640, 480)
-camera.framerate = 30
-rawCapture = PiRGBArray(camera, size=(640, 480))
-time.sleep(0.1)
+        vid = cv.VideoCapture(0)
+        cameraPos = bytearray([10, 69, 90, 170])
 
-fps, st, framesToCount, cnt = (0, 0, 20, 0)
+        while True:
+            # if arduino.in_waiting:
+            #     arduino.readinto(cameraPos)  # bytearray
 
-while True:
-    msg, clientAddr = serverSocket.recvfrom(bufferSize)
-    print('GOT connection from ', clientAddr)
-    WIDTH = 400
-    for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
-        image = frame.array
-        print('Captured frame size:', image.shape)
-        
-        image = imutils.resize(image, width=WIDTH)
-        print('Resized frame size:', image.shape)
+            msg, clientAddr = serverSocket.recvfrom(bufferSize)
+            print('GOT connection from ', clientAddr)
+            WIDTH = 400
+            HEIGHT = 1080
+            while vid.isOpened():
+                _, frame = vid.read()
+                frame = cv.resize(frame, (WIDTH, HEIGHT))
+                encoded, buffer = cv.imencode('.jpg', frame, [cv.IMWRITE_JPEG_QUALITY, 80])
 
-        encoded, buffer = cv2.imencode('.jpg', image, [cv2.IMWRITE_JPEG_QUALITY, 80])
-        message = base64.b64encode(buffer)
-        
-        # Pack the integer value
-        int_value = struct.pack('!I', camLocation)
-        # Concatenate the integer value with the message
-        packet = int_value + message
-        
-        serverSocket.sendto(packet, clientAddr)
-        
-        image = cv2.putText(image, 'FPS: ' + str(fps), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        
-        cv2.imshow('TRANSMITTING VIDEO', image)
-        key = cv2.waitKey(1) & 0xFF
-        rawCapture.truncate(0)
-        
-        if key == ord('q'):
-            serverSocket.close()
-            camera.close()
-            cv2.destroyAllWindows()
-            print('Server stopped by user')
-            exit(0)
-        
-        if cnt == framesToCount:
-            fps = round(framesToCount / (time.time() - st))
-            st = time.time()
-            cnt = 0
-        
-        cnt += 1
+                message = base64.b64encode(buffer)
+                combined = cameraPos + message
+                serverSocket.sendto(combined, clientAddr)
+                
+                cv.imshow('TRANSMITTING VIDEO', frame)
+                key = cv.waitKey(1) & 0xFF
+                if key == ord('q'):
+                    serverSocket.close()
+                    break
 
-cv2.destroyAllWindows()
+
+Camera.transmitUSBCamFeed()
