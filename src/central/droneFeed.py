@@ -14,7 +14,6 @@ import pickle
 
 PORT = 55555
 
-
 # Create a socket
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -42,18 +41,18 @@ while True:
         data += packet
 
     if len(data) < payload_size:
-        break
+        continue
 
-    packedMsgSize = data[:payload_size]
+    packed_msg_size = data[:payload_size]
     data = data[payload_size:]
-    msgSize = struct.unpack("L", packedMsgSize)[0]
+    msg_size = struct.unpack("L", packed_msg_size)[0]
 
-        # Retrieve all data based on message size
-    while len(data) < msgSize:
+    # Retrieve all data based on message size
+    while len(data) < msg_size:
         data += c.recv(4096)
 
-    frame_data = data[:msgSize]
-    data = data[msgSize:]
+    frame_data = data[:msg_size]
+    data = data[msg_size:]
 
     frame = pickle.loads(frame_data)
 
