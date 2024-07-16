@@ -159,10 +159,10 @@ class Camera:
 
         while True:
             # re-maps camera values and converts to bytearray
-            newTilt = self.numToRange(tiltPos, -1, 1, 0, 210)
+            newTilt = self.numToRange(tiltPos, -1, 1, 0, 180)
             newSwivel = self.numToRange(swivelPos, -1, 1, 0, 210)
-            newTele = self.numToRange(telePos, 0, 1, 0, 210) # figure out actual max
-            newZoom = self.numToRange(zoomPos, -1, 1, 0, 210)
+            newTele = self.numToRange(telePos, 0, 1, 0, 180) # figure out actual max
+            newZoom = self.numToRange(zoomPos, -1, 1, 0, 10)
             cameraPos = [newTilt, newSwivel, newTele, newZoom]
             cameraPosByte = bytearray(cameraPos)
 
@@ -208,10 +208,10 @@ class Camera:
 
         while True:
             # re-maps camera values and converts to bytearray
-            newTilt = self.numToRange(tiltPos, -1, 1, 0, 210)
+            newTilt = self.numToRange(tiltPos, -1, 1, 0, 180)
             newSwivel = self.numToRange(swivelPos, -1, 1, 0, 210)
-            newTele = self.numToRange(telePos, 0, 1, 0, 210) # figure out actual max
-            newZoom = self.numToRange(zoomPos, -1, 1, 0, 210)
+            newTele = self.numToRange(telePos, 0, 1, 0, 180) # figure out actual max
+            newZoom = self.numToRange(zoomPos, -1, 1, 0, 10)
             cameraPos = [newTilt, newSwivel, newTele, newZoom]
             cameraPosByte = bytearray(cameraPos)
 
