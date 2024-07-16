@@ -188,7 +188,7 @@ class Camera:
     """
     Transmits camera feed from Picamera2 to Central via UDP sockets
     """
-    def transmitPiCamFeed():
+    def transmitPiCamFeed(self):
         bufferSize = 65536
         serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
@@ -207,7 +207,12 @@ class Camera:
         picam2.start()
 
         while True:
-            cameraPos = [tiltPos, swivelPos, telePos, zoomPos]
+            # re-maps camera values and converts to bytearray
+            newTilt = self.numToRange(tiltPos, -1, 1, 0, 210)
+            newSwivel = self.numToRange(swivelPos, -1, 1, 0, 210)
+            newTele = self.numToRange(telePos, 0, 1, 0, 210) # figure out actual max
+            newZoom = self.numToRange(zoomPos, -1, 1, 0, 210)
+            cameraPos = [newTilt, newSwivel, newTele, newZoom]
             cameraPosByte = bytearray(cameraPos)
 
             msg, clientAddr = serverSocket.recvfrom(bufferSize)
