@@ -60,8 +60,6 @@ M6_ENA = 0 # enable
 M7_IN1 = 0
 M7_IN2 = 0
 
-stepsPerRevolution = 200; # for steppers == adjust based on steppers
-
 # Servo 1 -- Camera tilt
 S1_PIN = 0
 
@@ -87,13 +85,13 @@ zoom = Servo(S3_PIN)
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
-GPIO.setup(M5_DIR,GPIO.OUT)
-GPIO.setup(M5_PUL,GPIO.OUT)
-GPIO.setup(M5_ENA,GPIO.OUT)
+GPIO.setup(M5_DIR, GPIO.OUT)
+GPIO.setup(M5_PUL, GPIO.OUT)
+GPIO.setup(M5_ENA, GPIO.OUT)
 
-GPIO.setup(M6_DIR,GPIO.OUT)
-GPIO.setup(M6_PUL,GPIO.OUT)
-GPIO.setup(M6_ENA,GPIO.OUT)
+GPIO.setup(M6_DIR, GPIO.OUT)
+GPIO.setup(M6_PUL, GPIO.OUT)
+GPIO.setup(M6_ENA, GPIO.OUT)
 
 # Global variables
 IP = '192.168.110.78'  # change to rover IP
@@ -104,36 +102,11 @@ cameraType = 0
 rightSpeed = 0
 leftSpeed = 0
 
+# Servo range => (-1, 1)
 tiltPos = 0
 swivelPos = 0
 zoomPos = 0
 telePos = 0 # change to middle position
-
-"""
-State interface used to determine and switch camera state (from regular to IR)
-"""
-class CameraTypeState:
-    _state = 'REG'
-
-    """
-    Switches state from reg to IR (and vice versa)
-    """
-    def switch(self):
-        # TODO: add code to switch on microcontroller
-        if self._state == 'REG':
-            self._state = 'IR'
-            print("Camera IR")
-        elif self._state == 'IR':
-            self._state = 'REG'
-            print("Camera REG")
-        else:
-            pass # incorrect input
-    
-    """
-    Returns the current state
-    """
-    def getState(self):
-        return self._state
 
 """
 Class that defines a rover and its functionality
@@ -142,10 +115,7 @@ Receives drive controls, runs them on rover, and transmits video feed and camera
 class Rover:
     def __init__(self):
         print("Initializing...")
-        self.loopCount = 0
-        self.control = 0  # control state -- even => central, odd => drone
         self.on = True  # Rover running
-        self.cameraType = CameraTypeState()
 
         # UDP
         self.bufferSize = 65536
@@ -329,8 +299,7 @@ class Rover:
             ctrls.append("Right wheg down")
 
         if(controls["cameraTypeToggle"] > 0):
-            self.cameraType.switch()
-            ctrls.append("Camera switch")
+            ctrls.append("[OBSOLETE]")
 
         if(controls["cameraTelescope"] > 0):
             # find max

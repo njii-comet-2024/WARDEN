@@ -60,11 +60,6 @@ controls = {
     "cameraZoom" : 0
 }
 
-# PS4
-# 0: Left analog horizonal, 1: Left Analog Vertical, 2: Right Analog Horizontal
-# 3: Right Analog Vertical 4: Left Trigger, 5: Right Trigger
-# analogKeys = {0:0, 1:0, 2:0, 3:0, 4:-1, 5:-1}
-
 """
 Class that defines a transmitter and its functionality in transmitting controls
 """
@@ -77,13 +72,6 @@ class Transmitter:
         
         # UDP
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-        # TCP
-        # s.bind((CENTRAL_IP, port))
-        # s.listen()
-        # print("Listening for connection")
-        # self.c, self.addr = s.accept()
-        # print("Got connection from", self.addr)
 
     """
     Starts the transmitter and runs the transmission loop
@@ -176,8 +164,6 @@ class Transmitter:
 
     def sendContinuous(self):
         serializedControls = pickle.dumps(controls)
-
-        # self.c.send(serializedControls) # TCP
         self.sock.sendto(serializedControls, (ROVER_IP, PORT))
 
         val = False
@@ -187,7 +173,6 @@ class Transmitter:
         
         if(val):
             print(controls.values())
-        # print("Continuous")
 
 
 transmit = Transmitter()
