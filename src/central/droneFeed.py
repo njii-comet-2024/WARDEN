@@ -1,7 +1,6 @@
 """
 sets up server for all vehicles to connect too - - - acts as client
-@author [Vito Tribuzio]     [@Snoopy-0]
-        [Christopher Prol]  [@prolvalone]
+@author [Vito Tribuzio][@Snoopy-0]
 
 Date last modified: 07/15/2024
 """
@@ -11,7 +10,6 @@ import socket
 import cv2 as cv
 import numpy as np 
 import base64
-import cvzone
 import struct
 import pickle
 
@@ -22,6 +20,7 @@ import pickle
 DRONE_IP = '192.168.110.19'
 PORT = 55555
 
+#sets up the server as well as sends the camera feed to the central server
 def serverSetup():
     #create a socket
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -47,27 +46,34 @@ def serverSetup():
     payloadSize = struct.calcsize("L")
 
     while True:
-        #retrieve message size
-        while len(data) < payloadSize:
-            data += c.recv(4096)
+            # Retrieve message size
+            while len(data) < payloadSize:
+                packet = c.recv(4096)
+                if not packet:
+                    break
+                data += packet
+
+            if len(data) < payloadSize:
+                break
 
             packedMessageSize = data[:payloadSize]
-            data = data[payloadSize]
+            data = data[payloadSize:]
             messageSize = struct.unpack("L", packedMessageSize)[0]
 
-            #retrieve all data based on message size
+        # Retrieve all data based on message size
             while len(data) < messageSize:
                 data += c.recv(4096)
 
-                frameData = data[:messageSize]
-                data = data[messageSize]
+            frameData = data[:messageSize]
+            data = data[messageSize:]
 
-                frame = pickle.loads(frameData)
+            frame = pickle.loads(frameData)
 
-                cv.imshow('frame', frame)
-                cv.waitKey(1)
+            cv.imshow('frame', frame)
+            if cv.waitKey(1) & 0xFF == ord('q'):
+                break
 
-    #Close the connection
     c.close()
+    cv.destroyAllWindows()
 
 serverSetup()
