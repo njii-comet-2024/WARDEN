@@ -1,12 +1,5 @@
 """
-Transmits rover video to central - - -  acts as server
-Receives control code from central and runs on rover
-
-@author [Zoe Rizzo] [@zizz-0]
-        [Christopher Prol] [@prolvalone]
-        [vito tribuzio] [@Snoopy-0]
-
-Date last modified: 07/16/2024
+TEST FILE TO SIMULTANEOUSLY RECEIVE CONTROLS AND SEND VIDEO
 """
 # Libraries
 import cv2 as cv

@@ -46,15 +46,10 @@ M4_ENA = 0
 M4_IN1 = 0
 M4_IN2 = 0
 
-# Motor 5 -- Right wheg treads (DM456AI)
-M5_DIR = 0 # direction
-M5_PUL = 0 # pulse
-M5_ENA = 0 # enable
-
-# Motor 6 -- Left wheg treads  (DM456AI)
-M6_DIR = 0 # direction
-M6_PUL = 0 # pulse
-M6_ENA = 0 # enable
+# Motors 5 & 6 -- Articulating treads (DM456AI)
+STEP_OPTO = 0
+STEP_DIR = 0
+STEP_ENA = 0
 
 # Motor 7 -- Camera Telescope Linear Actuator
 M7_IN1 = 0
@@ -85,13 +80,9 @@ zoom = Servo(S3_PIN)
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
-GPIO.setup(M5_DIR, GPIO.OUT)
-GPIO.setup(M5_PUL, GPIO.OUT)
-GPIO.setup(M5_ENA, GPIO.OUT)
-
-GPIO.setup(M6_DIR, GPIO.OUT)
-GPIO.setup(M6_PUL, GPIO.OUT)
-GPIO.setup(M6_ENA, GPIO.OUT)
+GPIO.setup(STEP_OPTO, GPIO.OUT)
+GPIO.setup(STEP_DIR, GPIO.OUT)
+GPIO.setup(STEP_ENA, GPIO.OUT)
 
 # Global variables
 IP = '192.168.110.78'  # change to rover IP
@@ -271,35 +262,35 @@ class Rover:
 
         # not fully sure about PUL pins or ENA pins (some online code says LOW to enable but some says HIGH)
         if(controls["leftWheg"] > 0):
-            GPIO.output(M5_ENA, GPIO.LOW)
-            GPIO.output(M5_DIR, GPIO.HIGH)
+            GPIO.output(STEP_ENA, GPIO.LOW)
+            GPIO.output(STEP_DIR, GPIO.HIGH)
 
-            GPIO.output(M6_PUL, GPIO.HIGH)
-            GPIO.output(M6_PUL, GPIO.LOW)
+            GPIO.output(STEP_PUL, GPIO.HIGH)
+            GPIO.output(STEP_PUL, GPIO.LOW)
             ctrls.append("Left wheg up")
 
         if(controls["leftWheg"] < 0):
-            GPIO.output(M5_ENA, GPIO.LOW)
-            GPIO.output(M5_DIR, GPIO.LOW)
+            GPIO.output(STEP_ENA, GPIO.LOW)
+            GPIO.output(STEP_DIR, GPIO.LOW)
 
-            GPIO.output(M6_PUL, GPIO.HIGH)
-            GPIO.output(M6_PUL, GPIO.LOW)
+            GPIO.output(STEP_OPTO, GPIO.HIGH)
+            GPIO.output(STEP_OPTO, GPIO.LOW)
             ctrls.append("Left wheg down")
         
         if(controls["rightWheg"] > 0):
-            GPIO.output(M6_ENA, GPIO.LOW)
-            GPIO.output(M6_DIR, GPIO.HIGH)
+            GPIO.output(STEP_ENA, GPIO.LOW)
+            GPIO.output(STEP_DIR, GPIO.HIGH)
 
-            GPIO.output(M6_PUL, GPIO.HIGH)
-            GPIO.output(M6_PUL, GPIO.LOW)
+            GPIO.output(STEP_OPTO, GPIO.HIGH)
+            GPIO.output(STEP_OPTO, GPIO.LOW)
             ctrls.append("Right wheg up")
 
         if(controls["rightWheg"] < 0):
-            GPIO.output(M6_ENA, GPIO.LOW)
-            GPIO.output(M6_DIR, GPIO.LOW)
+            GPIO.output(STEP_ENA, GPIO.LOW)
+            GPIO.output(STEP_DIR, GPIO.LOW)
 
-            GPIO.output(M6_PUL, GPIO.HIGH)
-            GPIO.output(M6_PUL, GPIO.LOW)
+            GPIO.output(STEP_OPTO, GPIO.HIGH)
+            GPIO.output(STEP_OPTO, GPIO.LOW)
             ctrls.append("Right wheg down")
 
         if(controls["cameraTypeToggle"] > 0):
