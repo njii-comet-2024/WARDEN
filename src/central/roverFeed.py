@@ -12,12 +12,13 @@ import numpy as np
 import base64
 import cvzone
 
-TOP_HORIZ = 0#-293
-TOP_VERT = 50#-340
-SIDE_VERT = -370
-SIDE_HORIZ = -340
-
 ROVER_IP = '172.168.10.137'
+TOP_HORIZ = -70
+TOP_VERT = 0
+
+SIDE_VERT = -200
+SIDE_HORIZ = -5
+SIDE_ACTU = 340
 """
 This is a class for video reception
 """
@@ -29,7 +30,7 @@ class videoReciever:
     """
     This function recieves Rover Cam footage from the PI Camera.  
     """
-    def receiveRoverCam(roverIP):
+    def recieveRoverCam(roverIP):
         #initiate Window and resize
         cv.namedWindow('TESTING HUD', cv.WINDOW_NORMAL)
         cv.resizeWindow('TESTING HUD', 1024, 600)
@@ -45,16 +46,17 @@ class videoReciever:
         clientSocket.sendto(message, (roverIP,port))
 
         #read the image files
-        hudTop = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudSide = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
-        hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
-        hudHeightIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrowRed.png', cv.IMREAD_UNCHANGED)
-        infoBackground = cv.imread('src/assets/blackRectangle.png', cv.IMREAD_UNCHANGED)
+        #src/assets
+        hudTop = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
+        hudSide = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
+        hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
+        hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
+        hudHeightIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrowRed.png', cv.IMREAD_UNCHANGED)
+        infoBackground = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/blackRectangle.png', cv.IMREAD_UNCHANGED)
 
         #rotate and resize images to be properly aligned
         hudTop = cv.rotate(hudTop, cv.ROTATE_180)
-        hudTop = cv.resize(hudTop, (0, 0), None, 5, 1)
+        hudTop = cv.resize(hudTop, (0, 0), None, 1.5, 1)
         hudSide = cv.rotate(hudSide, cv.ROTATE_90_CLOCKWISE)
         hudSide = cv.resize(hudSide, (0, 0), None, 1.5, 1)
         hudSideIndicator = cv.rotate(hudSideIndicator, cv.ROTATE_90_COUNTERCLOCKWISE)
