@@ -13,9 +13,6 @@ import time
 import cv2
 import numpy as np
 from picamera2 import Picamera2
-from picamera2.encoders import Quality
-from picamera2.encoders import JpegEncoder
-from picamera2.outputs import FileOutput
 
 # Socket parameters
 server_ip = 'RECEIVER_IP_ADDRESS'  # Replace with receiver's IP address
@@ -28,21 +25,25 @@ connection = client_socket.makefile('wb')
 
 # Initialize Picamera2
 camera = Picamera2()
-camera.configure(camera.create_video_configuration(main={"size": (640, 480)}))
-encoder = JpegEncoder(quality=Quality.MEDIUM)
-
+camera_config = camera.create_still_configuration(main={"size": (320, 240)}, lores={"size": (320, 240)}, display="lores")
+camera.configure(camera_config)
 camera.start()
 
 try:
     while True:
         # Capture frame
-        frame = camera.capture_array()
-        # Serialize frame
-        data = pickle.dumps(frame)
+        frame = camera.capture_array("main")
+        
+        # Compress frame
+        _, frame_encoded = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
+        data = pickle.dumps(frame_encoded, protocol=pickle.HIGHEST_PROTOCOL)
+        
         # Pack message length and frame data
         message = struct.pack("Q", len(data)) + data
+        
         # Send message
         connection.write(message)
+        connection.flush()
 
 except KeyboardInterrupt:
     pass

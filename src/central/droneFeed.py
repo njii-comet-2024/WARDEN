@@ -9,6 +9,7 @@ import cv2
 import socket
 import struct
 import pickle
+import numpy as np
 
 # Socket parameters
 host_ip = '0.0.0.0'
@@ -39,8 +40,8 @@ while True:
         data += connection.read(msg_size - len(data))
 
     # Deserialize frame
-    frame_data = data[:msg_size]
-    frame = pickle.loads(frame_data)
+    frame_data = pickle.loads(data)
+    frame = cv2.imdecode(np.frombuffer(frame_data, dtype=np.uint8), cv2.IMREAD_COLOR)
 
     # Display frame
     cv2.imshow("Receiving Video", frame)
