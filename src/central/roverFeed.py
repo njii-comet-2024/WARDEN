@@ -29,7 +29,7 @@ class VideoReciever:
     """
     This function recieves Rover Cam footage from the PI Camera.  
     """
-    def recieveRoverCam(roverIP):
+    def receiveRoverCam(roverIP):
         #initiate Window and resize
         cv.namedWindow('TESTING HUD', cv.WINDOW_NORMAL)
         cv.resizeWindow('TESTING HUD', 1024, 600)
@@ -108,4 +108,4 @@ class VideoReciever:
                 break
 
 #serverProgram()
-videoReciever.recieveRoverCam(ROVER_IP)
+VideoReciever.receiveRoverCam(ROVER_IP)
