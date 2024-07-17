@@ -43,8 +43,10 @@ while True:
     frame_data = pickle.loads(data)
     frame = cv2.imdecode(np.frombuffer(frame_data, dtype=np.uint8), cv2.IMREAD_COLOR)
 
+    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
     # Display frame
-    cv2.imshow("Receiving Video", frame)
+    cv2.imshow("Receiving Video", frame_rgb)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 

@@ -25,7 +25,7 @@ connection = client_socket.makefile('wb')
 
 # Initialize Picamera2
 camera = Picamera2()
-camera_config = camera.create_still_configuration(main={"size": (320, 240)}, lores={"size": (320, 240)}, display="lores")
+camera_config = camera.create_still_configuration(main={"size": (1024, 600)}, lores={"size": (1024, 600)}, display="lores")
 camera.configure(camera_config)
 camera.start()
 
