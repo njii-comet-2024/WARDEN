@@ -22,7 +22,7 @@ ROVER_IP = '172.168.10.137'
 This is a class for video reception
 """
 
-class VideoReciever:
+class videoReciever:
     def __init__(self):
         print("initializing")
 
@@ -45,21 +45,25 @@ class VideoReciever:
         clientSocket.sendto(message, (roverIP,port))
 
         #read the image files
-        hudTop = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudSide = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
-        hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
-        hudHeightIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrowRed.png', cv.IMREAD_UNCHANGED)
+        hudTop = cv.imread('src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
+        hudSide = cv.imread('src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
+        hudTopIndicator = cv.imread('src/assets/arrow.png', cv.IMREAD_UNCHANGED)
+        hudSideIndicator = cv.imread('src/assets/arrow.png', cv.IMREAD_UNCHANGED)
+        hudHeightIndicator = cv.imread('src/assets/arrowRed.png', cv.IMREAD_UNCHANGED)
+        infoBackground = cv.imread('src/assets/blackRectangle.png', cv.IMREAD_UNCHANGED)
 
         #rotate and resize images to be properly aligned
         hudTop = cv.rotate(hudTop, cv.ROTATE_180)
-        hudTop = cv.resize(hudTop, (0, 0), None, 1.5, 1)
+        hudTop = cv.resize(hudTop, (0, 0), None, 5, 1)
         hudSide = cv.rotate(hudSide, cv.ROTATE_90_CLOCKWISE)
         hudSide = cv.resize(hudSide, (0, 0), None, 1.5, 1)
         hudSideIndicator = cv.rotate(hudSideIndicator, cv.ROTATE_90_COUNTERCLOCKWISE)
         hudSideIndicator = cv.resize(hudSideIndicator, (0,0), None, .1, .1)
         hudTopIndicator = cv.resize(hudTopIndicator, (0, 0), None, .1, .1)
         hudHeightIndicator = cv.resize(hudHeightIndicator, (0, 0), None, .4, .1)
+        infoBackground = cv.resize(infoBackground, (0, 0), None, 1, .6)
+        infoBackground = cv.rotate(infoBackground, cv.ROTATE_90_CLOCKWISE)
+
         #loop for displaying video
         while True:
             #recieve Packet
@@ -75,6 +79,7 @@ class VideoReciever:
             #adds indicator bars to HUD
             imgResult = cvzone.overlayPNG(frame, hudTop, [TOP_HORIZ, TOP_VERT]) # adds top Hud
             imgResult = cvzone.overlayPNG(imgResult, hudSide, [SIDE_HORIZ, SIDE_VERT]) #adds side hud
+            imgResult = cvzone.overlayPNG(imgResult, infoBackground, [5, 350])# adds info background for ease of seeing words
             #create positional data variables
             cameraPosData = [int(b) for b in cameraPos]
             cameraHeight = cameraPosData[0]
@@ -84,8 +89,8 @@ class VideoReciever:
             print(cameraPosData)
 
             #display location coords
-            imgResult = cv.putText(imgResult,'Height: ' + str(cameraHeight) + ' Zoom: ' + str(cameraZoom) + 'x', (40, 360), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
-            imgResult = cv.putText(imgResult, 'ValueY: ' + str(cameraTilt) + '  ValueX: ' + str(cameraRotation), (40, 380), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
+            imgResult = cv.putText(imgResult,'Height: ' + str(cameraHeight) + ' Zoom: ' + str(cameraZoom) + 'x', (40, 370), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
+            imgResult = cv.putText(imgResult, 'ValueY: ' + str(cameraTilt) + '  ValueX: ' + str(cameraRotation), (40, 390), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
             #display max limit messages
             if(cameraTilt == 0 or cameraTilt == 180):
                 imgResult = cv.putText(imgResult, 'Y AXIS LIMIT REACHED' , (390, 380), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
