@@ -12,10 +12,12 @@ import numpy as np
 import base64
 
 ROVER_IP = '172.168.10.137'
-TOP_HORIZ = -300
-TOP_VERT = -340
-SIDE_VERT = -370
-SIDE_HORIZ = -340
+TOP_HORIZ = -70
+TOP_VERT = 0
+
+SIDE_VERT = -200
+SIDE_HORIZ = -5
+SIDE_ACTU = 340
 
 
 class videoReciever:
@@ -43,16 +45,16 @@ class videoReciever:
 
         #read the image files
         hudTop = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudSide = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassVertical.png', cv.IMREAD_UNCHANGED)
+        hudSide = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
         hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
         hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
         hudHeightIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrowRed.png', cv.IMREAD_UNCHANGED)
 
         #rotate and resize images to be properly aligned
         hudTop = cv.rotate(hudTop, cv.ROTATE_180)
-        hudTop = cv.resize(hudTop, (0, 0), None, 5.8, 3.95)
-        hudSide = cv.rotate(hudSide, cv.ROTATE_180)
-        hudSide = cv.resize(hudSide, (0, 0), None, 4, 4)
+        hudTop = cv.resize(hudTop, (0, 0), None, 1.5, 1)
+        hudSide = cv.rotate(hudSide, cv.ROTATE_90_CLOCKWISE)
+        hudSide = cv.resize(hudSide, (0, 0), None, 1.5, 1)
         hudSideIndicator = cv.rotate(hudSideIndicator, cv.ROTATE_90_COUNTERCLOCKWISE)
         hudSideIndicator = cv.resize(hudSideIndicator, (0,0), None, .1, .1)
         hudTopIndicator = cv.resize(hudTopIndicator, (0, 0), None, .1, .1)
@@ -81,8 +83,8 @@ class videoReciever:
             print(cameraPosData)
 
             #display location coords
-            imgResult = cv.putText(imgResult,'Height: ' + str(cameraHeight) + ' Zoom: ' + str(cameraZoom) + 'x', (10, 360), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
-            imgResult = cv.putText(imgResult, 'ValueY: ' + str(cameraTilt) + '  ValueX: ' + str(cameraRotation), (10, 380), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
+            imgResult = cv.putText(imgResult,'Height: ' + str(cameraHeight) + ' Zoom: ' + str(cameraZoom) + 'x', (40, 360), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
+            imgResult = cv.putText(imgResult, 'ValueY: ' + str(cameraTilt) + '  ValueX: ' + str(cameraRotation), (40, 380), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
             #display max limit messages
             if(cameraTilt == 0 or cameraTilt == 180):
                 imgResult = cv.putText(imgResult, 'Y AXIS LIMIT REACHED' , (390, 380), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
@@ -93,9 +95,9 @@ class videoReciever:
             if(cameraZoom == 0 or cameraZoom == 10):
                 imgResult = cv.putText(imgResult, 'ZOOM LIMIT REACHED' , (650, 380), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
             #overlay indicator
-            imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [cameraRotation * 5, TOP_VERT + 350])#adds moving vertical
-            imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ + 350, cameraTilt * 2])
-            imgResult = cvzone.overlayPNG(imgResult, hudHeightIndicator, [960, cameraHeight * 2])
+            imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [cameraRotation * 5, TOP_VERT])#adds moving vertical
+            imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ, cameraTilt * 2])
+            imgResult = cvzone.overlayPNG(imgResult, hudHeightIndicator, [1030, cameraHeight * 2])
             #display video
             cv.imshow('TESTING HUD', frame)
 
