@@ -4,61 +4,53 @@ Sets up server for all vehicles to connect to - - - acts as client
 
 Date last modified: 07/15/2024
 """
-
-# Libraries
-import socket
 import cv2 as cv
-import numpy as np 
-import struct
-import pickle
+import socket 
+import numpy as np
+import base64
 
-PORT = 55555
+DRONE_IP = '192.168.110.19'
+TOP_HORIZ = -300
+TOP_VERT = -340
+SIDE_VERT = -370
+SIDE_HORIZ = -340
 
-# Create a socket
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+class videoReciever:
+    def __init__(self):
+        print("initializing")
 
-# Bind to the port, no IP in IP field which makes server listen to requests
-s.bind(('', PORT))
-print(f"Socket binded to {PORT}")
+    #This function recieves Rover Cam footage from the PI Camera.  
+    def recieveRoverCam():
+        #socket information
+        bufferSize = 65536
+        clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
+        print(DRONE_IP)
+        port = 22222                                 # can change based on possible interference, etc
+        message = b'Hello'                          # test message
+       
+        #connect to server socket
+        clientSocket.sendto(message, (DRONE_IP,port))
 
-# Put socket into listening mode
-s.listen(5)
-print("Socket is listening")
+        #loop for displaying video
+        while True:
+            #recieve Packet
+            packet,_ = clientSocket.recvfrom(bufferSize)
+            #interpret packet
+            cameraPosLength = 4
+            cameraPos = packet[:cameraPosLength]
+            imgData = packet[4:]
+            #decode data
+            data = base64.b64decode(imgData, ' /')
+            npdata = np.fromstring(data, dtype=np.uint8)
+            frame = cv.imdecode(npdata, 1)
 
-# Accept new connection
-c, addr = s.accept()
-print('Got connection from', addr)
+            #display video
+            cv.imshow('TESTING HUD', frame)
 
-data = b''
-payload_size = struct.calcsize("L")
+            #exit key
+            if cv.waitKey(20) &0xFF == ord('q'):
+                cv.destroyAllWindows()
+                break
 
-while True:
-    # Retrieve message size
-    while len(data) < payload_size:
-        packet = c.recv(4096)
-        if not packet:
-            break
-        data += packet
-
-    if len(data) < payload_size:
-        continue
-
-    packed_msg_size = data[:payload_size]
-    data = data[payload_size:]
-    msg_size = struct.unpack("L", packed_msg_size)[0]
-
-    # Retrieve all data based on message size
-    while len(data) < msg_size:
-        data += c.recv(4096)
-
-    frame_data = data[:msg_size]
-    data = data[msg_size:]
-
-    frame = pickle.loads(frame_data)
-
-    cv.imshow('frame', frame)
-    if cv.waitKey(1) & 0xFF == ord('q'):
-        break
-
-c.close()
-cv.destroyAllWindows()
+videoReciever.recieveRoverCam(DRONE_IP)

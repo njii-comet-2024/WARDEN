@@ -6,29 +6,45 @@ from external camera mounted on the bottom
 
 Date last modified: 06/16/2024
 '''
+import cv2 as cv
+import base64
+from gpiozero import Motor
+from gpiozero import Servo
+from picamera2 import Picamera2
+from picamera2.encoders import JpegEncoder
+from picamera2.outputs import FileOutput
+import RPi.GPIO as GPIO
 
-# Imports
-import cv2
-import numpy as np
-import socket
-import pickle
-import struct
+def transmitFeed(self):
+        # # re-maps camera values and converts to bytearray
+        # newTilt = self.numToRange(tiltPos, -1, 1, 0, 180)
+        # newSwivel = self.numToRange(swivelPos, -1, 1, 0, 205)
+        # newTele = self.numToRange(telePos, 0, 1, 0, 180) # figure out actual max
+        # newZoom = self.numToRange(zoomPos, -1, 1, 0, 10)
+        # cameraPos = [newTilt, newSwivel, newTele, newZoom]
+        # cameraPosByte = bytearray(cameraPos)
 
-# Initializing connection variables
-centralIP = '192.168.110.5'  # Placeholder IP
-port = 55555
+        msg, clientAddr = self.videoSock.recvfrom(self.bufferSize)
+        print('GOT connection from ', clientAddr)
+        WIDTH = 400
+        while True:
+            buffer = self.picam2.capture_array("main")
+            frame = cv.cvtColor(buffer, cv.COLOR_RGB2BGR)
+            frame = cv.resize(frame, (WIDTH, int(WIDTH * frame.shape[1] / frame.shape[0])), interpolation=cv.INTER_AREA)
+            print('Resized frame size:', frame.shape)
 
-# Initializing camera variable
-camera = cv2.VideoCapture(0)  # 0 = device index
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect((centralIP, port))
+            encoded, buffer = cv.imencode('.jpg', frame, [cv.IMWRITE_JPEG_QUALITY, 80])
 
-while True:
-    ret, frame = camera.read()
-    if not ret:
-        continue
-
-    data = pickle.dumps(frame)
-    message_size = struct.pack("L", len(data))
-
-    s.sendto(message_size + data, (centralIP, port))
+            message = base64.b64encode(buffer)
+            #combined = cameraPosByte + message
+            self.videoSock.sendto(message, clientAddr)
+                
+            cv.imshow('TRANSMITTING VIDEO', frame)
+            key = cv.waitKey(1) & 0xFF
+                
+            if key == ord('q'):
+                self.videoSock.close()
+                self.picam2.stop()
+                cv.destroyAllWindows()
+                print('Server stopped by user')
+                exit(0)
