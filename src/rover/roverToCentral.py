@@ -32,11 +32,11 @@ class Camera:
         self.bufferSize = 65536
         self.sendSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sendSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, self.bufferSize)
-        self.hostName = socket.gethostname()
-        self.hostIp = socket.gethostbyname(self.hostName)
-        self.socketAddress = (self.hostIp, SEND_PORT)
-        self.sendSocket.bind(self.socketAddress)
-        print('Listening at: ', self.socketAddress)
+        hostName = socket.gethostname()
+        hostIp = socket.gethostbyname(hostName)
+        socketAddress = (hostIp, SEND_PORT)
+        self.sendSocket.bind(socketAddress)
+        print('Listening at: ', socketAddress)
 
         # Socket to receive camera pos from controls pi
         self.recvSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

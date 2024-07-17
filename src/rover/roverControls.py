@@ -96,7 +96,7 @@ telePos = 0 # change to middle position
 """
 Class that defines a rover and its functionality
 """
-class Receiver:
+class Rover:
     """
     Initializes an instance of Rover 
     """

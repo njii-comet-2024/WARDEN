@@ -22,7 +22,7 @@ ROVER_IP = '172.168.10.137'
 This is a class for video reception
 """
 
-class videoReciever:
+class VideoReciever:
     def __init__(self):
         print("initializing")
 

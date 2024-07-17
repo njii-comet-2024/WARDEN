@@ -21,7 +21,7 @@ class VideoReceiver:
         self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, buffer_size)
 
-    def receiveRoverCam(self):
+    def receiveDroneCam(self):
         message = b'Hello'
         self.clientSocket.sendto(message, (self.drone_ip, self.port))
 
@@ -41,4 +41,4 @@ class VideoReceiver:
 
 if __name__ == "__main__":
     receiver = VideoReceiver(DRONE_IP, PORT, BUFFER_SIZE)
-    receiver.receiveRoverCam()
+    receiver.receiveDroneCam()
