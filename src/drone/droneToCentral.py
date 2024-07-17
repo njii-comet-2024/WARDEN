@@ -6,45 +6,37 @@ from external camera mounted on the bottom
 
 Date last modified: 06/16/2024
 '''
-import cv2 as cv
-import base64
-from picamera2 import Picamera2
+import cv2
 import socket
+import struct
+import pickle
 
-class DroneTransmitter:
-    def __init__(self, bufferSize=65536, width=400):
-        self.bufferSize = bufferSize
-        self.width = width
-        self.picam2 = Picamera2()
-        self.picam2.configure(self.picam2.create_still_configuration())
-        self.picam2.start()
-        self.videoSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# Socket parameters
+server_ip = 'RECEIVER_IP_ADDRESS'  # Replace with receiver's IP address
+server_port = 5000
 
-    def transmitFeed(self):
-        msg, clientAddr = self.videoSock.recvfrom(self.bufferSize)
-        print('GOT connection from ', clientAddr)
-        
-        while True:
-            buffer = self.picam2.capture_array("main")
-            frame = cv.cvtColor(buffer, cv.COLOR_RGB2BGR)
-            frame = cv.resize(frame, (self.width, int(self.width * frame.shape[1] / frame.shape[0])), interpolation=cv.INTER_AREA)
-            print('Resized frame size:', frame.shape)
+# Initialize socket
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket.connect((server_ip, server_port))
+connection = client_socket.makefile('wb')
 
-            encoded, buffer = cv.imencode('.jpg', frame, [cv.IMWRITE_JPEG_QUALITY, 80])
-            message = base64.b64encode(buffer)
+# Initialize video capture
+cap = cv2.VideoCapture(0)
 
-            self.videoSock.sendto(message, clientAddr)
-                
-            cv.imshow('TRANSMITTING VIDEO', frame)
-            key = cv.waitKey(1) & 0xFF
-                
-            if key == ord('q'):
-                self.videoSock.close()
-                self.picam2.stop()
-                cv.destroyAllWindows()
-                print('Server stopped by user')
-                exit(0)
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
 
-if __name__ == "__main__":
-    drone = DroneTransmitter()
-    drone.transmitFeed()
+    # Serialize frame
+    data = pickle.dumps(frame)
+    # Pack message length and frame data
+    message = struct.pack("Q", len(data)) + data
+
+    # Send message
+    connection.write(message)
+
+# Release resources
+cap.release()
+connection.close()
+client_socket.close()
