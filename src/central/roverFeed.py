@@ -30,7 +30,7 @@ class videoReciever:
     """
     This function recieves Rover Cam footage from the PI Camera.  
     """
-    def recieveRoverCam(roverIP):
+    def receiveRoverCam(roverIP):
         #initiate Window and resize
         cv.namedWindow('TESTING HUD', cv.WINDOW_NORMAL)
         cv.resizeWindow('TESTING HUD', 1024, 600)
@@ -47,12 +47,12 @@ class videoReciever:
 
         #read the image files
         #src/assets
-        hudTop = cv.imread('/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudSide = cv.imread('/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudTopIndicator = cv.imread('/WARDEN/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
-        hudSideIndicator = cv.imread('/WARDEN/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
-        hudHeightIndicator = cv.imread('/WARDEN/src/assets/arrowRed.png', cv.IMREAD_UNCHANGED)
-        infoBackground = cv.imread('/WARDEN/src/assets/blackRectangle.png', cv.IMREAD_UNCHANGED)
+        hudTop = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
+        hudSide = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
+        hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
+        hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
+        hudHeightIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrowRed.png', cv.IMREAD_UNCHANGED)
+        infoBackground = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/blackRectangle.png', cv.IMREAD_UNCHANGED)
 
         #rotate and resize images to be properly aligned
         hudTop = cv.rotate(hudTop, cv.ROTATE_180)
