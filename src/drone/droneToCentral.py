@@ -15,7 +15,7 @@ import numpy as np
 from picamera2 import Picamera2
 
 # Socket parameters
-server_ip = 'RECEIVER_IP_ADDRESS'  # Replace with receiver's IP address
+server_ip = '192.168.110.5'  # Replace with receiver's IP address
 server_port = 5000
 
 # Initialize socket

@@ -12,7 +12,7 @@ import pickle
 import numpy as np
 
 # Socket parameters
-host_ip = '0.0.0.0'
+host_ip = '192.169.110.5'
 host_port = 5000
 
 # Initialize socket
