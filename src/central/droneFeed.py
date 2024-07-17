@@ -5,52 +5,40 @@ Sets up server for all vehicles to connect to - - - acts as client
 Date last modified: 07/15/2024
 """
 import cv2 as cv
-import socket 
+import socket
 import numpy as np
 import base64
 
 DRONE_IP = '192.168.110.19'
-TOP_HORIZ = -300
-TOP_VERT = -340
-SIDE_VERT = -370
-SIDE_HORIZ = -340
+PORT = 22222
+BUFFER_SIZE = 65536
 
-class videoReciever:
-    def __init__(self):
-        print("initializing")
+class VideoReceiver:
+    def __init__(self, drone_ip, port, buffer_size):
+        self.drone_ip = drone_ip
+        self.port = port
+        self.buffer_size = buffer_size
+        self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, buffer_size)
 
-    #This function recieves Rover Cam footage from the PI Camera.  
-    def recieveRoverCam():
-        #socket information
-        bufferSize = 65536
-        clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
-        print(DRONE_IP)
-        port = 22222                                 # can change based on possible interference, etc
-        message = b'Hello'                          # test message
-       
-        #connect to server socket
-        clientSocket.sendto(message, (DRONE_IP,port))
+    def receiveRoverCam(self):
+        message = b'Hello'
+        self.clientSocket.sendto(message, (self.drone_ip, self.port))
 
-        #loop for displaying video
         while True:
-            #recieve Packet
-            packet,_ = clientSocket.recvfrom(bufferSize)
-            #interpret packet
-            cameraPosLength = 4
-            cameraPos = packet[:cameraPosLength]
-            imgData = packet[4:]
-            #decode data
-            data = base64.b64decode(imgData, ' /')
-            npdata = np.fromstring(data, dtype=np.uint8)
+            packet, _ = self.clientSocket.recvfrom(self.buffer_size)
+            imgData = packet
+
+            data = base64.b64decode(imgData)
+            npdata = np.frombuffer(data, dtype=np.uint8)
             frame = cv.imdecode(npdata, 1)
 
-            #display video
             cv.imshow('TESTING HUD', frame)
 
-            #exit key
-            if cv.waitKey(20) &0xFF == ord('q'):
+            if cv.waitKey(20) & 0xFF == ord('q'):
                 cv.destroyAllWindows()
                 break
 
-videoReciever.recieveRoverCam(DRONE_IP)
+if __name__ == "__main__":
+    receiver = VideoReceiver(DRONE_IP, PORT, BUFFER_SIZE)
+    receiver.receiveRoverCam()

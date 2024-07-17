@@ -8,35 +8,31 @@ Date last modified: 06/16/2024
 '''
 import cv2 as cv
 import base64
-from gpiozero import Motor
-from gpiozero import Servo
 from picamera2 import Picamera2
-from picamera2.encoders import JpegEncoder
-from picamera2.outputs import FileOutput
-import RPi.GPIO as GPIO
+import socket
 
-def transmitFeed(self):
-        # # re-maps camera values and converts to bytearray
-        # newTilt = self.numToRange(tiltPos, -1, 1, 0, 180)
-        # newSwivel = self.numToRange(swivelPos, -1, 1, 0, 205)
-        # newTele = self.numToRange(telePos, 0, 1, 0, 180) # figure out actual max
-        # newZoom = self.numToRange(zoomPos, -1, 1, 0, 10)
-        # cameraPos = [newTilt, newSwivel, newTele, newZoom]
-        # cameraPosByte = bytearray(cameraPos)
+class DroneTransmitter:
+    def __init__(self, bufferSize=65536, width=400):
+        self.bufferSize = bufferSize
+        self.width = width
+        self.picam2 = Picamera2()
+        self.picam2.configure(self.picam2.create_still_configuration())
+        self.picam2.start()
+        self.videoSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+    def transmitFeed(self):
         msg, clientAddr = self.videoSock.recvfrom(self.bufferSize)
         print('GOT connection from ', clientAddr)
-        WIDTH = 400
+        
         while True:
             buffer = self.picam2.capture_array("main")
             frame = cv.cvtColor(buffer, cv.COLOR_RGB2BGR)
-            frame = cv.resize(frame, (WIDTH, int(WIDTH * frame.shape[1] / frame.shape[0])), interpolation=cv.INTER_AREA)
+            frame = cv.resize(frame, (self.width, int(self.width * frame.shape[1] / frame.shape[0])), interpolation=cv.INTER_AREA)
             print('Resized frame size:', frame.shape)
 
             encoded, buffer = cv.imencode('.jpg', frame, [cv.IMWRITE_JPEG_QUALITY, 80])
-
             message = base64.b64encode(buffer)
-            #combined = cameraPosByte + message
+
             self.videoSock.sendto(message, clientAddr)
                 
             cv.imshow('TRANSMITTING VIDEO', frame)
@@ -48,3 +44,7 @@ def transmitFeed(self):
                 cv.destroyAllWindows()
                 print('Server stopped by user')
                 exit(0)
+
+if __name__ == "__main__":
+    drone = DroneTransmitter()
+    drone.transmitFeed()
