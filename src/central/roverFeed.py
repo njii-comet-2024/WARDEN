@@ -47,12 +47,12 @@ class videoReciever:
 
         #read the image files
         #src/assets
-        hudTop = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudSide = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
-        hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
-        hudHeightIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrowRed.png', cv.IMREAD_UNCHANGED)
-        infoBackground = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/blackRectangle.png', cv.IMREAD_UNCHANGED)
+        hudTop = cv.imread('/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
+        hudSide = cv.imread('/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
+        hudTopIndicator = cv.imread('/WARDEN/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
+        hudSideIndicator = cv.imread('/WARDEN/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
+        hudHeightIndicator = cv.imread('/WARDEN/src/assets/arrowRed.png', cv.IMREAD_UNCHANGED)
+        infoBackground = cv.imread('/WARDEN/src/assets/blackRectangle.png', cv.IMREAD_UNCHANGED)
 
         #rotate and resize images to be properly aligned
         hudTop = cv.rotate(hudTop, cv.ROTATE_180)
