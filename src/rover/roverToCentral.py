@@ -82,7 +82,7 @@ class Camera:
     def transmitPiCamFeed(self):
         # Initialize Picamera2
         picam2 = Picamera2()
-        videoConfig = picam2.create_video_configuration(main={"size": (640, 480)})
+        videoConfig = picam2.create_video_configuration(main={"size": (1080, 400)})
         picam2.configure(videoConfig)
         picam2.start()
 
@@ -96,7 +96,7 @@ class Camera:
             while True:
                 buffer = picam2.capture_array("main")
                 frame = cv.cvtColor(buffer, cv.COLOR_RGB2BGR)
-                frame = cv.resize(frame, (WIDTH, int(WIDTH * frame.shape[1] / frame.shape[0])), interpolation=cv.INTER_AREA)
+                frame = cv.resize(frame, (1080, 400 ), interpolation=cv.INTER_AREA)
                 print('Resized frame size:', frame.shape)
 
                 encoded, buffer = cv.imencode('.jpg', frame, [cv.IMWRITE_JPEG_QUALITY, 80])
