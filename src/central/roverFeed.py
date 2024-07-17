@@ -113,4 +113,4 @@ class videoReciever:
                 break
 
 #serverProgram()
-VideoReciever.receiveRoverCam(ROVER_IP)
+videoReciever.receiveRoverCam(ROVER_IP)
