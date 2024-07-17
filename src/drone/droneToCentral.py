@@ -6,10 +6,16 @@ from external camera mounted on the bottom
 
 Date last modified: 06/16/2024
 '''
-import cv2
 import socket
 import struct
 import pickle
+import time
+import cv2
+import numpy as np
+from picamera2 import Picamera2
+from picamera2.encoders import Quality
+from picamera2.encoders import JpegEncoder
+from picamera2.outputs import FileOutput
 
 # Socket parameters
 server_ip = 'RECEIVER_IP_ADDRESS'  # Replace with receiver's IP address
@@ -20,23 +26,29 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((server_ip, server_port))
 connection = client_socket.makefile('wb')
 
-# Initialize video capture
-cap = cv2.VideoCapture(0)
+# Initialize Picamera2
+camera = Picamera2()
+camera.configure(camera.create_video_configuration(main={"size": (640, 480)}))
+encoder = JpegEncoder(quality=Quality.MEDIUM)
 
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        break
+camera.start()
 
-    # Serialize frame
-    data = pickle.dumps(frame)
-    # Pack message length and frame data
-    message = struct.pack("Q", len(data)) + data
+try:
+    while True:
+        # Capture frame
+        frame = camera.capture_array()
+        # Serialize frame
+        data = pickle.dumps(frame)
+        # Pack message length and frame data
+        message = struct.pack("Q", len(data)) + data
+        # Send message
+        connection.write(message)
 
-    # Send message
-    connection.write(message)
+except KeyboardInterrupt:
+    pass
 
-# Release resources
-cap.release()
-connection.close()
-client_socket.close()
+finally:
+    # Release resources
+    connection.close()
+    client_socket.close()
+    camera.stop()
