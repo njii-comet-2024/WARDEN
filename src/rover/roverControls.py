@@ -13,6 +13,7 @@ import pickle
 import socket
 from gpiozero import Motor
 from gpiozero import Servo
+import RPi.GPIO as GPIO
 
 # PINS
 # IN1 => CLOCKWISE

@@ -10,15 +10,11 @@ Date last modified: 07/17/2024
 """
 # Libraries
 import cv2 as cv
-import pickle
 import socket
 import base64
-from gpiozero import Motor
-from gpiozero import Servo
 from picamera2 import Picamera2
 from picamera2.encoders import JpegEncoder
 from picamera2.outputs import FileOutput
-import RPi.GPIO as GPIO
 
 # Global variables
 IP = '192.168.110.78'  # change to camera pi IP
