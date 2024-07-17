@@ -5,7 +5,7 @@ Sets up server for connection with pi on the drone. received video feed from ext
 
 Date last modified: 07/15/2024
 """
-import cv2
+import cv2 as cv
 import socket
 import struct
 import pickle
@@ -41,17 +41,17 @@ while True:
 
     # Deserialize frame
     frame_data = pickle.loads(data)
-    frame = cv2.imdecode(np.frombuffer(frame_data, dtype=np.uint8), cv2.IMREAD_COLOR)
+    frame = cv.imdecode(np.frombuffer(frame_data, dtype=np.uint8), cv.IMREAD_COLOR)
 
-    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    frame_rgb = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
 
     # Display frame
-    cv2.imshow("Receiving Video", frame_rgb)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    cv.imshow("Receiving Video", frame_rgb)
+    if cv.waitKey(1) & 0xFF == ord('q'):
         break
 
 # Release resources
 connection.close()
 client_socket.close()
 server_socket.close()
-cv2.destroyAllWindows()
+cv.destroyAllWindows()
