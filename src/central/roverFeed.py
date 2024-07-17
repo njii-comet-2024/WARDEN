@@ -1,8 +1,10 @@
 """
-sets up server for rover to connect to
+connects to rover and recieves camera locations and video feed over UDP 
+sockets
+
 @author [Christopher Prol]  [@prolvalone]
 
-Date last modified: 07/15/2024
+Date last modified: 07/16/2024
 """
 
 # Libraries
