@@ -28,6 +28,14 @@ This project is still a work in progress.
 
 ---
 
+## Goals
+
+- Communicate with both the drone and rover to control them.
+- Receive video feed from both the drone and rover.
+- Extend the Wi-Fi range using the drone after the rover has lost connection.
+
+---
+
 ## Definitions
 
 **Rover:** The ground vehicle used for reconnaissance.
@@ -60,14 +68,6 @@ This project is still a work in progress.
 **Drone Raspberry Pi:** Runs `droneToCentral.py` to transmit digital drone video to Central Raspberry Pi.
 
 **Drone VTX:** Transmits analog drone video at a specific frequency for Central Raspberry Pi to receive.
-
----
-
-## Goals
-
-- Communicate with both the ground and air vehicles to control them.
-- Receive video feed from both the ground and air vehicles.
-- Extend the Wi-Fi range using the drone after the rover has lost connection.
 
 ---
 
