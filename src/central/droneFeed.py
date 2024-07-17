@@ -1,44 +1,53 @@
 """
-Sets up server for all vehicles to connect to - - - acts as client
+Sets up server for connection with pi on the drone. received video feed from external camera
 @author [Vito Tribuzio][@Snoopy-0]
 
 Date last modified: 07/15/2024
 """
-import cv2 as cv
+import cv2
 import socket
-import numpy as np
-import base64
+import struct
+import pickle
 
-DRONE_IP = '192.168.110.19'
-PORT = 22222
-BUFFER_SIZE = 65536
+# Socket parameters
+host_ip = '0.0.0.0'
+host_port = 5000
 
-class VideoReceiver:
-    def __init__(self, drone_ip, port, buffer_size):
-        self.drone_ip = drone_ip
-        self.port = port
-        self.buffer_size = buffer_size
-        self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, buffer_size)
+# Initialize socket
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_socket.bind((host_ip, host_port))
+server_socket.listen(5)
+print("Listening for connections...")
 
-    def receiveDroneCam(self):
-        message = b'Hello'
-        self.clientSocket.sendto(message, (self.drone_ip, self.port))
+# Accept connection
+client_socket, addr = server_socket.accept()
+print(f"Connection from: {addr}")
+connection = client_socket.makefile('rb')
 
-        while True:
-            packet, _ = self.clientSocket.recvfrom(self.buffer_size)
-            imgData = packet
+while True:
+    # Read message length
+    packed_msg_size = connection.read(struct.calcsize("Q"))
+    if not packed_msg_size:
+        break
 
-            data = base64.b64decode(imgData)
-            npdata = np.frombuffer(data, dtype=np.uint8)
-            frame = cv.imdecode(npdata, 1)
+    msg_size = struct.unpack("Q", packed_msg_size)[0]
 
-            cv.imshow('TESTING HUD', frame)
+    # Read message data
+    data = b""
+    while len(data) < msg_size:
+        data += connection.read(msg_size - len(data))
 
-            if cv.waitKey(20) & 0xFF == ord('q'):
-                cv.destroyAllWindows()
-                break
+    # Deserialize frame
+    frame_data = data[:msg_size]
+    frame = pickle.loads(frame_data)
 
-if __name__ == "__main__":
-    receiver = VideoReceiver(DRONE_IP, PORT, BUFFER_SIZE)
-    receiver.receiveDroneCam()
+    # Display frame
+    cv2.imshow("Receiving Video", frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# Release resources
+connection.close()
+client_socket.close()
+server_socket.close()
+cv2.destroyAllWindows()
