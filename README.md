@@ -33,10 +33,10 @@ This project is still a work in progress.
 **Rover:** The ground vehicle used for reconnaissance.
 
 
-**Drone:** The air vehicle used to extend the rover's range.
+**Drone:** The aerial vehicle used to extend the rover's range.
 
 
-**Central:** The Raspberry Pi used to receive video footage from both vehicles.
+**Central:** The Raspberry Pi used to receive video footage from both vehicles and display video footage and necessary feedback.
 
 
 **Rover Control:** The controller used to transmit movement controls to the rover.
@@ -45,17 +45,21 @@ This project is still a work in progress.
 **Drone Control:** The controller used to transmit movement controls to the drone.
 
 
-**Ground Station:** Refers to all command controllers and receivers and Wi-Fi network-- Lcentral, rover control, drone control, and router.
+**Ground Station:** Refers to all command controllers and receivers and Wi-Fi network-- Central, rover control, drone control, and router.
 
 ---
 
 ## Controller Components
 
-**Central Raspberry Pi:** Runs programs `centralToRover.py` and `centralServer.py` to send controls to and receive video from Rover Raspberry Pi and receive video from Drone VTX.
+**Central Raspberry Pi:** Runs programs `centralToRover.py` to send controls to Controls Raspberry Pi, `roverFeed.py` to receive rover video and camera positions from Camera Raspberry Pi, and `droneFeed.py` to receive drone video from Drone Raspberry Pi and/or Drone VTX.
 
-**Rover Raspberry Pi:** Runs program `roverToCentral.py` to receive controls from Central Raspberry Pi and runs them on rover.
+**Controls Raspberry Pi:** Runs program `roverControls.py` to receive controls from Central Raspberry Pi and run them on rover. Sends camera positions to Camera Raspberry Pi.
 
-**Drone VTX:** Transmits drone video at a specific frequency for Central Raspberry Pi to receive.
+**Camera Raspberry Pi:** Runs program `roverToCentral.py` to receive camera positions from Controls Raspberry Pi and send rover video and camera positions to Central Raspberry Pi.
+
+**Drone Raspberry Pi:** Runs `droneToCentral.py` to transmit digital drone video to Central Raspberry Pi.
+
+**Drone VTX:** Transmits analog drone video at a specific frequency for Central Raspberry Pi to receive.
 
 ---
 
@@ -64,6 +68,16 @@ This project is still a work in progress.
 - Communicate with both the ground and air vehicles to control them.
 - Receive video feed from both the ground and air vehicles.
 - Extend the Wi-Fi range using the drone after the rover has lost connection.
+
+---
+
+## Necessary Libraries
+
+- [gpiozero](https://gpiozero.readthedocs.io/en/stable/installing.html)
+- [OpenCV](https://opencv.org/get-started/)
+- [pygame](https://www.pygame.org/news)
+- [picamera and picamera[array]](https://picamera.readthedocs.io/en/release-1.13/install.html)
+- [RPI.GPIO](https://pypi.org/project/RPi.GPIO/)
 
 ---
 
