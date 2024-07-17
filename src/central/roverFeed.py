@@ -12,8 +12,8 @@ import numpy as np
 import base64
 import cvzone
 
-TOP_HORIZ = -293
-TOP_VERT = -340
+TOP_HORIZ = 0#-293
+TOP_VERT = 50#-340
 SIDE_VERT = -370
 SIDE_HORIZ = -340
 
@@ -45,11 +45,11 @@ class videoReciever:
         clientSocket.sendto(message, (roverIP,port))
 
         #read the image files
-        hudTop = cv.imread('src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudSide = cv.imread('src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudTopIndicator = cv.imread('src/assets/arrow.png', cv.IMREAD_UNCHANGED)
-        hudSideIndicator = cv.imread('src/assets/arrow.png', cv.IMREAD_UNCHANGED)
-        hudHeightIndicator = cv.imread('src/assets/arrowRed.png', cv.IMREAD_UNCHANGED)
+        hudTop = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
+        hudSide = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
+        hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
+        hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
+        hudHeightIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrowRed.png', cv.IMREAD_UNCHANGED)
         infoBackground = cv.imread('src/assets/blackRectangle.png', cv.IMREAD_UNCHANGED)
 
         #rotate and resize images to be properly aligned
