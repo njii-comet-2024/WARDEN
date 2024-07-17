@@ -452,6 +452,7 @@ class Camera:
                 newZoom = self.numToRange(zoomPos, -1, 1, 0, 10)
                 cameraPos = [newTilt, newSwivel, newTele, newZoom]
                 cameraPosByte = bytearray(cameraPos)
+                
                 _, frame = vid.read()
                 frame = cv.resize(frame, (WIDTH, HEIGHT))
                 encoded, buffer = cv.imencode('.jpg', frame, [cv.IMWRITE_JPEG_QUALITY, 80])
