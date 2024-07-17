@@ -1,16 +1,16 @@
 """
-Transmits rover controls from central
+Transmits rover controls from central pi to controls pi
 
 @author [Zoe Rizzo] [@zizz-0]
 
-Date last modified: 07/16/2024
+Date last modified: 07/17/2024
 """
  
 import socket
 import pygame
 import pickle
 
-ROVER_IP = '192.168.110.19' # change to rover IP
+IP = '192.168.110.19' # change to controls pi IP
 PORT = 55555
 
 pygame.init()
@@ -18,8 +18,6 @@ pygame.joystick.init()
 joystick = pygame.joystick.Joystick(0)
 print(joystick.get_name())
 joystick.init()
-
-# s = socket.socket() # TCP
 
 # Controls:
 #
@@ -150,12 +148,9 @@ class Transmitter:
         if(self.on):
             self.sendContinuous()
 
-        # RESETTING TOGGLES -- otherwise they are continuous
-        controls["cameraTypeToggle"] = 0
-
     def sendContinuous(self):
         serializedControls = pickle.dumps(controls)
-        self.sock.sendto(serializedControls, (ROVER_IP, PORT))
+        self.sock.sendto(serializedControls, (IP, PORT))
 
         val = False
         for x in controls.values():
