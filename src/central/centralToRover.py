@@ -64,8 +64,6 @@ class Transmitter:
     """
     def __init__(self):
         self.on = True
-        
-        # UDP
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     """
