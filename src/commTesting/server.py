@@ -10,6 +10,8 @@ import cv2 as cv
 import socket
 import base64
 
+CONNECTED = 0
+
 class Camera: 
     def __init__(self):
         print("initializing")
@@ -80,7 +82,15 @@ class Camera:
                 key = cv.waitKey(1) & 0xFF
                 if key == ord('q'):
                     serverSocket.close()
+                    cv.destroyAllWindows()
                     break
 
+while True:
+    Camera.transmitUSBCamFeed()
 
-Camera.transmitUSBCamFeed()
+
+
+
+
+
+
