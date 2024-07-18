@@ -11,4 +11,5 @@ def set_motor_speed(motor_id, speed):
     ser.write(command_packet)
 
 # Example usage:
-set_motor_speed(1, 100)  # Set motor 1 speed to 100
+while True:
+	set_motor_speed(1, 100)  # Set motor 1 speed to 100
