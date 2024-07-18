@@ -132,6 +132,7 @@ class Rover:
     def drive(self):
         global zoomPos, tiltPos, swivelPos, telePos
         ctrls = []
+        
         serializedControls, addr = self.recvSocket.recvfrom(1024)
         controls = pickle.loads(serializedControls)  # deserializes controls
 
