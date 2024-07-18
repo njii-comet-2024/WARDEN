@@ -1,39 +1,22 @@
-import time
-from tcr_roboclaw import Roboclaw
+# Complete example of using the RoboClaw library
 
-#Windows comport name
-# rc = Roboclaw("COM11",115200)
-#Linux comport name
-rc = Roboclaw("/dev/ttyS0",115200)
+#import the relevant code from the RoboClaw library
 
-rc.Open()
+from roboclaw import Roboclaw
+
+# address of the RoboClaw as set in Motion Studio
+
 address = 0x80
 
-while(1):
-    rc.ForwardM1(address,32)#1/4 power forward
-    rc.BackwardM2(address,32)#1/4 power backward
-    time.sleep(2)
+# Creating the RoboClaw object, serial port and baudrate passed
 
-    rc.BackwardM1(address,32)#1/4 power backward
-    rc.ForwardM2(address,32)#1/4 power forward
-    time.sleep(2)
+roboclaw = RoboClaw(“/dev/ttyS0”, 38400)
 
-    rc.BackwardM1(address,0)#Stopped
-    rc.ForwardM2(address,0)#Stopped
-    time.sleep(2)
+# Starting communication with the RoboClaw hardware
 
-    m1duty = 16
-    m2duty = -16
-    rc.ForwardBackwardM1(address,64+m1duty)#1/4 power forward
-    rc.ForwardBackwardM2(address,64+m2duty)#1/4 power backward
-    time.sleep(2)
+roboclaw.Open()
 
-    m1duty = -16
-    m2duty = 16
-    rc.ForwardBackwardM1(address,64+m1duty)#1/4 power backward
-    rc.ForwardBackwardM2(address,64+m2duty)#1/4 power forward
-    time.sleep(2)
+# Start motor 1 in the forward direction at half speed
 
-    rc.ForwardBackwardM1(address,64)#Stopped
-    rc.ForwardBackwardM2(address,64)#Stopped
-    time.sleep(2)
+while True:
+    roboclaw.ForwardM1(address, 63)
