@@ -160,7 +160,6 @@ class Rover:
             ctrls.append("Right back")
 
         # not fully sure about OPTO pins or ENA pins (some online code says LOW to enable but some says HIGH)
-        
         if(controls["rightWheg"] < 0 or controls["leftWheg"] < 0):
             GPIO.output(STEP_ENA, GPIO.LOW)
             GPIO.output(STEP_DIR, GPIO.HIGH)
@@ -178,30 +177,30 @@ class Rover:
             ctrls.append("Whegs down")
 
         if(controls["cameraTelescope"] < 0):
-            # telescope.backward()
+            telescope.backward()
             ctrls.append("Telescope up")
         
         if(controls["cameraTelescope"] > 0):
-            # telescope.backward()
+            telescope.backward()
             ctrls.append("Telescope down")
 
         if(controls["cameraTilt"] < 0):
-            # tilt.value = -1
+            tilt.value = -1
             ctrls.append("Tilt up")
         
         if(controls["cameraTilt"] > 0):
-            # tilt.value = 1
+            tilt.value = 1
             ctrls.append("Tilt down")
 
         if(controls["cameraLeft"] > 0):
-            # swivel.value = -1
+            swivel.value = -1
             ctrls.append("Swivel left")
         elif(controls["cameraRight"] > 0):
-            # swivel.value = 1
+            swivel.value = 1
             ctrls.append("Swivel right")
         
         if(controls["cameraZoom"] != 0):
-            # zoom.value = zoomPos
+            zoom.value = zoomPos
             if(controls["cameraZoom"] < 0):
                 ctrls.append("Zoom out")
             else:
