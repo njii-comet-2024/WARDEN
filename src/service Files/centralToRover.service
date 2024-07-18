@@ -1,0 +1,14 @@
+[Unit]
+Description = Runs ground.py on startup
+After=graphical.target
+Requires=network.target
+
+[Service]
+Type=idle
+User=pi
+ExecStart= /usr/bin/python  /home/pi/Desktop/centralToRover.py
+Restart=always
+RestartSec=15
+
+[Install]
+wantedBy=multi-user.target

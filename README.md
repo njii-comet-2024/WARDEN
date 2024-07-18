@@ -3,7 +3,7 @@
 
 ---
 
-# WARDEN -- COMET 2024
+# W.A.R.D.E.N. -- COMET 2024
 Wireless Assessment Rover with Drone Extended Network
 
 </br>
@@ -17,7 +17,7 @@ https://github.com/njii-comet-2024/WARDEN
 This repository holds the control code for the COMET 2024 internship project. 
 
 
-This system is a deployable field recon ground vehicle. The objective is to extend the range of the ground vehicle by using an air vehicle, thus being able to cover more ground. 
+The project, called W.A.R.D.E.N., is a deployable field recon system. It is comprised of a ground rover and aerial vehicle. The objective of the aerial vehicle is to extend the communication range of the ground rover for recon.
 
 
 This project is still a work in progress. 
@@ -28,15 +28,23 @@ This project is still a work in progress.
 
 ---
 
+## Goals
+
+- Communicate with both the drone and rover to control them.
+- Receive video feed from both the drone and rover.
+- Extend the Wi-Fi range using the drone after the rover has lost connection.
+
+---
+
 ## Definitions
 
 **Rover:** The ground vehicle used for reconnaissance.
 
 
-**Drone:** The air vehicle used to extend the rover's range.
+**Drone:** The aerial vehicle used to extend the rover's range.
 
 
-**Central:** The laptop used to receive video footage from both vehicles.
+**Central:** The Raspberry Pi used to receive video footage from both vehicles and display video footage and necessary feedback.
 
 
 **Rover Control:** The controller used to transmit movement controls to the rover.
@@ -45,15 +53,31 @@ This project is still a work in progress.
 **Drone Control:** The controller used to transmit movement controls to the drone.
 
 
-**Ground Station:** Refers to all command controllers and receivers-- central, rover control, and drone control.
+**Ground Station:** Refers to all command controllers and receivers and Wi-Fi network-- Central, rover control, drone control, and router.
 
 ---
 
-## Goals
+## Controller Components
 
-- Communicate with both the ground and air vehicles to control them.
-- Receive video feed from both the ground and air vehicles.
-- Send commands to the ground vehicle through the air vehicle when connection is lost.
+**Central Raspberry Pi:** Runs programs `centralToRover.py` to send controls to Controls Raspberry Pi, `roverFeed.py` to receive rover video and camera positions from Camera Raspberry Pi, and `droneFeed.py` to receive drone video from Drone Raspberry Pi and/or Drone VTX.
+
+**Controls Raspberry Pi:** Runs program `roverControls.py` to receive controls from Central Raspberry Pi and run them on rover. Sends camera positions to Camera Raspberry Pi.
+
+**Camera Raspberry Pi:** Runs program `roverToCentral.py` to receive camera positions from Controls Raspberry Pi and send rover video and camera positions to Central Raspberry Pi.
+
+**Drone Raspberry Pi:** Runs `droneToCentral.py` to transmit digital drone video to Central Raspberry Pi.
+
+**Drone VTX:** Transmits analog drone video at a specific frequency for Central Raspberry Pi to receive.
+
+---
+
+## Necessary Libraries
+
+- [gpiozero](https://gpiozero.readthedocs.io/en/stable/installing.html)
+- [OpenCV](https://opencv.org/get-started/)
+- [pygame](https://www.pygame.org/news)
+- [picamera and picamera[array]](https://picamera.readthedocs.io/en/release-1.13/install.html)
+- [RPI.GPIO](https://pypi.org/project/RPi.GPIO/)
 
 ---
 

@@ -1,15 +1,18 @@
 """
-Client Side Video testing
+connects to rover and recieves camera locations and video feed over UDP 
+sockets
 
-@author  [Christopher Prol] [@prolvalone]
+@author [Christopher Prol]  [@prolvalone]
 
 Date last modified: 07/16/2024
 """
+
+# Libraries
+import socket
 import cv2 as cv
-import socket 
-import cvzone
-import numpy as np
+import numpy as np 
 import base64
+import cvzone
 
 ROVER_IP = '172.168.10.137'
 TOP_HORIZ = -70
@@ -18,17 +21,18 @@ TOP_VERT = 0
 SIDE_VERT = -200
 SIDE_HORIZ = -5
 SIDE_ACTU = 340
-
+"""
+This is a class for video reception
+"""
 
 class videoReciever:
     def __init__(self):
         print("initializing")
 
-
     """
     This function recieves Rover Cam footage from the PI Camera.  
     """
-    def recieveRoverCam(roverIP):
+    def receiveRoverCam(roverIP):
         #initiate Window and resize
         cv.namedWindow('TESTING HUD', cv.WINDOW_NORMAL)
         cv.resizeWindow('TESTING HUD', 1024, 600)
@@ -44,12 +48,13 @@ class videoReciever:
         clientSocket.sendto(message, (roverIP,port))
 
         #read the image files
-        hudTop = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudSide = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
-        hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrow.png', cv.IMREAD_UNCHANGED)
-        hudHeightIndicator = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/arrowRed.png', cv.IMREAD_UNCHANGED)
-        infoBackground = cv.imread('/Users/chris/OneDrive/Desktop/testingPe/blackRectangle.png', cv.IMREAD_UNCHANGED)
+        #src/assets
+        hudTop = cv.imread('/https://github.com/njii-comet-2024/WARDEN/blob/main/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
+        hudSide = cv.imread('/https://github.com/njii-comet-2024/WARDEN/blob/main/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
+        hudTopIndicator = cv.imread('/https://github.com/njii-comet-2024/WARDEN/blob/main/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
+        hudSideIndicator = cv.imread('/https://github.com/njii-comet-2024/WARDEN/blob/main/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
+        hudHeightIndicator = cv.imread('/https://github.com/njii-comet-2024/WARDEN/blob/main/src/assets/arrowRed.png', cv.IMREAD_UNCHANGED)
+        infoBackground = cv.imread('/https://github.com/njii-comet-2024/WARDEN/blob/main/src/assets/blackRectangle.png', cv.IMREAD_UNCHANGED)
 
         #rotate and resize images to be properly aligned
         hudTop = cv.rotate(hudTop, cv.ROTATE_180)
@@ -112,4 +117,4 @@ class videoReciever:
                 break
 
 #serverProgram()
-videoReciever.recieveRoverCam(ROVER_IP)
+videoReciever.receiveRoverCam(ROVER_IP)

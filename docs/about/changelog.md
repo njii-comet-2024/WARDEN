@@ -44,3 +44,25 @@ This is the first release of project **WARDEN**. It is not yet production-ready.
 **Bugfixes**
 
 - 
+
+## Version 0.3.0 (07/16/2024)
+
+This release expands on previous releases and includes an arduino to run motor control code on the rover.
+
+
+**Features**
+
+- Controller inputs transmitted via UDP between laptops/raspberry pis
+- Motors controlled using arduino -- controls sent from laptop to raspberry pi, then sent to arduino over serial connection
+- Arduino rover control code
+
+
+**Minor Changes**
+
+- Updated diagrams
+- Switched from PS4 controls to TX12 controls
+
+
+**Bugfixes**
+
+- Switched from picam to picam2 for compatibility with OpenCV, NumPy, and Python3
