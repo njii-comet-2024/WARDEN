@@ -1,5 +1,5 @@
 import time
-from tcr_roboclaw import Roboclaw
+from roboclaw import Roboclaw
 
 #Windows comport name
 # rc = Roboclaw("COM11",115200)
