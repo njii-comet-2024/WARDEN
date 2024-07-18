@@ -193,65 +193,34 @@ class Rover:
             ctrls.append("Whegs down")
 
         if(controls["cameraTelescope"] < 0):
-            # find max
-            # if telePos < max
-            telescope.forward()
-            telePos += 0.01
+            # telescope.backward()
             ctrls.append("Telescope up")
         
         if(controls["cameraTelescope"] > 0):
-            if(telePos > 0):
-                telescope.backward()
-                telePos -= 0.01
-                ctrls.append("Telescope down")
-                ctrls.append(telePos)
-            # else:
-            #     ctrls.append("TELE END")
+            # telescope.backward()
+            ctrls.append("Telescope down")
 
         if(controls["cameraTilt"] < 0):
-            if(tiltPos < 1):
-                tiltPos += 0.01
-                tilt.value = tiltPos
-                ctrls.append("Tilt up")
-                ctrls.append(tiltPos)
-            # else:
-            #     ctrls.append("TILT END")
+            # tilt.value = -1
+            ctrls.append("Tilt up")
         
         if(controls["cameraTilt"] > 0):
-            if(tiltPos > -1):
-                tiltPos -= 0.01
-                tilt.value = tiltPos
-                ctrls.append("Tilt down")
-                ctrls.append(tiltPos)
-            # else:
-            #     ctrls.append("TILT END")
+            # tilt.value = 1
+            ctrls.append("Tilt down")
 
-        if(controls["cameraLeft"] < 0):
-            if(swivelPos > -1):
-                swivelPos -= 0.01
-                swivel.value = swivelPos
-                ctrls.append("Swivel left")
-                ctrls.append(swivelPos)
-            # else:
-            #     ctrls.append("SWIVEL END")
-        
-        if(controls["cameraRight"] > 0):
-            if(swivelPos < 1):
-                swivelPos += 0.01
-                swivel.value = swivelPos
-                ctrls.append("Swivel right")
-                ctrls.append(swivelPos)
-            # else:
-            #     ctrls.append("SWIVEL END")
+        if(controls["cameraLeft"] > 0):
+            # swivel.value = -1
+            ctrls.append("Swivel left")
+        elif(controls["cameraRight"] > 0):
+            # swivel.value = 1
+            ctrls.append("Swivel right")
         
         if(controls["cameraZoom"] != 0):
-            zoom.value = zoomPos
-            ctrls.append("Zoom in")
-
+            # zoom.value = zoomPos
             if(controls["cameraZoom"] < 0):
-                ctrls.append("Zoom in")
-            else:
                 ctrls.append("Zoom out")
+            else:
+                ctrls.append("Zoom in")
         
         if(ctrls):
             print(ctrls)
