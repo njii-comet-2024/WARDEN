@@ -11,9 +11,9 @@ Date last modified: 07/17/2024
 # Libraries
 import pickle
 import socket
-from gpiozero import Motor
-from gpiozero import Servo
-import RPi.GPIO as GPIO
+# from gpiozero import Motor
+# from gpiozero import Servo
+# import RPi.GPIO as GPIO
 
 # PINS
 # IN1 => CLOCKWISE
@@ -57,28 +57,28 @@ S2_PIN = 0
 S3_PIN = 0
 
 # Tread motors
-rightMainTread = Motor(M1_IN1, M1_IN2, M1_ENA)
-leftMainTread = Motor(M2_IN1, M2_IN2, M2_ENA)
-rightWhegTread = Motor(M3_IN1, M3_IN2, M3_ENA)
-leftWhegTread = Motor(M4_IN1, M4_IN2, M4_ENA)
+# rightMainTread = Motor(M1_IN1, M1_IN2, M1_ENA)
+# leftMainTread = Motor(M2_IN1, M2_IN2, M2_ENA)
+# rightWhegTread = Motor(M3_IN1, M3_IN2, M3_ENA)
+# leftWhegTread = Motor(M4_IN1, M4_IN2, M4_ENA)
 
-# Camera motor/servos
-telescope = Motor(M7_IN1, M7_IN2)
-tilt = Servo(S1_PIN)
-swivel = Servo(S2_PIN)
-zoom = Servo(S3_PIN)
+# # Camera motor/servos
+# telescope = Motor(M7_IN1, M7_IN2)
+# tilt = Servo(S1_PIN)
+# swivel = Servo(S2_PIN)
+# zoom = Servo(S3_PIN)
 
-# Wheg stepper motors
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
+# # Wheg stepper motors
+# GPIO.setwarnings(False)
+# GPIO.setmode(GPIO.BCM)
 
-GPIO.setup(STEP_OPTO, GPIO.OUT)
-GPIO.setup(STEP_DIR, GPIO.OUT)
-GPIO.setup(STEP_ENA, GPIO.OUT)
+# GPIO.setup(STEP_OPTO, GPIO.OUT)
+# GPIO.setup(STEP_DIR, GPIO.OUT)
+# GPIO.setup(STEP_ENA, GPIO.OUT)
 
 # Global variables
-IP = '192.168.110.78'  # change to controls pi IP
-CAMERA_IP = '192.168.110.78'  # change to camera pi IP
+IP = '172.168.10.136'  # change to controls pi IP
+CAMERA_IP = '172.168.10.136'  # change to camera pi IP
 RECV_PORT = 55555
 SEND_PORT = 1111
 
@@ -109,7 +109,7 @@ class Rover:
         self.recvSocket.bind((IP, RECV_PORT))
         
         # Socket to send camera pos to camera pi
-        self.sendSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # self.sendSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     """
     Starts the rover and runs the drive loop
@@ -120,7 +120,7 @@ class Rover:
 
         while self.on:
             self.drive()
-            self.sendToCameraPi()
+            # self.sendToCameraPi()
             # If no commands are sent for an extended period of time
             if self.loopCount > maxLoopCount:
                 self.on = False
@@ -130,116 +130,127 @@ class Rover:
     Will receive controller input from central and run controls on rover
     """
     def drive(self):
+        global zoomPos, tiltPos, swivelPos, telePos
         ctrls = []
         serializedControls, addr = self.recvSocket.recvfrom(1024)
         controls = pickle.loads(serializedControls)  # deserializes controls
 
         leftSpeed = abs(controls["leftTread"])
         rightSpeed = abs(controls["rightTread"])
+        zoomPos = controls["cameraZoom"]
 
         if(controls["leftTread"] > 0):
-            leftMainTread.forward(leftSpeed)
-            leftWhegTread.forward(leftSpeed)
+            # leftMainTread.forward(leftSpeed)
+            # leftWhegTread.forward(leftSpeed)
             ctrls.append("Left fwd")
 
-        if(controls["rightTread"] < 0):
-            leftMainTread.backward(leftSpeed)
-            leftWhegTread.backward(leftSpeed)
+        if(controls["leftTread"] < 0):
+            # leftMainTread.backward(leftSpeed)
+            # leftWhegTread.backward(leftSpeed)
             ctrls.append("Left back")
 
         if(controls["rightTread"] > 0):
-            rightMainTread.forward(rightSpeed)
-            rightWhegTread.forward(rightSpeed)
+            # rightMainTread.forward(rightSpeed)
+            # rightWhegTread.forward(rightSpeed)
             ctrls.append("Right fwd")
 
         if(controls["rightTread"] < 0):
-            rightMainTread.backward(rightSpeed)
-            rightWhegTread.backward(rightSpeed)
+            # rightMainTread.backward(rightSpeed)
+            # rightWhegTread.backward(rightSpeed)
             ctrls.append("Right back")
 
         # not fully sure about OPTO pins or ENA pins (some online code says LOW to enable but some says HIGH)
-        if(controls["leftWheg"] > 0):
-            GPIO.output(STEP_ENA, GPIO.LOW)
-            GPIO.output(STEP_DIR, GPIO.HIGH)
-
-            GPIO.output(STEP_OPTO, GPIO.HIGH)
-            GPIO.output(STEP_OPTO, GPIO.LOW)
-            ctrls.append("Left wheg up")
-
         if(controls["leftWheg"] < 0):
-            GPIO.output(STEP_ENA, GPIO.LOW)
-            GPIO.output(STEP_DIR, GPIO.LOW)
+            # GPIO.output(STEP_ENA, GPIO.LOW)
+            # GPIO.output(STEP_DIR, GPIO.HIGH)
 
-            GPIO.output(STEP_OPTO, GPIO.HIGH)
-            GPIO.output(STEP_OPTO, GPIO.LOW)
-            ctrls.append("Left wheg down")
+            # GPIO.output(STEP_OPTO, GPIO.HIGH)
+            # GPIO.output(STEP_OPTO, GPIO.LOW)
+            ctrls.append("Whegs up")
+
+        if(controls["leftWheg"] > 0):
+            # GPIO.output(STEP_ENA, GPIO.LOW)
+            # GPIO.output(STEP_DIR, GPIO.LOW)
+
+            # GPIO.output(STEP_OPTO, GPIO.HIGH)
+            # GPIO.output(STEP_OPTO, GPIO.LOW)
+            ctrls.append("Whegs down")
         
-        if(controls["rightWheg"] > 0):
-            GPIO.output(STEP_ENA, GPIO.LOW)
-            GPIO.output(STEP_DIR, GPIO.HIGH)
-
-            GPIO.output(STEP_OPTO, GPIO.HIGH)
-            GPIO.output(STEP_OPTO, GPIO.LOW)
-            ctrls.append("Right wheg up")
-
         if(controls["rightWheg"] < 0):
-            GPIO.output(STEP_ENA, GPIO.LOW)
-            GPIO.output(STEP_DIR, GPIO.LOW)
+            # GPIO.output(STEP_ENA, GPIO.LOW)
+            # GPIO.output(STEP_DIR, GPIO.HIGH)
 
-            GPIO.output(STEP_OPTO, GPIO.HIGH)
-            GPIO.output(STEP_OPTO, GPIO.LOW)
-            ctrls.append("Right wheg down")
+            # GPIO.output(STEP_OPTO, GPIO.HIGH)
+            # GPIO.output(STEP_OPTO, GPIO.LOW)
+            ctrls.append("Whegs up")
 
-        if(controls["cameraTypeToggle"] > 0):
-            ctrls.append("[OBSOLETE]")
+        if(controls["rightWheg"] > 0):
+            # GPIO.output(STEP_ENA, GPIO.LOW)
+            # GPIO.output(STEP_DIR, GPIO.LOW)
 
-        if(controls["cameraTelescope"] > 0):
+            # GPIO.output(STEP_OPTO, GPIO.HIGH)
+            # GPIO.output(STEP_OPTO, GPIO.LOW)
+            ctrls.append("Whegs down")
+
+        if(controls["cameraTelescope"] < 0):
             # find max
             # if telePos < max
-            telescope.forward()
-            telePos += 1
+            # telescope.forward()
+            telePos += 0.01
             ctrls.append("Telescope up")
         
-        if(controls["cameraTelescope"] < 0):
+        if(controls["cameraTelescope"] > 0):
             if(telePos > 0):
-                telescope.backward()
-                telePos -= 1
+                # telescope.backward()
+                telePos -= 0.01
                 ctrls.append("Telescope down")
+                ctrls.append(telePos)
+            # else:
+            #     ctrls.append("TELE END")
 
-        if(controls["cameraTilt"] > 0):
-            if(tiltPos < 1):
-                tiltPos += 0.05
-                tilt.value = tiltPos
-                ctrls.append("Tilt up")
-        
         if(controls["cameraTilt"] < 0):
+            if(tiltPos < 1):
+                tiltPos += 0.01
+                # tilt.value = tiltPos
+                ctrls.append("Tilt up")
+                ctrls.append(tiltPos)
+            # else:
+            #     ctrls.append("TILT END")
+        
+        if(controls["cameraTilt"] > 0):
             if(tiltPos > -1):
-                tiltPos -= 0.05
-                tilt.value = tiltPos
+                tiltPos -= 0.01
+                # tilt.value = tiltPos
                 ctrls.append("Tilt down")
+                ctrls.append(tiltPos)
+            # else:
+            #     ctrls.append("TILT END")
 
-        if(controls["cameraLeft"] > 0):
+        if(controls["cameraLeft"] < 0):
             if(swivelPos > -1):
-                swivelPos -= 0.05
-                swivel.value = swivelPos
+                swivelPos -= 0.01
+                # swivel.value = swivelPos
                 ctrls.append("Swivel left")
+                ctrls.append(swivelPos)
+            # else:
+            #     ctrls.append("SWIVEL END")
         
         if(controls["cameraRight"] > 0):
             if(swivelPos < 1):
-                swivelPos += 0.05
-                swivel.value = swivelPos
+                swivelPos += 0.01
+                # swivel.value = swivelPos
                 ctrls.append("Swivel right")
+                ctrls.append(swivelPos)
+            # else:
+            #     ctrls.append("SWIVEL END")
         
-        if(controls["cameraZoom"] > 0):
-            if(zoomPos < 1):
-                zoomPos += 0.5
-                zoom.value = zoomPos
-                ctrls.append("Zoom in")
+        if(controls["cameraZoom"] != 0):
+            # zoom.value = zoomPos
+            ctrls.append("Zoom in")
 
-        if(controls["cameraZoom"] < 0):
-            if(zoomPos > -1):
-                zoomPos -= 0.5
-                zoom.value = zoomPos
+            if(controls["cameraZoom"] < 0):
+                ctrls.append("Zoom in")
+            else:
                 ctrls.append("Zoom out")
         
         if(ctrls):
@@ -267,3 +278,6 @@ class Rover:
     def numToRange(num, inMin, inMax, outMin, outMax):
         return outMin + (float(num - inMin) / float(inMax - inMin) * (outMax
                         - outMin))
+
+rover = Rover()
+rover.start()
