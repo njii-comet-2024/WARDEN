@@ -10,7 +10,7 @@ address = 0x80
 
 # Creating the RoboClaw object, serial port and baudrate passed
 
-roboclaw = RoboClaw(“/dev/ttyS0”, 38400)
+roboclaw = Roboclaw("/dev/ttyS0", 115200)
 
 # Starting communication with the RoboClaw hardware
 
