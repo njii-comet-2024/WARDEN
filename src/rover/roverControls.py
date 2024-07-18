@@ -160,23 +160,8 @@ class Rover:
             ctrls.append("Right back")
 
         # not fully sure about OPTO pins or ENA pins (some online code says LOW to enable but some says HIGH)
-        if(controls["leftWheg"] < 0):
-            GPIO.output(STEP_ENA, GPIO.LOW)
-            GPIO.output(STEP_DIR, GPIO.HIGH)
-
-            GPIO.output(STEP_OPTO, GPIO.HIGH)
-            GPIO.output(STEP_OPTO, GPIO.LOW)
-            ctrls.append("Whegs up")
-
-        if(controls["leftWheg"] > 0):
-            GPIO.output(STEP_ENA, GPIO.LOW)
-            GPIO.output(STEP_DIR, GPIO.LOW)
-
-            GPIO.output(STEP_OPTO, GPIO.HIGH)
-            GPIO.output(STEP_OPTO, GPIO.LOW)
-            ctrls.append("Whegs down")
         
-        if(controls["rightWheg"] < 0):
+        if(controls["rightWheg"] < 0 or controls["leftWheg"] < 0):
             GPIO.output(STEP_ENA, GPIO.LOW)
             GPIO.output(STEP_DIR, GPIO.HIGH)
 
@@ -184,7 +169,7 @@ class Rover:
             GPIO.output(STEP_OPTO, GPIO.LOW)
             ctrls.append("Whegs up")
 
-        if(controls["rightWheg"] > 0):
+        if(controls["rightWheg"] > 0 or controls["leftWheg"] > 0):
             GPIO.output(STEP_ENA, GPIO.LOW)
             GPIO.output(STEP_DIR, GPIO.LOW)
 
