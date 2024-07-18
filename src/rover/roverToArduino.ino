@@ -1,16 +1,7 @@
-// map<string, int> controls;
-
-//controls["upArrow"] = 0;
-//controls["downArrow"] = 0;
-
-#include <SPI.h>
-#include <nRF24L01.h>
-#include <RF24.h>
-
-RF24 radio(7, 8);
 const byte address[5] = {'R','x','a','A','z'};
 
-byte recv[2];
+unsigned char recv[30];
+unsigned char send[30];
 
 int ENA = 5;
 int IN1 = 2;
@@ -29,18 +20,18 @@ void setup(){
 
     Serial.begin(9600);
     
-    bool begin = radio.begin();
-    
-    radio.openWritingPipe(address);
-    radio.setPALevel(RF24_PA_MAX);
-    radio.stopListening(); // set as transmitter
 }
 
 void loop(){
-    if(Serial.available() > 0){
-        recv = Serial.read();
-        radio.write(&recv, sizeof(recv));
-    }
+  // int bytes_read = 0;
+  //   if(Serial.available() > 0){
+  //       while(bytes_read != 10000){
+  //         //send[bytes_read] = Serial.readBytes(recv, 2);
+  //         bytes_read++;
+  //       }
+  //     radio.write(&send, sizeof(send));
+  //     bytes_read = 0;
+  //   }
     
-    delay(500)
+  //   delay(500);
 }
