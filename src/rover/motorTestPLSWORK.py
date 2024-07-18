@@ -1,9 +1,14 @@
-import RPi.GPIO as GPIO
+import serial
 
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(13, GPIO.OUT)
-GPIO.setup(19, GPIO.OUT)
+# Open serial connection (adjust port and baudrate as per your setup)
+ser = serial.Serial('/dev/ttyS0', baudrate=115200, timeout=1)
 
-while True:
-	GPIO.output(13, GPIO.HIGH)
-	GPIO.output(19, GPIO.HIGH)
+# Example command to set motor speed
+def set_motor_speed(motor_id, speed):
+    command = [motor_id, speed]
+    checksum = (sum(command) & 0x7F)
+    command_packet = bytearray([0x80, motor_id] + command + [checksum])
+    ser.write(command_packet)
+
+# Example usage:
+set_motor_speed(1, 100)  # Set motor 1 speed to 100
