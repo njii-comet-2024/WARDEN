@@ -11,9 +11,10 @@ Date last modified: 07/17/2024
 # Libraries
 import pickle
 import socket
+import RPi.GPIO as GPIO
 from gpiozero import Motor
 from gpiozero import Servo
-import RPi.GPIO as GPIO
+from roboclaw_3 import Roboclaw
 
 # PINS
 # IN1 => CLOCKWISE
@@ -93,6 +94,13 @@ swivelPos = 0
 zoomPos = 0
 telePos = 0 # change to middle position
 
+address = 0x80
+rc = Roboclaw("/dev/ttyACM0", 38400)
+
+# SPEED => (0, 128)
+
+rc.Open()
+
 """
 Class that defines a rover and its functionality
 """
@@ -136,29 +144,24 @@ class Rover:
         serializedControls, addr = self.recvSocket.recvfrom(1024)
         controls = pickle.loads(serializedControls)  # deserializes controls
 
-        leftSpeed = abs(controls["leftTread"])
-        rightSpeed = abs(controls["rightTread"])
         zoomPos = controls["cameraZoom"]
 
-        if(controls["leftTread"] > 0):
-            leftMainTread.forward(leftSpeed)
-            leftWhegTread.forward(leftSpeed)
-            ctrls.append("Left fwd")
+        rightSpeed = int(controls["rightTread"] * 127)
+        leftSpeed = int(controls["leftTread"] * 127)
 
-        if(controls["leftTread"] < 0):
-            leftMainTread.backward(leftSpeed)
-            leftWhegTread.backward(leftSpeed)
-            ctrls.append("Left back")
-
-        if(controls["rightTread"] > 0):
-            rightMainTread.forward(rightSpeed)
-            rightWhegTread.forward(rightSpeed)
+        if rightSpeed > 0:
+            rc._write1(address, Roboclaw.Cmd.M1FORWARD, rightSpeed)
             ctrls.append("Right fwd")
-
-        if(controls["rightTread"] < 0):
-            rightMainTread.backward(rightSpeed)
-            rightWhegTread.backward(rightSpeed)
+        else:
+            rc._write1(address, Roboclaw.Cmd.M1BACKWARD, abs(rightSpeed))
             ctrls.append("Right back")
+        
+        if leftSpeed > 0:
+            rc._write1(address, Roboclaw.Cmd.M2FORWARD, leftSpeed)
+            ctrls.append("Left fwd")
+        else:
+            rc._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(leftSpeed))
+            ctrls.append("Left back")
 
         # not fully sure about OPTO pins or ENA pins (some online code says LOW to enable but some says HIGH)
         if(controls["rightWheg"] < 0 or controls["leftWheg"] < 0):
