@@ -12,6 +12,7 @@ class Roboclaw:
 		self.timeout = timeout;
 		self._trystimeout = retries
 		self._crc = 0;
+		self._port = serial.Serial(comport, rate)
 
 	#Command Enums
 	class Cmd():
@@ -123,12 +124,18 @@ class Roboclaw:
 		return
 
 	def _sendcommand(self,address,command):
-		self.crc_clear()
-		self.crc_update(address)
-		self._port.write(chr(address))
-		self.crc_update(command)
-		self._port.write(chr(command))
-		return
+		#self.crc_clear()
+		#self.crc_update(address)
+		#self._port.write(chr(address))
+		#self.crc_update(command)
+		#self._port.write(chr(command))
+		#return
+		try:self.port.is_open:
+			self._port.write(bytes([address]))
+			self._port.write(bytes([command]))
+		except Exception as e:
+			print(f"Error sending command: {e}")
+			raise
 
 	def _readchecksumword(self):
 		data = self._port.read(2)
@@ -308,14 +315,20 @@ class Roboclaw:
 		return False
 
 	def _write1(self,address,cmd,val):
-		trys=self._trystimeout
-		while trys:
-			self._sendcommand(address,cmd)
-			self._writebyte(val)
-			if self._writechecksum():
-				return True
-			trys=trys-1
-		return False
+		#trys=self._trystimeout
+		#while trys:
+			#self._sendcommand(address,cmd)
+			#self._writebyte(val)
+			#if self._writechecksum():
+				#return True
+			#trys=trys-1
+		#return False
+		try:
+			self.sendcommand(address,cmd)
+			self._port.write(bytes([value]))
+		except Exception as e:
+			print(f"Error writing data:{e}")
+			raise
 
 	def _write11(self,address,cmd,val1,val2):
 		trys=self._trystimeout
