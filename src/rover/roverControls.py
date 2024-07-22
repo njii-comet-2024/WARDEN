@@ -40,9 +40,11 @@ M4_IN1 = 0
 M4_IN2 = 0
 
 # Motors 5 & 6 -- Articulating treads (DM456AI)
-STEP_OPTO = 0
-STEP_DIR = 0
-STEP_ENA = 0
+STEPPER_AIN = 22
+STEPPER_ENA = 27
+STEPPER_ENA_RELAY = 23
+STEPPER_DIR = 17
+STEPPER_DIR_RELAY = 4
 
 # Motor 7 -- Camera Telescope Linear Actuator
 M7_IN1 = 0
@@ -73,9 +75,11 @@ zoom = Servo(S3_PIN)
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
-GPIO.setup(STEP_OPTO, GPIO.OUT)
-GPIO.setup(STEP_DIR, GPIO.OUT)
-GPIO.setup(STEP_ENA, GPIO.OUT)
+GPIO.setup(STEPPER_DIR, GPIO.OUT)
+GPIO.setup(STEPPER_ENA, GPIO.OUT)
+GPIO.setup(STEPPER_ENA_RELAY, GPIO.OUT)
+GPIO.setup(STEPPER_DIR, GPIO.OUT)
+GPIO.setup(STEPPER_DIR_RELAY, GPIO.OUT)
 
 # Global variables
 IP = '172.168.10.136'  # change to controls pi IP
@@ -163,22 +167,27 @@ class Rover:
             rc._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(leftSpeed))
             ctrls.append("Left back")
 
-        # not fully sure about OPTO pins or ENA pins (some online code says LOW to enable but some says HIGH)
-        if(controls["rightWheg"] < 0 or controls["leftWheg"] < 0):
-            GPIO.output(STEP_ENA, GPIO.LOW)
-            GPIO.output(STEP_DIR, GPIO.HIGH)
+       #STEPPER CODE
+        if(controls["rightWheg"] == 0 or controls["leftWheg"] == 0):
+            GPIO.output(STEPPER_ENA, GPIO.LOW)
+            GPIO.output(STEPPER_ENA_RELAY, GPIO.LOW)
 
-            GPIO.output(STEP_OPTO, GPIO.HIGH)
-            GPIO.output(STEP_OPTO, GPIO.LOW)
+        if(controls["rightWheg"] < 0 or controls["leftWheg"] < 0): 
+            GPIO.output(STEPPER_ENA, GPIO.HIGH)
+            GPIO.output(STEPPER_ENA_RELAY, GPIO.HIGH)
+            GPIO.output(STEPPER_DIR, GPIO.HIGH)
+            GPIO.output(STEPPER_DIR_RELAY, GPIO.HIGH)
             ctrls.append("Whegs up")
 
         if(controls["rightWheg"] > 0 or controls["leftWheg"] > 0):
-            GPIO.output(STEP_ENA, GPIO.LOW)
-            GPIO.output(STEP_DIR, GPIO.LOW)
+            GPIO.output(STEPPER_ENA, GPIO.HIGH)
+            GPIO.output(STEPPER_ENA_RELAY, GPIO.HIGH)
+            GPIO.output(STEPPER_DIR, GPIO.LOW)
+            GPIO.output(STEPPER_DIR_RELAY, GPIO.LOW)
 
-            GPIO.output(STEP_OPTO, GPIO.HIGH)
-            GPIO.output(STEP_OPTO, GPIO.LOW)
             ctrls.append("Whegs down")
+
+
 
         if(controls["cameraTelescope"] < 0):
             telescope.backward()
