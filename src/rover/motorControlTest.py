@@ -104,55 +104,55 @@ class Transmitter:
             if event.type == pygame.JOYAXISMOTION:
                 axisInputs[event.axis] = event.value
 
-                controls["leftTread"] = axisInputs[1] if abs(axisInputs[1]) > 0.3 else 0
-                controls["rightTread"] = axisInputs[3] if abs(axisInputs[3]) > 0.3 else 0
-                controls["leftWheg"] = axisInputs[2] if abs(axisInputs[2]) > 0.5 else 0
-                controls["rightWheg"] = axisInputs[4] if abs(axisInputs[4]) > 0.5 else 0
-                controls["cameraTilt"] = axisInputs[5] if abs(axisInputs[5]) > 0.5 else 0
-                controls["cameraTelescope"] = axisInputs[6] if abs(axisInputs[6]) > 0.5 else 0
-                controls["cameraZoom"] = axisInputs[7] if abs(axisInputs[7]) > 0.5 else 0
+                # controls["leftTread"] = axisInputs[1] if abs(axisInputs[1]) > 0.3 else 0
+                # controls["rightTread"] = axisInputs[3] if abs(axisInputs[3]) > 0.3 else 0
+                # controls["leftWheg"] = axisInputs[2] if abs(axisInputs[2]) > 0.5 else 0
+                # controls["rightWheg"] = axisInputs[4] if abs(axisInputs[4]) > 0.5 else 0
+                # controls["cameraTilt"] = axisInputs[5] if abs(axisInputs[5]) > 0.5 else 0
+                # controls["cameraTelescope"] = axisInputs[6] if abs(axisInputs[6]) > 0.5 else 0
+                # controls["cameraZoom"] = axisInputs[7] if abs(axisInputs[7]) > 0.5 else 0
 
-                # if abs(axisInputs[0]) > 0.3:
-                #     controls["leftTread"] = axisInputs[0]
-                #     # print("LJOY: ", axisInputs[0])
-                # else:
-                #     controls["leftTread"] = 0
+                if abs(axisInputs[0]) > 0.3:
+                    controls["leftTread"] = axisInputs[0]
+                    # print("LJOY: ", axisInputs[0])
+                else:
+                    controls["leftTread"] = 0
 
-                # if abs(axisInputs[1]) > 0.3:
-                #     controls["rightTread"] = axisInputs[1]
-                #     # print("RJOY: ", axisInputs[1])
-                # else:
-                #     controls["rightTread"] = 0
+                if abs(axisInputs[1]) > 0.3:
+                    controls["rightTread"] = axisInputs[1]
+                    # print("RJOY: ", axisInputs[1])
+                else:
+                    controls["rightTread"] = 0
 
-                # if abs(axisInputs[2]) > 0.5:
-                #     controls["leftWheg"] = axisInputs[2]
-                #     # print("SE: ", axisInputs[2])
-                # else:
-                #     controls["leftWheg"] = 0
+                if abs(axisInputs[2]) > 0.5:
+                    controls["leftWheg"] = axisInputs[2]
+                    # print("SE: ", axisInputs[2])
+                else:
+                    controls["leftWheg"] = 0
 
-                # if abs(axisInputs[3]) > 0.5:
-                #     controls["rightWheg"] = axisInputs[3]
-                #     # print("SF: ", axisInputs[3])
-                # else:
-                #     controls["rightWheg"] = 0
+                if abs(axisInputs[3]) > 0.5:
+                    controls["rightWheg"] = axisInputs[3]
+                    # print("SF: ", axisInputs[3])
+                else:
+                    controls["rightWheg"] = 0
 
-                # if abs(axisInputs[4]) > 0.5:
-                #     controls["cameraTilt"] = axisInputs[4]
-                #     # print("SB: ", axisInputs[4])
-                # else:
-                #     controls["cameraTilt"] = 0
+                if abs(axisInputs[4]) > 0.5:
+                    controls["cameraTilt"] = axisInputs[4]
+                    # print("SB: ", axisInputs[4])
+                else:
+                    controls["cameraTilt"] = 0
 
-                # if abs(axisInputs[5]) > 0.5:
-                #     controls["cameraTelescope"] = axisInputs[5]
-                #     # print("SD: ", axisInputs[5])
-                # else:
-                #     controls["cameraTelescope"] = 0
+                if abs(axisInputs[5]) > 0.5:
+                    controls["cameraTelescope"] = axisInputs[5]
+                    # print("SD: ", axisInputs[5])
+                else:
+                    controls["cameraTelescope"] = 0
 
-                # if abs(axisInputs[7]) > 0.5:
-                #     controls["cameraZoom"] = axisInputs[7]
-                #     # print("SD: ", axisInputs[5])
-                # else:
-                #     controls["cameraZoom"] = 0
+                if abs(axisInputs[7]) > 0.5:
+                    controls["cameraZoom"] = axisInputs[7]
+                    # print("SD: ", axisInputs[5])
+                else:
+                    controls["cameraZoom"] = 0
             
         if(self.on):
             self.sendContinuous()
