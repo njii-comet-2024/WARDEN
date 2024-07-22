@@ -150,25 +150,22 @@ class Transmitter:
             self.sendContinuous()
 
     def sendContinuous(self):
-        speed = abs(controls["rightTread"])
-        #print(controls["rightTread"])
-        
-        if(controls["rightTread"] < 0):
-            # speed = self.numToRange(speed, 0, 1, 0, 128)
-            # roboclaw.BackwardM1(address, speed)
-            roboclaw.BackwardM2(address, 32)
-            roboclaw.BackwardM1(address, 32)
-            print("back")
+        rightTreadSpeed = int(self.numToRange(abs(controls["rightTread"]), 0, 1, 0, 127))
+        leftTreadSpeed = int(self.numToRange(abs(controls["leftTread"]), 0, 1, 0, 127))
 
-        if(controls["rightTread"] > 0):
-            # speed = self.numToRange(speed, 0, 1, 0, 128)
-            # roboclaw.ForwardM1(address, speed)
-            roboclaw.ForwardM2(address, 32)
-            roboclaw.ForwardM1(address, 32)
-            print("fwd")
-            
-        if(controls["rightTread"] == 0):
-            print("STOP")
+        if controls["rightTread"] < 0:
+            roboclaw.BackwardM2(address, rightTreadSpeed)
+        elif controls["rightTread"] > 0:
+            roboclaw.ForwardM2(address, rightTreadSpeed)
+        else:
+            roboclaw.ForwardM2(address, 0)  # Stop motor
+
+        if controls["leftTread"] < 0:
+            roboclaw.BackwardM1(address, leftTreadSpeed)
+        elif controls["leftTread"] > 0:
+            roboclaw.ForwardM1(address, leftTreadSpeed)
+        else:
+            roboclaw.ForwardM1(address, 0)  # Stop motor
 
     """
     Maps a number from one range to another
@@ -182,9 +179,7 @@ class Transmitter:
     @return (int) number mapped to new range
     """
     def numToRange(self, num, inMin, inMax, outMin, outMax):
-        flSpeed = outMin + (float(num - inMin) / float(inMax - inMin) * (outMax
-                        - outMin))
-        return int(flSpeed)
+        return outMin + (float(num - inMin) / float(inMax - inMin) * (outMax - outMin))
 
 
 
