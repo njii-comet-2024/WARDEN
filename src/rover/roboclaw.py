@@ -320,7 +320,8 @@ class Roboclaw:
 		# return False
 		try:
 			self._sendcommand(address,cmd)
-			self._port.write(bytes([val]))
+			# self._port.write(bytes([val]))
+			self._writebyte(val)
 		except Exception as e:
 			print(f"Error writing data:{e}")
 			raise
