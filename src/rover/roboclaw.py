@@ -313,7 +313,7 @@ class Roboclaw:
 		trys=self._trystimeout
 		while trys:
 			self._sendcommand(address,cmd)
-			self._writebyte(val)
+			self._port.write(bytes([val]))
 			if self._writechecksum():
 				return True
 			trys=trys-1
