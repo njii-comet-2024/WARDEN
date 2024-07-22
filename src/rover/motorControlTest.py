@@ -171,11 +171,14 @@ class Transmitter:
 
     """
     Maps a number from one range to another
+    
     @param `num` : number to re-map
     @param `inMin` : original range min
     @param `inMax` : original range max
     @param `outMin` : target range min
     @param `outMax` : target range max
+
+    @return (int) number mapped to new range
     """
     def numToRange(self, num, inMin, inMax, outMin, outMax):
         flSpeed = outMin + (float(num - inMin) / float(inMax - inMin) * (outMax
