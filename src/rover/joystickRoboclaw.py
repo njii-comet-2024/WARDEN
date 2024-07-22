@@ -12,7 +12,7 @@ joystick.init()
 
 # Initialize Roboclaw (replace 'COM3' with your actual port)
 rc = Roboclaw("/dev/serial0", 38400)
-rc._port.open()
+rc.Open()
 
 # Roboclaw address
 address = 0x80
