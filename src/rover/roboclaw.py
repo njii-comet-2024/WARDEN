@@ -125,10 +125,9 @@ class Roboclaw:
 
 	def _sendcommand(self, address, command):
 		try:
-			if self._port.is_open:
-				print(f"Sending command: address={address}, command={command}")
-				self._port.write(bytes([address]))
-				self._port.write(bytes([command]))
+			print(f"Sending command: address={address}, command={command}")
+			self._port.write(bytes([address]))
+			self._port.write(bytes([command]))
 		except Exception as e:
 			print(f"Error sending command: {e}")
 			raise
