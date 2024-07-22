@@ -9,6 +9,7 @@ Date last modified: 07/17/2024
 import socket
 import pygame
 from gpiozero import Motor
+from roboclaw_3 import Roboclaw
 
 pygame.init()
 pygame.joystick.init()
@@ -52,11 +53,12 @@ controls = {
     "cameraZoom" : 0
 }
 
-M1_ENA = 0
-M1_IN1 = 0
-M1_IN2 = 0
+address = 0x80
+roboclaw = Roboclaw("/dev/ttyACM0", 115200)
 
-motor = Motor(M1_IN1, M1_IN2, M1_ENA)
+# SPEED => (0, 128) ?
+
+roboclaw.Open()
 
 """
 Class that defines a transmitter and its functionality in transmitting controls
@@ -161,12 +163,10 @@ class Transmitter:
         speed = abs(controls["rightTread"])
 
         if(controls["rightTread"] > 0):
-            motor.forward(speed)
-            motor.forward(speed)
+            roboclaw.ForwardM1(address, 63)
 
         if(controls["rightTread"] < 0):
-            motor.backward(speed)
-            motor.backward(speed)
+            roboclaw.ForwardM1(address, 63)
 
 
 transmit = Transmitter()

@@ -2,7 +2,7 @@
 
 #import the relevant code from the RoboClaw library
 
-from roboclaw import Roboclaw
+from roboclaw_3 import Roboclaw
 
 # address of the RoboClaw as set in Motion Studio
 
