@@ -31,23 +31,23 @@ while True:
 	time.sleep(2)
 	print("sleep")
 
-	m1duty = 16
-	m2duty = -16
-	rc.ForwardBackwardM1(address,64+m1duty)	#1/4 power forward
-	print("fwd m1")
-	rc.ForwardBackwardM2(address,64+m2duty)	#1/4 power backward
-	print("back m2")
-	time.sleep(2)
-	print("sleep")
+	# m1duty = 16
+	# m2duty = -16
+	# rc.ForwardBackwardM1(address,64+m1duty)	#1/4 power forward
+	# print("fwd m1")
+	# rc.ForwardBackwardM2(address,64+m2duty)	#1/4 power backward
+	# print("back m2")
+	# time.sleep(2)
+	# print("sleep")
 	
-	m1duty = -16
-	m2duty = 16
-	rc.ForwardBackwardM1(address,64+m1duty)	#1/4 power backward
-	print("back m1")
-	rc.ForwardBackwardM2(address,64+m2duty)	#1/4 power forward
-	print("fwd m2")
-	time.sleep(2)
-	print("sleep")
+	# m1duty = -16
+	# m2duty = 16
+	# rc.ForwardBackwardM1(address,64+m1duty)	#1/4 power backward
+	# print("back m1")
+	# rc.ForwardBackwardM2(address,64+m2duty)	#1/4 power forward
+	# print("fwd m2")
+	# time.sleep(2)
+	# print("sleep")
 
 	rc.ForwardBackwardM1(address,64)	#Stopped
 	print("m1 stop")
