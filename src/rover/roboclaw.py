@@ -310,20 +310,20 @@ class Roboclaw:
 		return False
 
 	def _write1(self,address,cmd,val):
-		trys=self._trystimeout
-		while trys:
-			self._sendcommand(address,cmd)
-			self._port.write(bytes([val]))
-			if self._writechecksum():
-				return True
-			trys=trys-1
-		return False
-		# try:
+		# trys=self._trystimeout
+		# while trys:
 		# 	self._sendcommand(address,cmd)
 		# 	self._port.write(bytes([val]))
-		# except Exception as e:
-		# 	print(f"Error writing data:{e}")
-		# 	raise
+		# 	if self._writechecksum():
+		# 		return True
+		# 	trys=trys-1
+		# return False
+		try:
+			self._sendcommand(address,cmd)
+			self._port.write(bytes([val]))
+		except Exception as e:
+			print(f"Error writing data:{e}")
+			raise
 
 	def _write11(self,address,cmd,val1,val2):
 		trys=self._trystimeout
