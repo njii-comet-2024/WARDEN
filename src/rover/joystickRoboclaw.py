@@ -11,7 +11,7 @@ joystick = pygame.joystick.Joystick(0)
 joystick.init()
 
 # Initialize Roboclaw (replace 'COM3' with your actual port)
-rc = Roboclaw("/dev/serial0", 38400)
+rc = Roboclaw("/dev/ttyACM0", 38400)
 rc.Open()
 
 # Roboclaw address

@@ -53,7 +53,7 @@ controls = {
 }
 
 address = 0x80
-roboclaw = Roboclaw("/dev/serial0", 38400)
+roboclaw = Roboclaw("/dev/ttyACM0", 38400)
 
 # SPEED => (0, 128) ?
 
