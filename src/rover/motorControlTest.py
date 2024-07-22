@@ -6,6 +6,7 @@ freaking out
 Date last modified: 07/22/2024
 """
 
+import time
 import pygame
 from roboclaw_3 import Roboclaw
 
@@ -53,11 +54,11 @@ controls = {
 }
 
 address = 0x80
-roboclaw = Roboclaw("/dev/ttyACM0", 38400)
+rc = Roboclaw("/dev/ttyACM0", 38400)
 
 # SPEED => (0, 128) ?
 
-roboclaw.Open()
+rc.Open()
 
 """
 Class that defines a transmitter and its functionality in transmitting controls
@@ -161,29 +162,15 @@ class Transmitter:
     Turns joystick values into motor values and runs motors
     """
     def sendContinuous(self):
-        rightTreadSpeed = int(self.numToRange(abs(controls["rightTread"]), 0, 1, 0, 127))
-        leftTreadSpeed = int(self.numToRange(abs(controls["leftTread"]), 0, 1, 0, 127))
+        speed_right = int(controls["rightTread"] * 127)
 
-        # Right tread control
-        if controls["rightTread"] < 0:
-            roboclaw.BackwardM2(address, rightTreadSpeed)
-            print("back")
-        elif controls["rightTread"] > 0:
-            roboclaw.ForwardM2(address, rightTreadSpeed)
-            print("fwd")
+        if speed_right > 0:
+            rc._write1(address, Roboclaw.Cmd.M2FORWARD, speed_right)
         else:
-            roboclaw.BackwardM2(address, 0)
-            roboclaw.ForwardM2(address, 0)
-            print("STOP")
+            rc._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(speed_right))
 
-        # Left tread control
-        # if controls["leftTread"] < 0:
-        #     roboclaw.BackwardM1(address, leftTreadSpeed)
-        # elif controls["leftTread"] > 0:
-        #     roboclaw.ForwardM1(address, leftTreadSpeed)
-        # else:
-        #     roboclaw.BackwardM1(address, 0)
-        #     roboclaw.ForwardM1(address, 0)
+        # Add a small delay to prevent excessive CPU usage
+        time.sleep(0.1)
 
     """
     Maps a number from one range to another
