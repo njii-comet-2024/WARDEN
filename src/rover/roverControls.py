@@ -230,8 +230,9 @@ class Rover:
     @param `outMax` : target range max
     """
     def numToRange(num, inMin, inMax, outMin, outMax):
-        return outMin + (float(num - inMin) / float(inMax - inMin) * (outMax
+        flSpeed = outMin + (float(num - inMin) / float(inMax - inMin) * (outMax
                         - outMin))
+        return int(flSpeed)
 
 rover = Rover()
 rover.start()
