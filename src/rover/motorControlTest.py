@@ -7,7 +7,7 @@ Date last modified: 07/22/2024
 """
 
 import pygame
-from roboclaw import Roboclaw
+from roboclaw_3 import Roboclaw
 
 pygame.init()
 pygame.joystick.init()
