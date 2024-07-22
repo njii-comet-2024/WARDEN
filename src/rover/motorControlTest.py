@@ -3,11 +3,11 @@ freaking out
 
 @author [Zoe Rizzo] [@zizz-0]
 
-Date last modified: 07/17/2024
+Date last modified: 07/22/2024
 """
 
 import pygame
-from roboclaw_3 import Roboclaw
+from roboclaw import Roboclaw
 
 pygame.init()
 pygame.joystick.init()
@@ -53,7 +53,7 @@ controls = {
 }
 
 address = 0x80
-roboclaw = Roboclaw("/dev/serial0", 2800)
+roboclaw = Roboclaw("/dev/serial0", 38400)
 
 # SPEED => (0, 128) ?
 
@@ -104,13 +104,13 @@ class Transmitter:
             if event.type == pygame.JOYAXISMOTION:
                 axisInputs[event.axis] = event.value
 
-                if abs(axisInputs[0]) > 0.1:
+                if abs(axisInputs[0]) > 0.3:
                     controls["leftTread"] = axisInputs[0]
                     # print("LJOY: ", axisInputs[0])
                 else:
                     controls["leftTread"] = 0
 
-                if abs(axisInputs[1]) > 0.1:
+                if abs(axisInputs[1]) > 0.3:
                     controls["rightTread"] = axisInputs[1]
                     # print("RJOY: ", axisInputs[1])
                 else:
@@ -150,25 +150,25 @@ class Transmitter:
             self.sendContinuous()
 
     def sendContinuous(self):
-        val = False
-        for x in controls.values():
-            if x != 0:
-                val = True
-        
-        if(val):
-            print(controls.values())
-
         speed = abs(controls["rightTread"])
+        #print(controls["rightTread"])
+        
+        if(controls["rightTread"] < 0):
+            # speed = self.numToRange(speed, 0, 1, 0, 128)
+            # roboclaw.BackwardM1(address, speed)
+            roboclaw.BackwardM2(address, 32)
+            roboclaw.BackwardM1(address, 32)
+            print("back")
 
         if(controls["rightTread"] > 0):
             # speed = self.numToRange(speed, 0, 1, 0, 128)
             # roboclaw.ForwardM1(address, speed)
             roboclaw.ForwardM2(address, 32)
-
-        if(controls["rightTread"] < 0):
-            # speed = self.numToRange(speed, 0, 1, 0, 128)
-            # roboclaw.ForwardM1(address, speed)
-            roboclaw.ForwardM2(address, 32)
+            roboclaw.ForwardM1(address, 32)
+            print("fwd")
+            
+        if(controls["rightTread"] == 0):
+            print("STOP")
 
     """
     Maps a number from one range to another
