@@ -8,7 +8,6 @@ Date last modified: 07/17/2024
  
 import socket
 import pygame
-from gpiozero import Motor
 from roboclaw_3 import Roboclaw
 
 pygame.init()

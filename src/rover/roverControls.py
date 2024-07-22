@@ -206,6 +206,9 @@ class Rover:
                 ctrls.append("Zoom out")
             else:
                 ctrls.append("Zoom in")
+
+        if(controls["cameraFocus"] != 0):
+            focus = self.numToRange(controls["cameraFocus"], -1, 1, 0, 2100)
         
         if(ctrls):
             print(ctrls)
@@ -223,7 +226,7 @@ class Rover:
 
     """
     Maps a number from one range to another
-    
+
     @param `num` : number to re-map
     @param `inMin` : original range min
     @param `inMax` : original range max
@@ -232,7 +235,7 @@ class Rover:
 
     @return (int) number mapped to new range
     """
-    def numToRange(num, inMin, inMax, outMin, outMax):
+    def numToRange(self, num, inMin, inMax, outMin, outMax):
         flSpeed = outMin + (float(num - inMin) / float(inMax - inMin) * (outMax
                         - outMin))
         return int(flSpeed)

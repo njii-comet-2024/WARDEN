@@ -40,8 +40,8 @@ buttonInputs = {
 # 0 => RJOY, 1 => LJOY
 # 2 => SE, 3 => SF
 # 4 => SB, 5 => SC
-# 7 => S2
-axisInputs = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 7:0}
+# 6 => S1, 7 => S2
+axisInputs = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0}
 
 controls = {
     "leftTread" : 0,
@@ -52,7 +52,8 @@ controls = {
     "cameraTilt" : 0,
     "cameraLeft" : 0,
     "cameraRight" : 0,
-    "cameraZoom" : 0
+    "cameraZoom" : 0,
+    "cameraFocus" : 0
 }
 
 """
@@ -137,9 +138,15 @@ class Transmitter:
                 else:
                     controls["cameraTelescope"] = 0
 
+                if abs(axisInputs[6]) > 0.5:
+                    controls["cameraFocus"] = axisInputs[6]
+                    # print("S1: ", axisInputs[6])
+                else:
+                    controls["cameraZoom"] = 0
+
                 if abs(axisInputs[7]) > 0.5:
                     controls["cameraZoom"] = axisInputs[7]
-                    # print("SD: ", axisInputs[5])
+                    # print("S2: ", axisInputs[7])
                 else:
                     controls["cameraZoom"] = 0
             
