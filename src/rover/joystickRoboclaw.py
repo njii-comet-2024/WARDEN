@@ -26,6 +26,8 @@ def control_motors():
         # Get joystick axis
         left_axis = joystick.get_axis(1)
         right_axis = joystick.get_axis(3)
+
+        print(joystick.get_axis(3))
         
         # Map joystick value (-1 to 1) to motor speed (0 to 127)
         speed_left = int(left_axis * 127)
