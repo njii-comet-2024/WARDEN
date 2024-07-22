@@ -49,12 +49,12 @@ class videoReciever:
 
         #read the image files
         #src/assets
-        hudTop = cv.imread('/https://github.com/njii-comet-2024/WARDEN/blob/main/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudSide = cv.imread('/https://github.com/njii-comet-2024/WARDEN/blob/main/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudTopIndicator = cv.imread('/https://github.com/njii-comet-2024/WARDEN/blob/main/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
-        hudSideIndicator = cv.imread('/https://github.com/njii-comet-2024/WARDEN/blob/main/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
-        hudHeightIndicator = cv.imread('/https://github.com/njii-comet-2024/WARDEN/blob/main/src/assets/arrowRed.png', cv.IMREAD_UNCHANGED)
-        infoBackground = cv.imread('/https://github.com/njii-comet-2024/WARDEN/blob/main/src/assets/blackRectangle.png', cv.IMREAD_UNCHANGED)
+        hudTop = cv.imread('/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
+        hudSide = cv.imread('/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
+        hudTopIndicator = cv.imread('/assets/arrow.png', cv.IMREAD_UNCHANGED)
+        hudSideIndicator = cv.imread('/assets/arrow.png', cv.IMREAD_UNCHANGED)
+        hudHeightIndicator = cv.imread('/assets/arrowRed.png', cv.IMREAD_UNCHANGED)
+        infoBackground = cv.imread('/assets/blackRectangle.png', cv.IMREAD_UNCHANGED)
 
         #rotate and resize images to be properly aligned
         hudTop = cv.rotate(hudTop, cv.ROTATE_180)
