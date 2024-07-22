@@ -149,6 +149,9 @@ class Transmitter:
         if(self.on):
             self.sendContinuous()
 
+    """
+    Turns joystick values into motor values and runs motors
+    """
     def sendContinuous(self):
         rightTreadSpeed = int(self.numToRange(abs(controls["rightTread"]), 0, 1, 0, 127))
         leftTreadSpeed = int(self.numToRange(abs(controls["leftTread"]), 0, 1, 0, 127))
