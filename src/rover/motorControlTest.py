@@ -5,8 +5,7 @@ freaking out
 
 Date last modified: 07/17/2024
 """
- 
-import socket
+
 import pygame
 from roboclaw_3 import Roboclaw
 
@@ -26,6 +25,7 @@ joystick.init()
 # SC [Right 3-way switch]       => camera telescope
 # SA [Left button]              => camera swivel left
 # SD [Right button]             => camera swivel right
+# S1 [Left slider]             => camera focus
 # S2 [Right slider]             => camera zoom
 
 # Controller inputs to transmit
@@ -53,7 +53,7 @@ controls = {
 }
 
 address = 0x80
-roboclaw = Roboclaw("/dev/ttyACM0", 115200)
+roboclaw = Roboclaw("/dev/serial0", 2800)
 
 # SPEED => (0, 128) ?
 
@@ -68,7 +68,6 @@ class Transmitter:
     """
     def __init__(self):
         self.on = True
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     """
     Starts the transmitter and runs the transmission loop
@@ -164,12 +163,12 @@ class Transmitter:
         if(controls["rightTread"] > 0):
             # speed = self.numToRange(speed, 0, 1, 0, 128)
             # roboclaw.ForwardM1(address, speed)
-            roboclaw.ForwardM1(address, 63)
+            roboclaw.ForwardM2(address, 32)
 
         if(controls["rightTread"] < 0):
             # speed = self.numToRange(speed, 0, 1, 0, 128)
             # roboclaw.ForwardM1(address, speed)
-            roboclaw.ForwardM1(address, 63)
+            roboclaw.ForwardM2(address, 32)
 
     """
     Maps a number from one range to another
