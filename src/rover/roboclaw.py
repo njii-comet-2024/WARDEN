@@ -123,16 +123,11 @@ class Roboclaw:
 				self._crc = self._crc << 1
 		return
 
-	def _sendcommand(self,address,command):
-		#self.crc_clear()
-		#self.crc_update(address)
-		#self._port.write(chr(address))
-		#self.crc_update(command)
-		#self._port.write(chr(command))
-		#return
-		try:self.port.is_open:
-			self._port.write(bytes([address]))
-			self._port.write(bytes([command]))
+	def _sendcommand(self, address, command):
+		try:
+			if self._port.is_open:
+				self._port.write(bytes([address]))
+				self._port.write(bytes([command]))
 		except Exception as e:
 			print(f"Error sending command: {e}")
 			raise
