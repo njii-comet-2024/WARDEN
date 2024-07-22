@@ -104,47 +104,55 @@ class Transmitter:
             if event.type == pygame.JOYAXISMOTION:
                 axisInputs[event.axis] = event.value
 
-                if abs(axisInputs[0]) > 0.3:
-                    controls["leftTread"] = axisInputs[0]
-                    # print("LJOY: ", axisInputs[0])
-                else:
-                    controls["leftTread"] = 0
+                controls["leftTread"] = axisInputs[1] if abs(axisInputs[1]) > 0.3 else 0
+                controls["rightTread"] = axisInputs[3] if abs(axisInputs[3]) > 0.3 else 0
+                controls["leftWheg"] = axisInputs[2] if abs(axisInputs[2]) > 0.5 else 0
+                controls["rightWheg"] = axisInputs[4] if abs(axisInputs[4]) > 0.5 else 0
+                controls["cameraTilt"] = axisInputs[5] if abs(axisInputs[5]) > 0.5 else 0
+                controls["cameraTelescope"] = axisInputs[6] if abs(axisInputs[6]) > 0.5 else 0
+                controls["cameraZoom"] = axisInputs[7] if abs(axisInputs[7]) > 0.5 else 0
 
-                if abs(axisInputs[1]) > 0.3:
-                    controls["rightTread"] = axisInputs[1]
-                    # print("RJOY: ", axisInputs[1])
-                else:
-                    controls["rightTread"] = 0
+                # if abs(axisInputs[0]) > 0.3:
+                #     controls["leftTread"] = axisInputs[0]
+                #     # print("LJOY: ", axisInputs[0])
+                # else:
+                #     controls["leftTread"] = 0
 
-                if abs(axisInputs[2]) > 0.5:
-                    controls["leftWheg"] = axisInputs[2]
-                    # print("SE: ", axisInputs[2])
-                else:
-                    controls["leftWheg"] = 0
+                # if abs(axisInputs[1]) > 0.3:
+                #     controls["rightTread"] = axisInputs[1]
+                #     # print("RJOY: ", axisInputs[1])
+                # else:
+                #     controls["rightTread"] = 0
 
-                if abs(axisInputs[3]) > 0.5:
-                    controls["rightWheg"] = axisInputs[3]
-                    # print("SF: ", axisInputs[3])
-                else:
-                    controls["rightWheg"] = 0
+                # if abs(axisInputs[2]) > 0.5:
+                #     controls["leftWheg"] = axisInputs[2]
+                #     # print("SE: ", axisInputs[2])
+                # else:
+                #     controls["leftWheg"] = 0
 
-                if abs(axisInputs[4]) > 0.5:
-                    controls["cameraTilt"] = axisInputs[4]
-                    # print("SB: ", axisInputs[4])
-                else:
-                    controls["cameraTilt"] = 0
+                # if abs(axisInputs[3]) > 0.5:
+                #     controls["rightWheg"] = axisInputs[3]
+                #     # print("SF: ", axisInputs[3])
+                # else:
+                #     controls["rightWheg"] = 0
 
-                if abs(axisInputs[5]) > 0.5:
-                    controls["cameraTelescope"] = axisInputs[5]
-                    # print("SD: ", axisInputs[5])
-                else:
-                    controls["cameraTelescope"] = 0
+                # if abs(axisInputs[4]) > 0.5:
+                #     controls["cameraTilt"] = axisInputs[4]
+                #     # print("SB: ", axisInputs[4])
+                # else:
+                #     controls["cameraTilt"] = 0
 
-                if abs(axisInputs[7]) > 0.5:
-                    controls["cameraZoom"] = axisInputs[7]
-                    # print("SD: ", axisInputs[5])
-                else:
-                    controls["cameraZoom"] = 0
+                # if abs(axisInputs[5]) > 0.5:
+                #     controls["cameraTelescope"] = axisInputs[5]
+                #     # print("SD: ", axisInputs[5])
+                # else:
+                #     controls["cameraTelescope"] = 0
+
+                # if abs(axisInputs[7]) > 0.5:
+                #     controls["cameraZoom"] = axisInputs[7]
+                #     # print("SD: ", axisInputs[5])
+                # else:
+                #     controls["cameraZoom"] = 0
             
         if(self.on):
             self.sendContinuous()
@@ -156,19 +164,26 @@ class Transmitter:
         rightTreadSpeed = int(self.numToRange(abs(controls["rightTread"]), 0, 1, 0, 127))
         leftTreadSpeed = int(self.numToRange(abs(controls["leftTread"]), 0, 1, 0, 127))
 
+        # Right tread control
         if controls["rightTread"] < 0:
             roboclaw.BackwardM2(address, rightTreadSpeed)
+            print("back")
         elif controls["rightTread"] > 0:
             roboclaw.ForwardM2(address, rightTreadSpeed)
+            print("fwd")
         else:
-            roboclaw.ForwardM2(address, 0)  # Stop motor
+            roboclaw.BackwardM2(address, 0)
+            roboclaw.ForwardM2(address, 0)
+            print("STOP")
 
-        if controls["leftTread"] < 0:
-            roboclaw.BackwardM1(address, leftTreadSpeed)
-        elif controls["leftTread"] > 0:
-            roboclaw.ForwardM1(address, leftTreadSpeed)
-        else:
-            roboclaw.ForwardM1(address, 0)  # Stop motor
+        # Left tread control
+        # if controls["leftTread"] < 0:
+        #     roboclaw.BackwardM1(address, leftTreadSpeed)
+        # elif controls["leftTread"] > 0:
+        #     roboclaw.ForwardM1(address, leftTreadSpeed)
+        # else:
+        #     roboclaw.BackwardM1(address, 0)
+        #     roboclaw.ForwardM1(address, 0)
 
     """
     Maps a number from one range to another
@@ -179,7 +194,7 @@ class Transmitter:
     @param `outMin` : target range min
     @param `outMax` : target range max
 
-    @return (int) number mapped to new range
+    @return number mapped to new range
     """
     def numToRange(self, num, inMin, inMax, outMin, outMax):
         return outMin + (float(num - inMin) / float(inMax - inMin) * (outMax - outMin))
