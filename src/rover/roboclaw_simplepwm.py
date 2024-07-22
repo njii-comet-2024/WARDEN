@@ -1,10 +1,10 @@
 import time
-from roboclaw import Roboclaw
+from roboclaw_3 import Roboclaw
 
 #Windows comport name
 # rc = Roboclaw("COM11",115200)
 #Linux comport name
-rc = Roboclaw("/dev/serial0", 2800)
+rc = Roboclaw("/dev/ttyACM0", 38400)
 
 rc.Open()
 address = 0x80
