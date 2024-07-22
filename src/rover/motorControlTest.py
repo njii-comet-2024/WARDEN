@@ -163,15 +163,18 @@ class Transmitter:
         speed = abs(controls["rightTread"])
 
         if(controls["rightTread"] > 0):
-            speed = self.numToRange(speed, 0, 1, 0, 128)
+            # speed = self.numToRange(speed, 0, 1, 0, 128)
+            # roboclaw.ForwardM1(address, speed)
             roboclaw.ForwardM1(address, 63)
 
         if(controls["rightTread"] < 0):
+            # speed = self.numToRange(speed, 0, 1, 0, 128)
+            # roboclaw.ForwardM1(address, speed)
             roboclaw.ForwardM1(address, 63)
 
     """
     Maps a number from one range to another
-    
+
     @param `num` : number to re-map
     @param `inMin` : original range min
     @param `inMax` : original range max
