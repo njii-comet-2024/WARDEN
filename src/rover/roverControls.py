@@ -168,9 +168,6 @@ class Rover:
             ctrls.append("Left back")
 
        #STEPPER CODE
-        if(controls["rightWheg"] == 0 or controls["leftWheg"] == 0):
-            GPIO.output(STEPPER_ENA, GPIO.LOW)
-            GPIO.output(STEPPER_ENA_RELAY, GPIO.LOW)
 
         if(controls["rightWheg"] < 0 or controls["leftWheg"] < 0): 
             GPIO.output(STEPPER_ENA, GPIO.HIGH)
@@ -188,7 +185,7 @@ class Rover:
             ctrls.append("Whegs down")
 
 
-
+        #Acutator Code
         if(controls["cameraTelescope"] < 0):
             telescope.backward()
             ctrls.append("Telescope up")
@@ -196,7 +193,7 @@ class Rover:
         if(controls["cameraTelescope"] > 0):
             telescope.backward()
             ctrls.append("Telescope down")
-
+        #Servo Code
         if(controls["cameraTilt"] < 0):
             tilt.value = -1
             ctrls.append("Tilt up")
