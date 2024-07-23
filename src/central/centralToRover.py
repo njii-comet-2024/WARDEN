@@ -3,7 +3,7 @@ Transmits rover controls from central pi to controls pi
 
 @author [Zoe Rizzo] [@zizz-0]
 
-Date last modified: 07/17/2024
+Date last modified: 07/23/2024
 """
  
 import socket
@@ -37,17 +37,16 @@ buttonInputs = {
     "SD" : 1
 }
 
-# 0 => RJOY, 1 => LJOY
-# 2 => SE, 3 => SF
-# 4 => SB, 5 => SC
+# 0 => LJOY, 1 => RJOY
+# 2 => SE, 3 => SB
+# 4 => SC, 5 => S1
 # 6 => S1, 7 => S2
 axisInputs = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0}
 
 controls = {
     "leftTread" : 0,
     "rightTread" : 0,
-    "leftWheg" : 0,
-    "rightWheg" : 0,
+    "wheg" : 0,
     "cameraTelescope" : 0,
     "cameraTilt" : 0,
     "cameraLeft" : 0,
@@ -102,45 +101,39 @@ class Transmitter:
             if event.type == pygame.JOYAXISMOTION:
                 axisInputs[event.axis] = event.value
 
-                if abs(axisInputs[0]) > 0.1:
+                if abs(axisInputs[0]) > 0.3:
                     controls["leftTread"] = axisInputs[0]
                     # print("LJOY: ", axisInputs[0])
                 else:
                     controls["leftTread"] = 0
 
-                if abs(axisInputs[1]) > 0.1:
+                if abs(axisInputs[1]) > 0.3:
                     controls["rightTread"] = axisInputs[1]
                     # print("RJOY: ", axisInputs[1])
                 else:
                     controls["rightTread"] = 0
 
                 if abs(axisInputs[2]) > 0.5:
-                    controls["leftWheg"] = axisInputs[2]
+                    controls["wheg"] = axisInputs[2]
                     # print("SE: ", axisInputs[2])
                 else:
-                    controls["leftWheg"] = 0
+                    controls["wheg"] = 0
 
                 if abs(axisInputs[3]) > 0.5:
-                    controls["rightWheg"] = axisInputs[3]
-                    # print("SF: ", axisInputs[3])
-                else:
-                    controls["rightWheg"] = 0
-
-                if abs(axisInputs[4]) > 0.5:
-                    controls["cameraTilt"] = axisInputs[4]
-                    # print("SB: ", axisInputs[4])
+                    controls["cameraTilt"] = axisInputs[3]
+                    # print("SB: ", axisInputs[3])
                 else:
                     controls["cameraTilt"] = 0
 
-                if abs(axisInputs[5]) > 0.5:
-                    controls["cameraTelescope"] = axisInputs[5]
-                    # print("SD: ", axisInputs[5])
+                if abs(axisInputs[4]) > 0.5:
+                    controls["cameraTelescope"] = axisInputs[4]
+                    # print("SC: ", axisInputs[4])
                 else:
                     controls["cameraTelescope"] = 0
-
-                if abs(axisInputs[6]) > 0.5:
-                    controls["cameraFocus"] = axisInputs[6]
-                    # print("S1: ", axisInputs[6])
+                
+                if abs(axisInputs[5]) > 0.5:
+                    controls["cameraFocus"] = axisInputs[5]
+                    # print("S1: ", axisInputs[5])
                 else:
                     controls["cameraZoom"] = 0
 
@@ -150,8 +143,8 @@ class Transmitter:
                 else:
                     controls["cameraZoom"] = 0
             
-        if(self.on):
-            self.sendContinuous()
+        # if(self.on):
+        #     self.sendContinuous()
 
     def sendContinuous(self):
         serializedControls = pickle.dumps(controls)
