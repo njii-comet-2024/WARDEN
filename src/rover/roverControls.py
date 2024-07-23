@@ -15,6 +15,13 @@ import RPi.GPIO as GPIO
 from gpiozero import Motor
 from gpiozero import Servo
 from roboclaw_3 import Roboclaw
+import cv2 #sudo apt-get install python-opencv
+import sys
+import time
+from RpiCamera import Camera
+from Focuser import Focuser
+import curses
+from datetime import datetime
 
 # PINS
 # IN1 => CLOCKWISE
@@ -98,13 +105,14 @@ swivelPos = 0
 zoomPos = 0
 telePos = 0 # change to middle position
 
+# SPEED => (0, 128)
 address = 0x80
 # port: ls -l /dev/serial/by-id/
 rc = Roboclaw("/dev/ttyACM0", 38400)
-
-# SPEED => (0, 128)
-
 rc.Open()
+
+auto_focus_map = []
+auto_focus_idx = 0
 
 """
 Class that defines a rover and its functionality

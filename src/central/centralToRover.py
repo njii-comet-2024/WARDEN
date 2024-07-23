@@ -23,12 +23,12 @@ joystick.init()
 #
 # LJOY [Left joystick]          => left treads
 # RJOY [Right joystick]         => right treads
-# SE [Top left 3-way switch]    => left pivoting tread
-# SF [Top right 3-way switch]   => right pivoting tread
+# SE [Top left 3-way switch]    => pivoting treads
 # SB [Left 3-way switch]        => camera tilt
 # SC [Right 3-way switch]       => camera telescope
 # SA [Left button]              => camera swivel left
 # SD [Right button]             => camera swivel right
+# S1 [Left slider]              => camera focus
 # S2 [Right slider]             => camera zoom
 
 # Controller inputs to transmit
@@ -41,7 +41,7 @@ buttonInputs = {
 # 2 => SE, 3 => SB
 # 4 => SC, 5 => S1
 # 6 => S1, 7 => S2
-axisInputs = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0}
+axisInputs = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 7:0}
 
 controls = {
     "leftTread" : 0,
