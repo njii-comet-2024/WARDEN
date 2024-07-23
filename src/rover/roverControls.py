@@ -179,7 +179,7 @@ class Rover:
             GPIO.output(STEPPER_DIR_RELAY, GPIO.HIGH)
             ctrls.append("Whegs up")
 
-        if(controls["rightWheg"] == 0 or controls["leftWheg"] == 0):
+        if(controls["rightWheg"] > 0 or controls["leftWheg"] > 0):
             GPIO.output(STEPPER_ENA, GPIO.HIGH)
             GPIO.output(STEPPER_ENA_RELAY, GPIO.HIGH)
             GPIO.output(STEPPER_DIR, GPIO.LOW)
