@@ -4,6 +4,7 @@ import threading
 import time
 import os
 from flask import Flask, Response
+import socket
 
 app = Flask(__name__)
 
@@ -64,6 +65,18 @@ class Camera:
 camera = Camera()
 camera.start_preview()
 
+def udp_stream(camera):
+    udp_ip = "127.0.0.1"  # Change this to the IP address of your receiver
+    udp_port = 5005       # Change this to the port number you want to use
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    while camera.is_running:
+        frame = camera.getFrame()
+        if frame is None:
+            continue
+        _, buffer = cv2.imencode('.jpg', frame)
+        sock.sendto(buffer.tobytes(), (udp_ip, udp_port))
+        time.sleep(0.05)  # Adjust this delay as needed
+
 @app.route('/video_feed')
 def video_feed():
     def gen_frames():
@@ -83,6 +96,11 @@ if __name__ == "__main__":
     flask_thread = threading.Thread(target=app.run, kwargs={'host': '0.0.0.0', 'port': 5000})
     flask_thread.setDaemon(True)
     flask_thread.start()
+
+    # Start the UDP streaming thread
+    udp_thread = threading.Thread(target=udp_stream, args=(camera,))
+    udp_thread.setDaemon(True)
+    udp_thread.start()
 
     try:
         while True:

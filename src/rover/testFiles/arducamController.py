@@ -1,14 +1,16 @@
-import cv2
-import numpy as np
-import os
-import sys
-import time
-import argparse
-from RpiCamera import Camera
-from Focuser import Focuser
-import pygame
-from datetime import datetime
+# Import necessary libraries
+import cv2  # OpenCV for image processing
+import numpy as np  # NumPy for numerical operations
+import os  # OS module for interacting with the operating system
+import sys  # System-specific parameters and functions
+import time  # Time-related functions
+import argparse  # Command-line option parsing
+from RpiCamera import Camera  # Custom module for camera handling
+from Focuser import Focuser  # Custom module for focusing the camera
+import pygame  # Pygame for handling joystick input
+from datetime import datetime  # Date and time handling
 
+# Initialize Pygame and joystick
 pygame.init()
 pygame.joystick.init()
 joystick = pygame.joystick.Joystick(0)
@@ -16,10 +18,12 @@ joystick.init()
 print(f"Initialized joystick: {joystick.get_name()}")
 
 # Controls mapping
-buttonInputs = {"SA": 0, "SD": 1}
+buttonInputs = {"SA": 0, "SD": 1}  # Button mappings for specific actions
 
-axisInputs = {3: 0, 5: 0, 7: 0}
+# Axis input mappings
+axisInputs = {3: 0, 5: 0, 7: 0}  # Axis mappings for specific controls
 
+# Controls state dictionary
 controls = {
     "cameraTilt": 0, 
     "cameraLeft": 0, 
@@ -28,20 +32,24 @@ controls = {
     "cameraFocus": 0
 }
 
-auto_focus_map = []
-auto_focus_idx = 0
+auto_focus_map = []  # List to store autofocus data
+auto_focus_idx = 0  # Index for the autofocus map
 
+# Class to store zoom and focus data
 class ZoomFocusData:
     def __init__(self, zoom=0, focus=0):
         self.zoom = zoom
         self.focus = focus
 
+# Function to parse joystick input and control the camera and focuser
 def parse_controller_input(focuser, camera):
     global auto_focus_idx
-    motor_step = 5
-    focus_step = 5
+    motor_step = 5  # Step size for motor movement
+    focus_step = 5  # Step size for focus movement
 
+    # Process joystick events
     for event in pygame.event.get():
+        # Handle button press events
         if event.type == pygame.JOYBUTTONDOWN:
             if event.button == buttonInputs["SA"]:
                 controls["cameraLeft"] = 1
@@ -50,12 +58,14 @@ def parse_controller_input(focuser, camera):
                 focuser.set(Focuser.OPT_MOTOR_X, focuser.get(Focuser.OPT_MOTOR_X) + motor_step)
                 controls["cameraRight"] = 1
 
+        # Handle button release events
         if event.type == pygame.JOYBUTTONUP:
             if event.button == buttonInputs["SA"]:
                 controls["cameraLeft"] = 0
             if event.button == buttonInputs["SD"]:
                 controls["cameraRight"] = 0
 
+        # Handle axis motion events
         if event.type == pygame.JOYAXISMOTION:
             axisInputs[event.axis] = event.value
 
@@ -74,8 +84,10 @@ def parse_controller_input(focuser, camera):
             else:
                 controls["cameraZoom"] = 0
 
+    # Execute input actions
     run_inputs(focuser, focus_step)
 
+# Function to run input actions based on control states
 def run_inputs(focuser, focus_step):
     global auto_focus_idx
     if controls["cameraLeft"] == 1:
@@ -90,10 +102,12 @@ def run_inputs(focuser, focus_step):
         auto_focus_idx = (auto_focus_idx - 1) % len(auto_focus_map)
         focuser.move(auto_focus_map[auto_focus_idx].focus, auto_focus_map[auto_focus_idx].zoom)
 
+# Function to generate the focus map
 def gen_focus_map(focuser, camera):
     focus_map = coarse_adjustment(focuser, camera)
     focuser.write_map(focus_map)
 
+# Function for coarse adjustment of focus
 def coarse_adjustment(focuser, camera):
     zoom_step = 200
     focus_step = 100
@@ -121,6 +135,7 @@ def coarse_adjustment(focuser, camera):
     
     return focus_map
 
+# Function for fine adjustment of focus
 def focus_map_fine(camera, focuser, beg):
     max_val = 0
     cur_focus = 0
@@ -145,9 +160,11 @@ def focus_map_fine(camera, focuser, beg):
     
     return cur_focus, max_val
 
+# Function to reset the focus
 def focus_reset(i2c_bus):
     return Focuser(i2c_bus)
 
+# Function to load the focus map
 def focus_map_load(focuser, camera):
     global auto_focus_map
     auto_focus_map.clear()
@@ -166,6 +183,7 @@ def focus_map_load(focuser, camera):
             t = ZoomFocusData(data[i], data[i + 1])
             auto_focus_map.append(t)
 
+# Main function
 def main():
     camera = Camera()
     camera.start_preview(1280, 720)
@@ -188,5 +206,6 @@ def main():
     camera.stop_preview()
     camera.close()
 
+# Run the main function if the script is executed directly
 if __name__ == "__main__":
     main()
