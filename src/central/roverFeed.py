@@ -48,7 +48,7 @@ class videoReciever:
         clientSocket.sendto(message, (roverIP,port))
 
         #read the image files
-        #src/assets
+        #may have to upload images to the actual Pi in order to work  - - relative path may not work due to not having repo cloned
         hudTop = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
         hudSide = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
         hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
