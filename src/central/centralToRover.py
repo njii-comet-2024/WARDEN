@@ -143,8 +143,8 @@ class Transmitter:
                 else:
                     controls["cameraZoom"] = 0
             
-        # if(self.on):
-        #     self.sendContinuous()
+        if(self.on):
+            self.sendContinuous()
 
     def sendContinuous(self):
         serializedControls = pickle.dumps(controls)
@@ -157,7 +157,6 @@ class Transmitter:
         
         if(val):
             print(controls.values())
-
 
 transmit = Transmitter()
 transmit.start()
