@@ -3,19 +3,9 @@ import cv2
 import threading
 import time
 import os
-import socket
-import struct
-import pickle
+from flask import Flask, Response
 
-# Socket parameters
-#centralIP = '192.168.110.78'  # Replace with central server's IP address
-#centralPort = 9999
-
-# Initialize socket
-#clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#clientSocket.connect((centralIP, centralPort))
-#connection = clientSocket.makefile('wb')
-
+app = Flask(__name__)
 
 class FrameReader:
     def __init__(self, size):
@@ -71,26 +61,32 @@ class Camera:
     def getFrame(self):
         return self.frame.popQueue()
 
-    #def sendVideo(self):
-       # try:
-           # while self.is_running:
-              #  frame = self.getFrame()
-              #  _, frame_encoded = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
-               # data = pickle.dumps(frame_encoded, protocol=pickle.HIGHEST_PROTOCOL)
-               # message = struct.pack("Q", len(data)) + data
-               # connection.write(message)
-               # connection.flush()
-              #  time.sleep(0.1)  # Adjust delay based on desired frame rate
-       # except socket.error as e:
-          #  print(f"Socket error: {e}")
-        #finally:
-           # if connection:
-              #  connection.close()
+camera = Camera()
+camera.start_preview()
 
+@app.route('/video_feed')
+def video_feed():
+    def gen_frames():
+        while camera.is_running:
+            frame = camera.getFrame()
+            if frame is None:
+                continue
+            _, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
-    tmp = Camera()
-    tmp.start_preview()
-    #tmp.sendVideo()
-    time.sleep(5)  # Keep sending video for 5 seconds (adjust as needed)
-    tmp.stop_preview()
+    # Start the Flask server in a separate thread
+    flask_thread = threading.Thread(target=app.run, kwargs={'host': '0.0.0.0', 'port': 5000})
+    flask_thread.setDaemon(True)
+    flask_thread.start()
+
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        camera.stop_preview()
+        camera.close()
