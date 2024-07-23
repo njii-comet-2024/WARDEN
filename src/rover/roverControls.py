@@ -6,7 +6,7 @@ Receives control code from central and runs on rover
         [vito tribuzio] [@Snoopy-0]
         [Soumya Khera] [@soumya-khera]
 
-Date last modified: 07/17/2024
+Date last modified: 07/23/2024
 """
 # Libraries
 import pickle
@@ -99,6 +99,7 @@ zoomPos = 0
 telePos = 0 # change to middle position
 
 address = 0x80
+# port: ls -l /dev/serial/by-id/
 rc = Roboclaw("/dev/ttyACM0", 38400)
 
 # SPEED => (0, 128)
@@ -169,14 +170,14 @@ class Rover:
 
        #STEPPER CODE
 
-        if(controls["rightWheg"] < 0 or controls["leftWheg"] < 0): 
+        if(controls["wheg"] < 0): 
             GPIO.output(STEPPER_ENA, GPIO.HIGH)
             GPIO.output(STEPPER_ENA_RELAY, GPIO.HIGH)
             GPIO.output(STEPPER_DIR, GPIO.HIGH)
             GPIO.output(STEPPER_DIR_RELAY, GPIO.HIGH)
             ctrls.append("Whegs up")
 
-        if(controls["rightWheg"] > 0 or controls["leftWheg"] > 0):
+        if(controls["wheg"] > 0):
             GPIO.output(STEPPER_ENA, GPIO.HIGH)
             GPIO.output(STEPPER_ENA_RELAY, GPIO.HIGH)
             GPIO.output(STEPPER_DIR, GPIO.LOW)
