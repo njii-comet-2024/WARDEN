@@ -8,7 +8,7 @@ import cvzone
 TOP_HORIZ = -70
 TOP_VERT = 0
 
-SIDE_VERT = -200
+SIDE_VERT = -100
 SIDE_HORIZ = -5
 SIDE_ACTU = 340
 
@@ -31,7 +31,7 @@ class Camera():
     is_running = False
     window_name = "Arducam PTZ Camera Controller Preview"
     frame = FrameReader(5)
-    def start_preview(self,width=600,length=1024):
+    def start_preview(self,width=1024,length=600):
         self.is_running = True
         self.capture_ = threading.Thread(target=self.capture_and_preview_thread, args=(width,length,))
         self.capture_.setDaemon(True)
@@ -76,7 +76,7 @@ class Camera():
             #adds indicator bars to HUD
             imgResult = cvzone.overlayPNG(buf, hudTop, [TOP_HORIZ, TOP_VERT]) # adds top Hud
             imgResult = cvzone.overlayPNG(imgResult, hudSide, [SIDE_HORIZ, SIDE_VERT]) #adds side hud
-            imgResult = cvzone.overlayPNG(imgResult, infoBackground, [5, 350])# adds info background for ease of seeing words
+            imgResult = cvzone.overlayPNG(imgResult, infoBackground, [5, 540])# adds info background for ease of seeing words
             #create positional data variables
             cameraPos = [140, 203, 302, 20]             #test before getting actual values
             cameraPosData = [int(b) for b in cameraPos]
@@ -91,13 +91,13 @@ class Camera():
             imgResult = cv2.putText(imgResult, 'ValueY: ' + str(cameraTilt) + '  ValueX: ' + str(cameraRotation), (40, 390), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
             #display max limit messages
             if(cameraTilt == 0 or cameraTilt == 180):
-                imgResult = cv2.putText(imgResult, 'Y AXIS LIMIT REACHED' , (390, 380), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
+                imgResult = cv2.putText(imgResult, 'Y AXIS LIMIT REACHED' , (390, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
             if(cameraRotation == 0 or cameraRotation == 205):
-                imgResult = cv2.putText(imgResult, 'X AXIS LIMIT REACHED' , (390, 350), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
+                imgResult = cv2.putText(imgResult, 'X AXIS LIMIT REACHED' , (390, 560), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
             if(cameraHeight == 0 or cameraHeight == 180):
-                imgResult = cv2.putText(imgResult, 'HEIGHT LIMIT REACHED' , (650, 350), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
+                imgResult = cv2.putText(imgResult, 'HEIGHT LIMIT REACHED' , (650, 560), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
             if(cameraZoom == 0 or cameraZoom == 10):
-                imgResult = cv2.putText(imgResult, 'ZOOM LIMIT REACHED' , (650, 380), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
+                imgResult = cv2.putText(imgResult, 'ZOOM LIMIT REACHED' , (650, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
             #overlay indicator
             imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [cameraRotation * 5, TOP_VERT])#adds moving vertical
             imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ, cameraTilt * 2])

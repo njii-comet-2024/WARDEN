@@ -334,7 +334,7 @@ def main():
     #open camera
     camera = Camera()
     #open camera preview
-    camera.start_preview(1280,720)
+    camera.start_preview(1080,600)
     time.sleep(1)
     curses.wrapper(draw_menu_focus_map, camera, 1)
     camera.sendVideo()
