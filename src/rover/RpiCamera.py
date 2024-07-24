@@ -102,7 +102,7 @@ class Camera():
             imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [cameraRotation * 5, TOP_VERT])#adds moving vertical
             imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ, cameraTilt * 2])
             imgResult = cvzone.overlayPNG(imgResult, hudHeightIndicator, [1030, cameraHeight * 2])
-            self.frame.pushQueue(buf)
+            self.frame.pushQueue(imgResult)
             cv2.imshow(self.window_name,imgResult)
             keyCode = cv2.waitKey(1)
             if(keyCode == ord('q')):
