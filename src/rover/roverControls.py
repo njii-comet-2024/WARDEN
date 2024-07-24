@@ -193,6 +193,11 @@ class Rover:
 
             ctrls.append("Whegs down")
 
+        if(controls["wheg"] > 0):                   #WHEGS OFF
+            GPIO.output(STEPPER_ENA, GPIO.LOW)
+            GPIO.output(STEPPER_ENA_RELAY, GPIO.LOW)
+           
+
 
         #Acutator Code
         if(controls["cameraTelescope"] < 0):
