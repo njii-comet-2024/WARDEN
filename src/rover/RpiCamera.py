@@ -46,6 +46,8 @@ class Camera():
         camHeight = self.cameraHeight
        
     def setCamHeight(self, setVal):
+        global camHeight
+        
         self.cameraHeight = setVal
         print(self.cameraHeight)
         camHeight = self.cameraHeight
