@@ -45,7 +45,6 @@ class Camera():
         self.cameraHeight = 90
         self.cameraTilt = 90
         self.cameraZoom = 8
-        camHeight = self.cameraHeight
        
     def setCamTilt(self, setVal):
         global camTilt
