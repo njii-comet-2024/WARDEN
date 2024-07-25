@@ -16,8 +16,9 @@ SIDE_ACTU = 340
 MOTOR_STEP = 5
 FOCUS_STEP = 5
 
-camHeight = 90
-
+camTilt = 90
+camRotation = 90
+camZoom = 8
 
 class FrameReader():
 
@@ -35,8 +36,9 @@ class FrameReader():
         return self.queue[self.offset]
 
 class Camera():
-    
-    global camHeight
+    global camTilt
+    global camRotation
+    global camZoom
     
     def __init__(self):
         self.cameraRotation = 90
@@ -45,11 +47,20 @@ class Camera():
         self.cameraZoom = 8
         camHeight = self.cameraHeight
        
-    def setCamHeight(self, setVal):
-        self.cameraHeight = setVal
-        print(self.cameraHeight)
-        camHeight = self.cameraHeight
-        
+    def setCamTilt(self, setVal):
+        global camTilt
+        self.cameraTilt = setVal
+        camTilt = self.cameraTilt
+    
+    def setCamRotation(self, setVal):
+        global camRotation
+        self.cameraRotation = setVal
+        camRotation = self.cameraRotation
+    
+    def setCamZoom(self, setVal):
+        global camZoom
+        self.cameraZoom = setVal
+        camZoom = self.cameraZoom
         
     debug = True
     is_running = False
@@ -63,15 +74,21 @@ class Camera():
         self.capture_ = threading.Thread(target=self.capture_and_preview_thread, args=(width,length,))
         self.capture_.setDaemon(True)
         self.capture_.start()
+        
     def stop_preview(self): 
         self.is_running = False
         self.capture_.join()
+
     def close(self):
         if(hasattr(self,"cam")):
             self.cam.stop()
             self.cam.close()
+
     def capture_and_preview_thread(self,width,length):
-        global camHeight
+        global camTilt
+        global camRotation
+        global camZoom
+
         #Read Images
         hudTop = cv2.imread('/home/rover-camera/Downloads/hudCompassHorizontal.png', cv2.IMREAD_UNCHANGED)
         hudSide = cv2.imread('/home/rover-camera/Downloads/hudCompassHorizontal.png', cv2.IMREAD_UNCHANGED)
@@ -106,20 +123,18 @@ class Camera():
             imgResult = cvzone.overlayPNG(imgResult, infoBackground, [5, 540])# adds info background for ease of seeing words
             #create positional data variables
             #display location coords
-            imgResult = cv2.putText(imgResult,'Height: ' + str(camHeight) + ' Zoom: ' + str(self.cameraZoom) + 'x', (40, 570), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
-            imgResult = cv2.putText(imgResult, 'ValueY: ' + str(self.cameraTilt) + '  ValueX: ' + str(self.cameraRotation), (40, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
+            imgResult = cv2.putText(imgResult,' Zoom: ' + str(camZoom) + 'x', (40, 570), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
+            imgResult = cv2.putText(imgResult, 'ValueY: ' + str(camTilt) + '  ValueX: ' + str(camRotation), (40, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
             #display max limit messages
-            if(self.cameraTilt == 0 or self.cameraTilt == 180):
+            if(camTilt == 0 or camTilt == 180):
                 imgResult = cv2.putText(imgResult, 'Y AXIS LIMIT REACHED' , (390, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
-            if(self.cameraRotation == 0 or self.cameraRotation == 205):
+            if(camRotation == 0 or camRotation == 205):
                 imgResult = cv2.putText(imgResult, 'X AXIS LIMIT REACHED' , (390, 570), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
-            if(camHeight == 0 or camHeight == 180):
-                imgResult = cv2.putText(imgResult, 'HEIGHT LIMIT REACHED' , (650, 570), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
-            if(self.cameraZoom == 0 or self.cameraZoom == 10):
+            if(camZoom == 0 or camZoom == 10):
                 imgResult = cv2.putText(imgResult, 'ZOOM LIMIT REACHED' , (650, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
             #overlay indicator
-            imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [self.cameraRotation * 5, TOP_VERT])#adds moving vertical
-            imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ, self.cameraTilt * 2])
+            imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [camRotation * 5, TOP_VERT])#adds moving vertical
+            imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ, camTilt * 2])
             imgResult = cvzone.overlayPNG(imgResult, hudHeightIndicator, [1030, self.cameraHeight * 2])
             self.frame.pushQueue(imgResult)
             cv2.imshow(self.window_name,imgResult)
