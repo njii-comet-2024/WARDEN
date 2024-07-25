@@ -159,9 +159,11 @@ def parseKeyByMap(stdscr,k,focuser:Focuser,camera):
     elif k == curses.KEY_UP:
         auto_focus_idx = (auto_focus_idx + 1)%10
         focuser.move(auto_focus_map[auto_focus_idx].focus, auto_focus_map[auto_focus_idx].zoom)
+        camera.setCamZoom(Focuser.OPT_ZOOM)
     elif k == curses.KEY_DOWN:
         auto_focus_idx   = (auto_focus_idx - 1)%10
         focuser.move(auto_focus_map[auto_focus_idx].focus, auto_focus_map[auto_focus_idx].zoom)
+        camera.setCamZoom(Focuser.OPT_ZOOM)
     elif k == curses.KEY_RIGHT:
         focuser.set(Focuser.OPT_FOCUS,focuser.get(Focuser.OPT_FOCUS) + focus_step)
     elif k == curses.KEY_LEFT:
