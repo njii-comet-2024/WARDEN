@@ -317,7 +317,7 @@ def draw_menu_focus_map(stdscr, camera:Camera, i2c_bus):
         curses.flushinp()
         # get height and width of the window.
         height, width = stdscr.getmaxyx()
-        # parser input key
+        # parser input key                                                      
         parseKeyByMap(stdscr,k,focuser,camera) 
 
         # Rendering some text
