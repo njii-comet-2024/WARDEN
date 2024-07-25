@@ -140,16 +140,16 @@ def parseKeyByMap(stdscr,k,focuser:Focuser,camera):
     focus_step  = 5
     if k == ord('s'):
         focuser.set(Focuser.OPT_MOTOR_Y,focuser.get(Focuser.OPT_MOTOR_Y) + motor_step)
-        camera.setCamTilt(0)
+        camera.setCamTilt(focuser.get(Focuser.OPT_MOTOR_Y))
     elif k == ord('w'):
         focuser.set(Focuser.OPT_MOTOR_Y,focuser.get(Focuser.OPT_MOTOR_Y) - motor_step)
-        camera.setCamTilt(180)
+        camera.setCamTilt(focuser.get(Focuser.OPT_MOTOR_Y))
     elif k == ord('d'):
         focuser.set(Focuser.OPT_MOTOR_X,focuser.get(Focuser.OPT_MOTOR_X) - motor_step)
-        camera.setCamRotation(180)
+        camera.setCamRotation(focuser.get(Focuser.OPT_MOTOR_X))
     elif k == ord('a'):
         focuser.set(Focuser.OPT_MOTOR_X,focuser.get(Focuser.OPT_MOTOR_X) + motor_step)
-        camera.setCamRotation(0)
+        camera.setCamRotation(focuser.get(Focuser.OPT_MOTOR_X))
     elif k == ord('r'):
         focuser.set(Focuser.OPT_RESET,0x01)
     elif k == ord('t'):
@@ -159,11 +159,11 @@ def parseKeyByMap(stdscr,k,focuser:Focuser,camera):
     elif k == curses.KEY_UP:
         auto_focus_idx = (auto_focus_idx + 1)%10
         focuser.move(auto_focus_map[auto_focus_idx].focus, auto_focus_map[auto_focus_idx].zoom)
-        camera.setCamZoom(Focuser.OPT_ZOOM)
+        camera.setCamZoom(focuser.get(Focuser.OPT_ZOOM))
     elif k == curses.KEY_DOWN:
         auto_focus_idx   = (auto_focus_idx - 1)%10
         focuser.move(auto_focus_map[auto_focus_idx].focus, auto_focus_map[auto_focus_idx].zoom)
-        camera.setCamZoom(Focuser.OPT_ZOOM)
+        camera.setCamZoom(focuser.get(Focuser.OPT_ZOOM))
     elif k == curses.KEY_RIGHT:
         focuser.set(Focuser.OPT_FOCUS,focuser.get(Focuser.OPT_FOCUS) + focus_step)
     elif k == curses.KEY_LEFT:
