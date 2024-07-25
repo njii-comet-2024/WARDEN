@@ -93,7 +93,6 @@ class Camera():
         hudSide = cv2.imread('/home/rover-camera/Downloads/hudCompassHorizontal.png', cv2.IMREAD_UNCHANGED)
         hudTopIndicator = cv2.imread('/home/rover-camera/Downloads/arrow.png', cv2.IMREAD_UNCHANGED)
         hudSideIndicator = cv2.imread('/home/rover-camera/Downloads/arrow.png', cv2.IMREAD_UNCHANGED)
-        hudHeightIndicator = cv2.imread('/home/rover-camera/Downloads/arrowRed.png', cv2.IMREAD_UNCHANGED)
         infoBackground = cv2.imread('/home/rover-camera/Downloads/blackRectangle.png', cv2.IMREAD_UNCHANGED)
     
         #rotate and resize images to be properly aligned
@@ -104,7 +103,6 @@ class Camera():
         hudSideIndicator = cv2.rotate(hudSideIndicator, cv2.ROTATE_90_COUNTERCLOCKWISE)
         hudSideIndicator = cv2.resize(hudSideIndicator, (0,0), None, .1, .1)
         hudTopIndicator = cv2.resize(hudTopIndicator, (0, 0), None, .1, .1)
-        hudHeightIndicator = cv2.resize(hudHeightIndicator, (0, 0), None, .4, .1)
         infoBackground = cv2.resize(infoBackground, (0, 0), None, 1, .6)
         infoBackground = cv2.rotate(infoBackground, cv2.ROTATE_90_CLOCKWISE)
         
@@ -134,7 +132,6 @@ class Camera():
             #overlay indicator
             imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [camRotation * 5, TOP_VERT])#adds moving vertical
             imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ, camTilt * 2])
-            imgResult = cvzone.overlayPNG(imgResult, hudHeightIndicator, [1030, self.cameraHeight * 2])
             self.frame.pushQueue(imgResult)
             cv2.imshow(self.window_name,imgResult)
             keyCode = cv2.waitKey(1)
