@@ -64,8 +64,8 @@ def RenderStatusBar(stdscr):
 def RenderDescription(stdscr):
     focus_desc      = "Focus    : Left and right keys for manual fine-tuning"
     zoom_desc       = "Zoom     : Up and down keys 10x zoom"
-    motor_x_desc    = "MotorX   : 'a'-'d' Key"
-    motor_y_desc    = "MotorY   : 'w'-'s' Key"
+    motor_x_desc    = "MotorX   : 'w'-'s' Key"
+    motor_y_desc    = "MotorY   : 'a'-'d' Key"
     ircut_desc      = "IRCUT    : Space"
     snapshot_desc   = "Snapshot : 'c' Key"
     Mode_desc       = "Mode     : 't' Key switch mode"
@@ -93,7 +93,8 @@ def RenderMiddleText(stdscr,k,focuser):
     zoom_value  = "Zoom     : {}".format(focuser.get(Focuser.OPT_ZOOM))[:width-1]
     motor_x_val = "MotorX   : {}".format(focuser.get(Focuser.OPT_MOTOR_X))[:width-1]
     motor_y_val = "MotorY   : {}".format(focuser.get(Focuser.OPT_MOTOR_Y))[:width-1]
-    ircut_val   = "IRCUT    : {}".format(focuser.get(Focuser.OPT_IRCUT))[:width-1]   
+    ircut_val   = "IRCU:    : {}".format(focuser.get(Focuser.OPT_IRCUT))[:width-1]
+    
     sysStatus   = "Mode     : {}".format("Adjust" if focuser.get(Focuser.OPT_MODE) else "Fix")
     zoom_val    = "Zoom     : {}x".format(auto_focus_idx+1)
 
@@ -137,13 +138,14 @@ def parseKeyByMap(stdscr,k,focuser:Focuser,camera):
     
     motor_step  = 5
     focus_step  = 5
-    if k == ord('a'):
+    if k == ord('s'):
         focuser.set(Focuser.OPT_MOTOR_Y,focuser.get(Focuser.OPT_MOTOR_Y) + motor_step)
-    elif k == ord('d'):
-        focuser.set(Focuser.OPT_MOTOR_Y,focuser.get(Focuser.OPT_MOTOR_Y) - motor_step)
+        camera.setCamHeight(20)
     elif k == ord('w'):
+        focuser.set(Focuser.OPT_MOTOR_Y,focuser.get(Focuser.OPT_MOTOR_Y) - motor_step)
+    elif k == ord('d'):
         focuser.set(Focuser.OPT_MOTOR_X,focuser.get(Focuser.OPT_MOTOR_X) - motor_step)
-    elif k == ord('s'):
+    elif k == ord('a'):
         focuser.set(Focuser.OPT_MOTOR_X,focuser.get(Focuser.OPT_MOTOR_X) + motor_step)
     elif k == ord('r'):
         focuser.set(Focuser.OPT_RESET,0x01)
@@ -329,15 +331,17 @@ def draw_menu_focus_map(stdscr, camera:Camera, i2c_bus):
         # Wait for next input
         k = stdscr.getch()
 
+
 def main():
 
     #open camera
     camera = Camera()
     #open camera preview
+
     camera.start_preview(1080,600)
     time.sleep(1)
     curses.wrapper(draw_menu_focus_map, camera, 1)
-    camera.sendVideo()
+
     camera.stop_preview()
     camera.close()
 
