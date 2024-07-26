@@ -34,26 +34,26 @@ class Camera:
         
         while True:
             
-            msg, clientAddr = serverSocket.recvfrom(bufferSize)
-            print('GOT connection from ', clientAddr)
+            #msg, clientAddr = serverSocket.recvfrom(bufferSize)
+            #print('GOT connection from ', clientAddr)
             WIDTH = 1080
             HEIGHT = 400
-            while vid.isOpened():
-                #recieve Packet
-                packet,_ = serverSocket.recvfrom(bufferSize)
-           
-                #decode data
-                data = base64.b64decode(packet, ' /')
-                npdata = np.fromstring(data, dtype=np.uint8)
-                frame = cv.imdecode(npdata, 1)
+            #while vid.isOpened():
+            #recieve Packet
+            packet,_ = serverSocket.recvfrom(bufferSize)
+        
+            #decode data
+            data = base64.b64decode(packet, ' /')
+            npdata = np.fromstring(data, dtype=np.uint8)
+            frame = cv.imdecode(npdata, 1)
+            
+            cv.imshow('TESTING HUD', frame)
                 
-                cv.imshow('TESTING HUD', frame)
-                    
-                key = cv.waitKey(1) & 0xFF
-                if key == ord('q'):
-                    serverSocket.close()
-                    cv.destroyAllWindows()
-                    break
+            key = cv.waitKey(1) & 0xFF
+            if key == ord('q'):
+                serverSocket.close()
+                cv.destroyAllWindows()
+                break
 
 while True:
     Camera.transmitUSBCamFeed()
