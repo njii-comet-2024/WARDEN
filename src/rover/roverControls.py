@@ -110,8 +110,8 @@ address = 0x80
 rcOne = Roboclaw("/dev/ttyACM0", 38400)
 rcOne.Open()
 
-rcTwo = Roboclaw("/dev/ttyACM1", 38400)
-rcTwo.Open()
+# rcTwo = Roboclaw("/dev/ttyACM1", 38400)
+# rcTwo.Open()
 
 auto_focus_map = []
 auto_focus_idx = 0
@@ -173,12 +173,12 @@ class Rover:
             rcOne._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(leftSpeed))
             ctrls.append("Right back")
         
-        if leftSpeed > 0:
-            rcTwo._write1(address, Roboclaw.Cmd.M2FORWARD, leftSpeed)
-            ctrls.append("Left fwd")
-        else:
-            rcTwo._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(leftSpeed))
-            ctrls.append("Left back")
+        # if leftSpeed > 0:
+        #     rcTwo._write1(address, Roboclaw.Cmd.M2FORWARD, leftSpeed)
+        #     ctrls.append("Left fwd")
+        # else:
+        #     rcTwo._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(leftSpeed))
+        #     ctrls.append("Left back")
 
        #STEPPER CODE
 
