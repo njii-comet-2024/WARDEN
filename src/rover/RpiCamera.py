@@ -8,8 +8,8 @@ import socket
 import numpy as np
 import base64
 
-ROVER_IP = '172.168.10.137'
-SERVER_IP = '172.168.10.137'
+ROVER_IP = '10.255.0.137'
+SERVER_IP = '10.255.0.137'
 
 TOP_HORIZ = -70
 TOP_VERT = 0
@@ -121,18 +121,18 @@ class Camera():
         clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
         print(ROVER_IP)
-        port = 9999                                 # can change based on possible interference, et
+        PORT = 9999                                 # can change based on possible interference, et
 
         while self.is_running == True:
             buf = self.cam.capture_array()
              #recieve Packet
-            _, frame = buf
+            frame = buf
             frame = cv2.resize(frame, (1024, 600))
             encoded, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
 
             message = base64.b64encode(buffer)
                 
-            clientSocket.sendto(message, SERVER_IP)
+            clientSocket.sendto(message, (SERVER_IP, PORT))
             #adds indicator bars to HUD
             imgResult = cvzone.overlayPNG(buf, hudTop, [TOP_HORIZ, TOP_VERT]) # adds top Hud
             imgResult = cvzone.overlayPNG(imgResult, hudSide, [SIDE_HORIZ, SIDE_VERT]) #adds side hud
