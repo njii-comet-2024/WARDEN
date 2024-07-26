@@ -125,14 +125,7 @@ class Camera():
 
         while self.is_running == True:
             buf = self.cam.capture_array()
-             #recieve Packet
-            frame = buf
-            frame = cv2.resize(frame, (1024, 600))
-            encoded, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
 
-            message = base64.b64encode(buffer)
-                
-            clientSocket.sendto(message, (SERVER_IP, PORT))
             #adds indicator bars to HUD
             imgResult = cvzone.overlayPNG(buf, hudTop, [TOP_HORIZ, TOP_VERT]) # adds top Hud
             imgResult = cvzone.overlayPNG(imgResult, hudSide, [SIDE_HORIZ, SIDE_VERT]) #adds side hud
@@ -153,6 +146,16 @@ class Camera():
             imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ, (camTilt * 2)+100])
             self.frame.pushQueue(imgResult)
             cv2.imshow(self.window_name,imgResult)
+
+            
+            frame = imgResult
+            frame = cv2.resize(frame, (1024, 600))
+            encoded, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
+
+            message = base64.b64encode(buffer)
+                
+            clientSocket.sendto(message, (SERVER_IP, PORT))
+
             keyCode = cv2.waitKey(1)
             if(keyCode == ord('q')):
                 break
