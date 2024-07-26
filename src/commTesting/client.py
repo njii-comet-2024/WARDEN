@@ -67,25 +67,16 @@ class videoReciever:
         while True:
             #recieve Packet
             packet,_ = clientSocket.recvfrom(bufferSize)
-            #interpret packet
-            cameraPosLength = 4
-            cameraPos = packet[:cameraPosLength]
-            imgData = packet[4:]
+           
             #decode data
-            data = base64.b64decode(imgData, ' /')
+            data = base64.b64decode(packet, ' /')
             npdata = np.fromstring(data, dtype=np.uint8)
             frame = cv.imdecode(npdata, 1)
             #adds indicator bars to HUD
             imgResult = cvzone.overlayPNG(frame, hudTop, [TOP_HORIZ, TOP_VERT]) # adds top Hud
             imgResult = cvzone.overlayPNG(imgResult, hudSide, [SIDE_HORIZ, SIDE_VERT]) #adds side hud
             imgResult = cvzone.overlayPNG(imgResult, infoBackground, [5, 350])# adds info background for ease of seeing words
-            #create positional data variables
-            cameraPosData = [int(b) for b in cameraPos]
-            cameraHeight = cameraPosData[0]
-            cameraTilt = cameraPosData[1]
-            cameraRotation = cameraPosData[2]
-            cameraZoom = cameraPosData[3]
-            print(cameraPosData)
+            
 
             #display location coords
             imgResult = cv.putText(imgResult,'Height: ' + str(cameraHeight) + ' Zoom: ' + str(cameraZoom) + 'x', (40, 370), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
