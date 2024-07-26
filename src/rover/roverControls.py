@@ -90,7 +90,6 @@ GPIO.setup(STEPPER_DIR_RELAY, GPIO.OUT)
 
 # Global variables
 IP = '172.168.10.136'  # change to controls pi IP
-CAMERA_IP = '172.168.10.136'  # change to camera pi IP
 RECV_PORT = 55555
 SEND_PORT = 1111
 
@@ -111,7 +110,7 @@ address = 0x80
 rcOne = Roboclaw("/dev/ttyACM0", 38400)
 rcOne.Open()
 
-rcTwo = Roboclaw("/dev/ttyACM0", 38400)
+rcTwo = Roboclaw("/dev/ttyACM1", 38400)
 rcTwo.Open()
 
 auto_focus_map = []
@@ -210,45 +209,9 @@ class Rover:
         if(controls["cameraTelescope"] > 0):
             telescope.backward()
             ctrls.append("Telescope down")
-        #Servo Code
-        if(controls["cameraTilt"] < 0):
-            tilt.value = -1
-            ctrls.append("Tilt up")
-        
-        if(controls["cameraTilt"] > 0):
-            tilt.value = 1
-            ctrls.append("Tilt down")
-
-        if(controls["cameraLeft"] > 0):
-            swivel.value = -1
-            ctrls.append("Swivel left")
-        elif(controls["cameraRight"] > 0):
-            swivel.value = 1
-            ctrls.append("Swivel right")
-        
-        if(controls["cameraZoom"] != 0):
-            zoom.value = zoomPos
-            if(controls["cameraZoom"] < 0):
-                ctrls.append("Zoom out")
-            else:
-                ctrls.append("Zoom in")
-
-        if(controls["cameraFocus"] != 0):
-            focus = self.numToRange(controls["cameraFocus"], -1, 1, 0, 2100)
-        
+       
         if(ctrls):
             print(ctrls)
-    
-    def sendToCameraPi(self):
-        # re-maps camera values and converts to bytearray
-        newTilt = self.numToRange(tiltPos, -1, 1, 0, 180)
-        newSwivel = self.numToRange(swivelPos, -1, 1, 0, 205)
-        newTele = self.numToRange(telePos, 0, 1, 0, 180) # figure out actual max
-        newZoom = self.numToRange(zoomPos, -1, 1, 0, 10)
-        cameraPos = [newTilt, newSwivel, newTele, newZoom]
-        cameraPosByte = bytearray(cameraPos)
-
-        self.sendSocket.sendto(cameraPosByte, (CAMERA_IP, SEND_PORT))
 
     """
     Maps a number from one range to another
