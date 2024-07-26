@@ -6,7 +6,7 @@ Receives control code from central and runs on rover
         [vito tribuzio] [@Snoopy-0]
         [Soumya Khera] [@soumya-khera]
 
-Date last modified: 07/23/2024
+Date last modified: 07/26/2024
 """
 # Libraries
 import pickle
@@ -89,7 +89,7 @@ GPIO.setup(STEPPER_DIR, GPIO.OUT)
 GPIO.setup(STEPPER_DIR_RELAY, GPIO.OUT)
 
 # Global variables
-IP = '172.168.10.136'  # change to controls pi IP
+IP = '192.168.110.19'  # change to controls pi IP
 RECV_PORT = 55555
 SEND_PORT = 1111
 

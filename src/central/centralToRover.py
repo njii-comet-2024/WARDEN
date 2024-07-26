@@ -10,7 +10,7 @@ import socket
 import pygame
 import pickle
 
-IP = '172.168.10.136' # change to controls pi IP
+IP = '192.168.110.19' # change to controls pi IP
 PORT = 55555
 
 pygame.init()
