@@ -108,8 +108,11 @@ telePos = 0 # change to middle position
 # SPEED => (0, 128)
 address = 0x80
 # port: ls -l /dev/serial/by-id/
-rc = Roboclaw("/dev/ttyACM0", 38400)
-rc.Open()
+rcOne = Roboclaw("/dev/ttyACM0", 38400)
+rcOne.Open()
+
+rcTwo = Roboclaw("/dev/ttyACM0", 38400)
+rcTwo.Open()
 
 auto_focus_map = []
 auto_focus_idx = 0
@@ -163,17 +166,19 @@ class Rover:
         leftSpeed = int(controls["leftTread"] * 127)
 
         if rightSpeed > 0:
-            rc._write1(address, Roboclaw.Cmd.M1FORWARD, rightSpeed)
+            rcOne._write1(address, Roboclaw.Cmd.M1FORWARD, rightSpeed)
+            rcOne._write1(address, Roboclaw.Cmd.M2FORWARD, leftSpeed)
             ctrls.append("Right fwd")
         else:
-            rc._write1(address, Roboclaw.Cmd.M1BACKWARD, abs(rightSpeed))
+            rcOne._write1(address, Roboclaw.Cmd.M1BACKWARD, abs(rightSpeed))
+            rcOne._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(leftSpeed))
             ctrls.append("Right back")
         
         if leftSpeed > 0:
-            rc._write1(address, Roboclaw.Cmd.M2FORWARD, leftSpeed)
+            rcTwo._write1(address, Roboclaw.Cmd.M2FORWARD, leftSpeed)
             ctrls.append("Left fwd")
         else:
-            rc._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(leftSpeed))
+            rcTwo._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(leftSpeed))
             ctrls.append("Left back")
 
        #STEPPER CODE
@@ -196,9 +201,7 @@ class Rover:
         if(controls["wheg"] > 0):                   #WHEGS OFF
             GPIO.output(STEPPER_ENA, GPIO.LOW)
             GPIO.output(STEPPER_ENA_RELAY, GPIO.LOW)
-           
-
-
+        
         #Acutator Code
         if(controls["cameraTelescope"] < 0):
             telescope.backward()
