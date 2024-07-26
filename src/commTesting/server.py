@@ -51,12 +51,12 @@ class Camera:
                 
             key = cv.waitKey(1) & 0xFF
             if key == ord('q'):
-                serverSocket.close()
-                cv.destroyAllWindows()
                 break
+            
+        serverSocket.close()
+        cv.destroyAllWindows()
 
-while True:
-    Camera.transmitUSBCamFeed()
+Camera.transmitUSBCamFeed()
 
 
 
