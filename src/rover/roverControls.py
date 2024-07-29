@@ -13,28 +13,11 @@ import pickle
 import socket
 import RPi.GPIO as GPIO
 from gpiozero import Motor
-from gpiozero import Servo
 from roboclaw_3 import Roboclaw
-import cv2 #sudo apt-get install python-opencv
-import sys
-import time
-from RpiCamera import Camera
-from Focuser import Focuser
-import curses
-from datetime import datetime
 
 # PINS
 # IN1 => CLOCKWISE
 # IN2 => COUNTER-CLOCKWISE
-# Motor 1 -- Right main treads
-M1_ENA = 0
-M1_IN1 = 0
-M1_IN2 = 0
-
-# Motor 2 -- Left main treads
-M2_ENA = 0
-M2_IN1 = 0
-M2_IN2 = 0
 
 # Motor 3 -- Left wheg treads
 M3_ENA = 0
@@ -57,26 +40,8 @@ STEPPER_DIR_RELAY = 4
 M7_IN1 = 0
 M7_IN2 = 0
 
-# Servo 1 -- Camera tilt
-S1_PIN = 0
-
-# Servo 2 -- Camera swivel
-S2_PIN = 0
-
-# Servo 3 -- Camera zoom
-S3_PIN = 0
-
-# Tread motors
-rightMainTread = Motor(M1_IN1, M1_IN2, M1_ENA)
-leftMainTread = Motor(M2_IN1, M2_IN2, M2_ENA)
-rightWhegTread = Motor(M3_IN1, M3_IN2, M3_ENA)
-leftWhegTread = Motor(M4_IN1, M4_IN2, M4_ENA)
-
 # Camera motor/servos
 telescope = Motor(M7_IN1, M7_IN2)
-tilt = Servo(S1_PIN)
-swivel = Servo(S2_PIN)
-zoom = Servo(S3_PIN)
 
 # Wheg stepper motors
 GPIO.setwarnings(False)
