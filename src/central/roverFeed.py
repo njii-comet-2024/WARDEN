@@ -14,7 +14,7 @@ import numpy as np
 import base64
 import cvzone
 
-ROVER_IP = '172.168.10.137'
+ROVER_IP = '172.168.10.116'
 TOP_HORIZ = -70
 TOP_VERT = 0
 
