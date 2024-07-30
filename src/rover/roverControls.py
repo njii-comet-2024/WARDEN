@@ -71,11 +71,11 @@ telePos = 0 # change to middle position
 # SPEED => (0, 128)
 address = 0x80
 # port: ls -l /dev/serial/by-id/
-rcRight = Roboclaw("/dev/ttyACM0", 38400) # right treads
-rcRight.Open()
+rcLeft = Roboclaw("/dev/ttyACM0", 38400) # left treads
+rcLeft.Open()
 
-# rcLeft = Roboclaw("/dev/ttyACM1", 38400) # left treads
-# rcLeft.Open()
+rcRight = Roboclaw("/dev/ttyACM1", 38400) # right treads
+rcRight.Open()
 
 auto_focus_map = []
 auto_focus_idx = 0
@@ -137,14 +137,14 @@ class Rover:
             rcRight._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(rightSpeed))
             ctrls.append("Right back")
         
-        # if leftSpeed > 0:
-        #     rcLeft._write1(address, Roboclaw.Cmd.M1FORWARD, leftSpeed)
-        #     rcLeft._write1(address, Roboclaw.Cmd.M2FORWARD, leftSpeed)
-        #     ctrls.append("Left fwd")
-        # else:
-        #     rcLeft._write1(address, Roboclaw.Cmd.M1BACKWARD, leftSpeed)
-        #     rcLeft._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(leftSpeed))
-        #     ctrls.append("Left back")
+        if leftSpeed > 0:
+            rcLeft._write1(address, Roboclaw.Cmd.M1FORWARD, leftSpeed)
+            rcLeft._write1(address, Roboclaw.Cmd.M2FORWARD, leftSpeed)
+            ctrls.append("Left fwd")
+        else:
+            rcLeft._write1(address, Roboclaw.Cmd.M1BACKWARD, leftSpeed)
+            rcLeft._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(leftSpeed))
+            ctrls.append("Left back")
 
        #STEPPER CODE
 
