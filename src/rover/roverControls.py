@@ -53,7 +53,7 @@ GPIO.setup(STEPPER_DIR, GPIO.OUT)
 GPIO.setup(STEPPER_DIR_RELAY, GPIO.OUT)
 
 # Global variables
-IP = '10.255.0.27'  # change to controls pi IP
+IP = '192.168.110.19'  # change to controls pi IP
 RECV_PORT = 55555
 SEND_PORT = 1111
 
