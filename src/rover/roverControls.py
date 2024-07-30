@@ -53,7 +53,7 @@ GPIO.setup(STEPPER_DIR, GPIO.OUT)
 GPIO.setup(STEPPER_DIR_RELAY, GPIO.OUT)
 
 # Global variables
-IP = '192.168.110.19'  # change to controls pi IP
+IP = '192.168.10.148'  # change to controls pi IP
 RECV_PORT = 55555
 SEND_PORT = 1111
 
@@ -121,11 +121,11 @@ class Rover:
         
         serializedControls, addr = self.recvSocket.recvfrom(1024)
 
-        if(addr):
-            self.recv = 1
+        # if(addr):
+        #     self.recv = 1
 
-        if(self.recv == 1):
-            print("Connected to ", addr)
+        # if(self.recv == 1):
+        #     print("Connected to ", addr)
 
         controls = pickle.loads(serializedControls)  # deserializes controls
 
