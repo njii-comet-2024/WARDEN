@@ -125,8 +125,8 @@ class Rover:
 
         zoomPos = controls["cameraZoom"]
 
-        rightSpeed = int(controls["rightTread"] * 127)
-        leftSpeed = int(controls["leftTread"] * 127)
+        rightSpeed = int(controls["rightTread"] * 50)
+        leftSpeed = int(controls["leftTread"] * 50)
 
         if rightSpeed > 0:
             rcRight._write1(address, Roboclaw.Cmd.M1BACKWARD, rightSpeed)
