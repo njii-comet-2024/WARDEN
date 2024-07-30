@@ -145,10 +145,10 @@ def parseKeyByMap(stdscr,k,focuser:Focuser,camera):
         focuser.set(Focuser.OPT_MOTOR_Y,focuser.get(Focuser.OPT_MOTOR_Y) - motor_step)
         camera.setCamTilt(focuser.get(Focuser.OPT_MOTOR_Y))
     elif k == ord('d'):
-        focuser.set(Focuser.OPT_MOTOR_X,focuser.get(Focuser.OPT_MOTOR_X) + motor_step)
+        focuser.set(Focuser.OPT_MOTOR_X,focuser.get(Focuser.OPT_MOTOR_X) - motor_step)
         camera.setCamRotation(focuser.get(Focuser.OPT_MOTOR_X))
     elif k == ord('a'):
-        focuser.set(Focuser.OPT_MOTOR_X,focuser.get(Focuser.OPT_MOTOR_X) - motor_step)
+        focuser.set(Focuser.OPT_MOTOR_X,focuser.get(Focuser.OPT_MOTOR_X) + motor_step)
         camera.setCamRotation(focuser.get(Focuser.OPT_MOTOR_X))
     elif k == ord('r'):
         focuser.set(Focuser.OPT_RESET,0x01)

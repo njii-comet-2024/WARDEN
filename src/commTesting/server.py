@@ -44,7 +44,7 @@ class Camera:
         
             #decode data
             data = base64.b64decode(packet, ' /')
-            npdata = np.fromstring(data, dtype=np.uint8)
+            npdata = np.frombuffer(data, dtype=np.uint8)
             frame = cv.imdecode(npdata, 1)
             
             cv.imshow('TESTING HUD', frame)
