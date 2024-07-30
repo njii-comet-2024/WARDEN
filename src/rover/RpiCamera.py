@@ -5,7 +5,6 @@ import time
 import os
 import cvzone
 import socket
-import numpy as np
 import base64
 
 ROVER_IP = '10.255.0.137'
@@ -150,7 +149,7 @@ class Camera():
             
             frame = imgResult
             frame = cv2.resize(frame, (1024, 600))
-            encoded, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
+            encoded, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 40])
 
             message = base64.b64encode(buffer)
                 
