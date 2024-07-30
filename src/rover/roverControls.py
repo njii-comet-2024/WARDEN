@@ -95,8 +95,7 @@ class Rover:
         self.recvSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.recvSocket.bind((IP, RECV_PORT))
         
-        # Socket to send camera pos to camera pi
-        # self.sendSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.recv = 0
 
     """
     Starts the rover and runs the drive loop
@@ -121,12 +120,19 @@ class Rover:
         ctrls = []
         
         serializedControls, addr = self.recvSocket.recvfrom(1024)
+
+        if(addr):
+            self.recv = 1
+
+        if(self.recv == 1):
+            print("Connected to ", addr)
+
         controls = pickle.loads(serializedControls)  # deserializes controls
 
         zoomPos = controls["cameraZoom"]
 
-        rightSpeed = int(controls["rightTread"] * 50)
-        leftSpeed = int(controls["leftTread"] * 50)
+        rightSpeed = int(controls["rightTread"] * 80)
+        leftSpeed = int(controls["leftTread"] * 80)
 
         if rightSpeed > 0:
             rcRight._write1(address, Roboclaw.Cmd.M1BACKWARD, rightSpeed)
@@ -168,13 +174,13 @@ class Rover:
             GPIO.output(STEPPER_ENA_RELAY, GPIO.LOW)
         
         #Acutator Code
-        if(controls["cameraTelescope"] < 0):
-            telescope.backward()
-            ctrls.append("Telescope up")
+        # if(controls["cameraTelescope"] < 0):
+        #     telescope.backward()
+        #     ctrls.append("Telescope up")
         
-        if(controls["cameraTelescope"] > 0):
-            telescope.backward()
-            ctrls.append("Telescope down")
+        # if(controls["cameraTelescope"] > 0):
+        #     telescope.backward()
+        #     ctrls.append("Telescope down")
        
         if(ctrls):
             print(ctrls)
