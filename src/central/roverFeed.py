@@ -4,7 +4,7 @@ sockets
 
 @author [Christopher Prol]  [@prolvalone]
 
-Date last modified: 07/16/2024
+Date last modified: 07/30/2024
 """
 
 # Libraries
@@ -115,6 +115,44 @@ class videoReciever:
             if cv.waitKey(20) &0xFF == ord('q'):
                 cv.destroyAllWindows()
                 break
+    """
+    This function recieves Rover Cam footage from the PI Camera.  USE THIS ONE, NOT THE TOP ONE  
+    """
+    def recieveCamFeed():
+        bufferSize = 65536
+        serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
+        hostName = socket.gethostname()
+        hostIp = socket.gethostbyname(hostName)
+        print(hostIp)
+        port = 9999
+        socketAddress = (hostIp, port)
+        serverSocket.bind(socketAddress)
+        print('Listening at:', socketAddress)
+        
+        while True:
+            
+            #msg, clientAddr = serverSocket.recvfrom(bufferSize)
+            #print('GOT connection from ', clientAddr)
+            WIDTH = 1080
+            HEIGHT = 400
+            #while vid.isOpened():
+            #recieve Packet
+            packet,_ = serverSocket.recvfrom(bufferSize)
+        
+            #decode data
+            data = base64.b64decode(packet, ' /')
+            npdata = np.frombuffer(data, dtype=np.uint8)
+            frame = cv.imdecode(npdata, 1)
+            
+            cv.imshow('TESTING HUD', frame)
+                
+            key = cv.waitKey(1) & 0xFF
+            if key == ord('q'):
+                break
+            
+        serverSocket.close()
+        cv.destroyAllWindows()
 
 #serverProgram()
 videoReciever.receiveRoverCam(ROVER_IP)
