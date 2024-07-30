@@ -129,12 +129,12 @@ class Rover:
         leftSpeed = int(controls["leftTread"] * 127)
 
         if rightSpeed > 0:
-            rcRight._write1(address, Roboclaw.Cmd.M1FORWARD, rightSpeed)
-            rcRight._write1(address, Roboclaw.Cmd.M2FORWARD, rightSpeed)
+            rcRight._write1(address, Roboclaw.Cmd.M1BACKWARD, rightSpeed)
+            rcRight._write1(address, Roboclaw.Cmd.M2BACKWARD, rightSpeed)
             ctrls.append("Right fwd")
         else:
-            rcRight._write1(address, Roboclaw.Cmd.M1BACKWARD, abs(rightSpeed))
-            rcRight._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(rightSpeed))
+            rcRight._write1(address, Roboclaw.Cmd.M1FORWARD, abs(rightSpeed))
+            rcRight._write1(address, Roboclaw.Cmd.M2FORWARD, abs(rightSpeed))
             ctrls.append("Right back")
         
         if leftSpeed > 0:
@@ -142,7 +142,7 @@ class Rover:
             rcLeft._write1(address, Roboclaw.Cmd.M2FORWARD, leftSpeed)
             ctrls.append("Left fwd")
         else:
-            rcLeft._write1(address, Roboclaw.Cmd.M1BACKWARD, leftSpeed)
+            rcLeft._write1(address, Roboclaw.Cmd.M1BACKWARD, abs(leftSpeed))
             rcLeft._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(leftSpeed))
             ctrls.append("Left back")
 
