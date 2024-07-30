@@ -12,7 +12,6 @@ Date last modified: 07/26/2024
 import pickle
 import socket
 import RPi.GPIO as GPIO
-from gpiozero import Motor
 from roboclaw_3 import Roboclaw
 
 # PINS
@@ -41,7 +40,7 @@ M7_IN1 = 0
 M7_IN2 = 0
 
 # Camera motor/servos
-telescope = Motor(M7_IN1, M7_IN2)
+#telescope = Motor(M7_IN1, M7_IN2)
 
 # Wheg stepper motors
 GPIO.setwarnings(False)
@@ -54,7 +53,7 @@ GPIO.setup(STEPPER_DIR, GPIO.OUT)
 GPIO.setup(STEPPER_DIR_RELAY, GPIO.OUT)
 
 # Global variables
-IP = '192.168.110.19'  # change to controls pi IP
+IP = '10.255.0.27'  # change to controls pi IP
 RECV_PORT = 55555
 SEND_PORT = 1111
 
