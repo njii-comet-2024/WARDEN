@@ -192,9 +192,8 @@ class Rover:
             GPIO.output(M7_ENA, GPIO.HIGH)
             ctrls.append("Telescope down")
         
-        if(controls["cameraTelescope"] > 0): # OFF
+        if(controls["cameraTelescope"] == 0): # OFF
             GPIO.output(M7_ENA, GPIO.LOW)
-            ctrls.append("Telescope OFF")
        
         if(ctrls):
             print(ctrls)
