@@ -5,8 +5,8 @@ Requires=network.target
 
 [Service]
 Type=idle
-User=pi
-ExecStart= /usr/bin/python  /home/pi/Desktop/droneToCentral.py
+User=drone
+ExecStart= /usr/bin/python  /home/drone/Desktop/droneToCentral.py
 Restart=always
 RestartSec=15
 
