@@ -40,9 +40,6 @@ M7_IN1 = 0
 M7_IN2 = 0
 M7_ENA = 0
 
-# Camera motor/servos
-#telescope = Motor(M7_IN1, M7_IN2)
-
 # Wheg stepper motors
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
@@ -81,9 +78,6 @@ rcLeft.Open()
 
 rcRight = Roboclaw("/dev/ttyACM1", 38400) # right treads
 rcRight.Open()
-
-auto_focus_map = []
-auto_focus_idx = 0
 
 """
 Class that defines a rover and its functionality

@@ -35,6 +35,8 @@ buttonInputs = {
 # 2 => SE, 3 => SB
 # 4 => SC, 5 => S1
 # 6 => S1, 7 => S2
+
+# not all of these are used
 axisInputs = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 7:0}
 
 controls = {
