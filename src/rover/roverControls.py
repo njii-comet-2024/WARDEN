@@ -6,7 +6,7 @@ Receives control code from central and runs on rover
         [vito tribuzio] [@Snoopy-0]
         [Soumya Khera] [@soumya-khera]
 
-Date last modified: 07/26/2024
+Date last modified: 07/31/2024
 """
 # Libraries
 import pickle
@@ -178,7 +178,7 @@ class Rover:
             GPIO.output(STEPPER_ENA, GPIO.LOW)
             GPIO.output(STEPPER_ENA_RELAY, GPIO.LOW)
         
-        #Acutator Code
+        #LINEAR ACTUATOR CODE
 
         if(controls["cameraTelescope"] < 0): # UP
             GPIO.output(M7_IN1, GPIO.LOW)
