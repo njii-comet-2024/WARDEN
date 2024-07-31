@@ -38,6 +38,7 @@ STEPPER_DIR_RELAY = 4
 # Motor 7 -- Camera Telescope Linear Actuator
 M7_IN1 = 0
 M7_IN2 = 0
+M7_ENA = 0
 
 # Camera motor/servos
 #telescope = Motor(M7_IN1, M7_IN2)
@@ -52,6 +53,10 @@ GPIO.setup(STEPPER_ENA_RELAY, GPIO.OUT)
 GPIO.setup(STEPPER_DIR, GPIO.OUT)
 GPIO.setup(STEPPER_DIR_RELAY, GPIO.OUT)
 
+#Actuator Motor
+GPIO.setup(M7_IN1, GPIO.OUT)
+GPIO.setup(M7_IN2, GPIO.OUT)
+GPIO.setup(M7_ENA, GPIO.OUT)
 # Global variables
 IP = '192.168.10.148'  # change to controls pi IP
 RECV_PORT = 55555
@@ -174,13 +179,22 @@ class Rover:
             GPIO.output(STEPPER_ENA_RELAY, GPIO.LOW)
         
         #Acutator Code
-        # if(controls["cameraTelescope"] < 0):
-        #     telescope.backward()
-        #     ctrls.append("Telescope up")
+
+        if(controls["cameraTelescope"] < 0): # UP
+            GPIO.output(M7_IN1, GPIO.LOW)
+            GPIO.output(M7_IN2, GPIO.HIGH)
+            GPIO.output(M7_ENA, GPIO.HIGH)
+            ctrls.append("Telescope up")
         
-        # if(controls["cameraTelescope"] > 0):
-        #     telescope.backward()
-        #     ctrls.append("Telescope down")
+        if(controls["cameraTelescope"] > 0): # DOWN
+            GPIO.output(M7_IN1, GPIO.HIGH)
+            GPIO.output(M7_IN2, GPIO.LOW)
+            GPIO.output(M7_ENA, GPIO.HIGH)
+            ctrls.append("Telescope down")
+        
+        if(controls["cameraTelescope"] > 0): # OFF
+            GPIO.output(M7_ENA, GPIO.LOW)
+            ctrls.append("Telescope OFF")
        
         if(ctrls):
             print(ctrls)
