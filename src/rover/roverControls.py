@@ -127,14 +127,16 @@ class Rover:
         serializedControls, addr = self.recvSocket.recvfrom(1024)
 
         # if(addr):
-        #     self.recv = 1
+        #     self.recv += 1
 
         # if(self.recv == 1):
         #     print("Connected to ", addr)
 
         controls = pickle.loads(serializedControls)  # deserializes controls
 
-        zoomPos = controls["cameraZoom"]
+        if(controls["end"] == 1):
+            self.on = False
+            return
 
         rightSpeed = int(controls["rightTread"] * 80)
         leftSpeed = int(controls["leftTread"] * 80)

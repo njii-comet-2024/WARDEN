@@ -24,17 +24,11 @@ joystick.init()
 # LJOY [Left joystick]          => left treads
 # RJOY [Right joystick]         => right treads
 # SE [Top left 3-way switch]    => pivoting treads
-# SB [Left 3-way switch]        => camera tilt
 # SC [Right 3-way switch]       => camera telescope
-# SA [Left button]              => camera swivel left
-# SD [Right button]             => camera swivel right
-# S1 [Left slider]              => camera focus
-# S2 [Right slider]             => camera zoom
 
 # Controller inputs to transmit
 buttonInputs = {
-    "SA" : 0,
-    "SD" : 1
+    "SA" : 0
 }
 
 # 0 => LJOY, 1 => RJOY
@@ -48,11 +42,7 @@ controls = {
     "rightTread" : 0,
     "wheg" : 0,
     "cameraTelescope" : 0,
-    "cameraTilt" : 0,
-    "cameraLeft" : 0,
-    "cameraRight" : 0,
-    "cameraZoom" : 0,
-    "cameraFocus" : 0
+    "end" : 0
 }
 
 """
@@ -84,19 +74,8 @@ class Transmitter:
             
             if event.type == pygame.JOYBUTTONDOWN:
                 if event.button == buttonInputs["SA"]:
-                    controls["cameraLeft"] = 1
-                    # print("SA DOWN")
-                if event.button == buttonInputs["SD"]:
-                    controls["cameraRight"] = 1
-                    # print("SD DOWN")
-
-            if event.type == pygame.JOYBUTTONUP:
-                if event.button == buttonInputs["SA"]:
-                    controls["cameraLeft"] = 0
-                    # print("SA UP")
-                if event.button == buttonInputs["SD"]:
-                    controls["cameraRight"] = 0
-                    # print("SD UP")
+                    controls["end"] = 1
+                    # print("END")
 
             if event.type == pygame.JOYAXISMOTION:
                 axisInputs[event.axis] = event.value
@@ -119,36 +98,21 @@ class Transmitter:
                 else:
                     controls["wheg"] = 0
 
-                if abs(axisInputs[3]) > 0.5:
-                    controls["cameraTilt"] = axisInputs[3]
-                    # print("SB: ", axisInputs[3])
-                else:
-                    controls["cameraTilt"] = 0
-
                 if abs(axisInputs[4]) > 0.5:
                     controls["cameraTelescope"] = axisInputs[4]
                     # print("SC: ", axisInputs[4])
                 else:
                     controls["cameraTelescope"] = 0
                 
-                if abs(axisInputs[5]) > 0.5:
-                    controls["cameraFocus"] = axisInputs[5]
-                    # print("S1: ", axisInputs[5])
-                else:
-                    controls["cameraZoom"] = 0
-
-                if abs(axisInputs[7]) > 0.5:
-                    controls["cameraZoom"] = axisInputs[7]
-                    # print("S2: ", axisInputs[7])
-                else:
-                    controls["cameraZoom"] = 0
-            
         if(self.on):
             self.sendContinuous()
 
+        if(controls["end"] == 1):
+            self.on = False
+
     def sendContinuous(self):
-        serializedControls = pickle.dumps(controls)
-        self.sock.sendto(serializedControls, (IP, PORT))
+        # serializedControls = pickle.dumps(controls)
+        # self.sock.sendto(serializedControls, (IP, PORT))
 
         val = False
         for x in controls.values():
