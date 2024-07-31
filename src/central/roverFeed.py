@@ -14,11 +14,7 @@ import numpy as np
 import base64
 import cvzone
 
-<<<<<<< HEAD
-ROVER_IP = '172.168.10.116'
-=======
 ROVER_IP = '192.168.110.78'
->>>>>>> 8bdc810 (hello)
 TOP_HORIZ = -70
 TOP_VERT = 0
 
@@ -52,15 +48,6 @@ class videoReciever:
         serverSocket.sendto(message, (ROVER_IP,port))
 
         #read the image files
-<<<<<<< HEAD
-        #may have to upload images to the actual Pi in order to work  - - relative path may not work due to not having repo cloned
-        hudTop = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudSide = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
-        hudTopIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
-        hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
-        hudHeightIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrowRed.png', cv.IMREAD_UNCHANGED)
-        infoBackground = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/blackRectangle.png', cv.IMREAD_UNCHANGED)
-=======
         #src/assets
         # hudTop = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
         # hudSide = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/hudCompassHorizontal.png', cv.IMREAD_UNCHANGED)
@@ -68,7 +55,6 @@ class videoReciever:
         # hudSideIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrow.png', cv.IMREAD_UNCHANGED)
         # hudHeightIndicator = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/arrowRed.png', cv.IMREAD_UNCHANGED)
         # infoBackground = cv.imread('/Users/chris/OneDrive/Desktop/WARDEN/src/assets/blackRectangle.png', cv.IMREAD_UNCHANGED)
->>>>>>> 8bdc810 (hello)
 
         # #rotate and resize images to be properly aligned
         # hudTop = cv.rotate(hudTop, cv.ROTATE_180)
