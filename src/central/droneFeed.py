@@ -13,8 +13,8 @@ import pickle
 import numpy as np
 
 # Socket parameters
-host_ip = '192.168.110.78'
-host_port = 5005
+hostIp = '192.168.110.78'
+hostPort = 5005
 
 # Initialize socket
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
