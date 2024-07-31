@@ -111,8 +111,8 @@ class Transmitter:
             self.on = False
 
     def sendContinuous(self):
-        # serializedControls = pickle.dumps(controls)
-        # self.sock.sendto(serializedControls, (IP, PORT))
+        serializedControls = pickle.dumps(controls)
+        self.sock.sendto(serializedControls, (IP, PORT))
 
         val = False
         for x in controls.values():
