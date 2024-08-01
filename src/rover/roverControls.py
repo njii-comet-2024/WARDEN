@@ -109,11 +109,11 @@ class Rover:
         
         serializedControls, addr = self.recvSocket.recvfrom(1024)
 
-        # if(addr):
-        #     self.recv += 1
+        if(addr):
+            self.recv += 1
 
-        # if(self.recv == 1):
-        #     print("Connected to ", addr)
+        if(self.recv == 1):
+            print("Connected to ", addr)
 
         controls = pickle.loads(serializedControls)  # deserializes controls
 
@@ -131,7 +131,8 @@ class Rover:
         else:
             rcRight._write1(address, Roboclaw.Cmd.M1FORWARD, abs(rightSpeed))
             rcRight._write1(address, Roboclaw.Cmd.M2FORWARD, abs(rightSpeed))
-            ctrls.append("Right back")
+            if(rightSpeed != 0):
+                ctrls.append("Right back")
         
         if leftSpeed > 0:
             rcLeft._write1(address, Roboclaw.Cmd.M1FORWARD, leftSpeed)
@@ -140,7 +141,8 @@ class Rover:
         else:
             rcLeft._write1(address, Roboclaw.Cmd.M1BACKWARD, abs(leftSpeed))
             rcLeft._write1(address, Roboclaw.Cmd.M2BACKWARD, abs(leftSpeed))
-            ctrls.append("Left back")
+            if(leftSpeed != 0):
+                ctrls.append("Left back")
 
        #STEPPER CODE
         if(controls["wheg"] < 0): 
