@@ -19,7 +19,7 @@ ROVER_IP = '192.168.110.78'
 This is a class for video reception
 """
 
-class videoReciever:
+class videoReceiver:
     def __init__(self):
         print("initializing")
 
@@ -46,7 +46,7 @@ class videoReciever:
             WIDTH = 1080
             HEIGHT = 400
             #while vid.isOpened():
-            #recieve Packet
+            #receive Packet
             packet,_ = serverSocket.recvfrom(bufferSize)
         
             #decode data
@@ -64,4 +64,4 @@ class videoReciever:
         cv.destroyAllWindows()
 
 #serverProgram()
-videoReciever.receiveCamFeed()
+videoReceiver.receiveCamFeed()
