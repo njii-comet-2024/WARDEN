@@ -1,6 +1,5 @@
 """
 Client Side Video testing
-
 @author  [Christopher Prol] [@prolvalone]
 
 Date last modified: 07/16/2024
@@ -26,9 +25,9 @@ class videoReciever:
 
 
     """
-    This function recieves Rover Cam footage from the PI Camera.  
+    This function receives Rover Cam footage from the PI Camera.  
     """
-    def recieveRoverCam(roverIP):
+    def receiveRoverCam(roverIP):
         #initiate Window and resize
         cv.namedWindow('TESTING HUD', cv.WINDOW_NORMAL)
         cv.resizeWindow('TESTING HUD', 1024, 600)
