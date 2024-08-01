@@ -141,8 +141,8 @@ class Camera():
             if(camZoom == 0 or camZoom == 10):
                 imgResult = cv2.putText(imgResult, 'ZOOM LIMIT REACHED' , (650, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
             #overlay indicator
-            imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [-1 * ((camRotation * 5) + 60), TOP_VERT])#adds moving vertical
-            imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ, -1 * ((camTilt * 4)+100)])
+            imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [(camRotation * 5) + 60, TOP_VERT])#adds moving vertical
+            imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ, (camTilt * 4)-70])
             self.frame.pushQueue(imgResult)
             cv2.imshow(self.window_name,imgResult)
 
