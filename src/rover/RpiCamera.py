@@ -7,7 +7,7 @@ import cvzone
 import socket
 import base64
 
-ROVER_IP = '10.255.0.137'
+ROVER_IP = '10.255.0.106'
 SERVER_IP = '10.255.0.137'
 
 TOP_HORIZ = -70

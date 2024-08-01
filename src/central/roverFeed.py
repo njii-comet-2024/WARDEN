@@ -12,15 +12,9 @@ import socket
 import cv2 as cv
 import numpy as np 
 import base64
-import cvzone
 
 ROVER_IP = '192.168.110.78'
-TOP_HORIZ = -70
-TOP_VERT = 0
 
-SIDE_VERT = -200
-SIDE_HORIZ = -5
-SIDE_ACTU = 340
 """
 This is a class for video reception
 """
@@ -118,7 +112,7 @@ class videoReciever:
     """
     This function recieves Rover Cam footage from the PI Camera.  USE THIS ONE, NOT THE TOP ONE  
     """
-    def recieveCamFeed():
+    def receiveCamFeed():
         bufferSize = 65536
         serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
@@ -155,4 +149,4 @@ class videoReciever:
         cv.destroyAllWindows()
 
 #serverProgram()
-videoReciever.receiveRoverCam(ROVER_IP)
+videoReciever.receiveCamFeed()
