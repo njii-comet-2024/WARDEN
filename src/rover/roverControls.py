@@ -116,7 +116,8 @@ class Rover:
 
         controls = pickle.loads(serializedControls)  # deserializes controls
 
-        if(controls["end"] == 1):
+        if(controls["end"] > 0):
+            print("END")
             self.on = False
             return
 
@@ -143,7 +144,7 @@ class Rover:
             if(leftSpeed != 0):
                 ctrls.append("Left back")
 
-       #STEPPER CODE
+        #STEPPER CODE
         if(controls["wheg"] < 0): 
             GPIO.output(STEPPER_ENA, GPIO.HIGH)
             GPIO.output(STEPPER_ENA_RELAY, GPIO.HIGH)
