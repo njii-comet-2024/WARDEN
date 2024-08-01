@@ -136,13 +136,13 @@ class Camera():
             #display max limit messages
             if(camTilt == 0 or camTilt == 180):
                 imgResult = cv2.putText(imgResult, 'Y AXIS LIMIT REACHED' , (390, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)# 35 , 140
-            if(camRotation == 0 or camRotation == 205):
+            if(camRotation == 0 or camRotation == 180):
                 imgResult = cv2.putText(imgResult, 'X AXIS LIMIT REACHED' , (390, 570), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
             if(camZoom == 0 or camZoom == 10):
                 imgResult = cv2.putText(imgResult, 'ZOOM LIMIT REACHED' , (650, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
             #overlay indicator
             imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [(camRotation * 5) + 60, TOP_VERT])#adds moving vertical
-            imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ, (camTilt * 4)-70])
+            imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ, (camTilt * 4)-80])
             self.frame.pushQueue(imgResult)
             cv2.imshow(self.window_name,imgResult)
 
