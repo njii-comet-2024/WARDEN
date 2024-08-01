@@ -1,6 +1,5 @@
 """
 Client Side Video testing
-
 @author  [Christopher Prol] [@prolvalone]
 
 Date last modified: 07/16/2024
@@ -20,15 +19,15 @@ SIDE_HORIZ = -5
 SIDE_ACTU = 340
 
 
-class videoReciever:
+class videoReceiver:
     def __init__(self):
         print("initializing")
 
 
     """
-    This function recieves Rover Cam footage from the PI Camera.  
+    This function receives Rover Cam footage from the PI Camera.  
     """
-    def recieveRoverCam(roverIP):
+    def receiveRoverCam(roverIP):
         #initiate Window and resize
         cv.namedWindow('TESTING HUD', cv.WINDOW_NORMAL)
         cv.resizeWindow('TESTING HUD', 1024, 600)
@@ -103,4 +102,4 @@ class videoReciever:
                 break
 
 #serverProgram()
-videoReciever.recieveRoverCam(ROVER_IP)
+videoReceiver.receiveRoverCam(ROVER_IP)

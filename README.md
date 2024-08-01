@@ -59,7 +59,7 @@ This project is still a work in progress.
 
 ## Controller Components
 
-**Central Raspberry Pi:** Runs programs `centralToRover.py` to send controls to Controls Raspberry Pi, `roverFeed.py` to receive rover video and camera positions from Camera Raspberry Pi, and `droneFeed.py` to receive drone video from Drone Raspberry Pi and/or Drone VTX.
+**Central Raspberry Pi:** Runs programs `centralToRover.py` to send controls to Controls Raspberry Pi, `roverFeed.py` to receive rover video and camera positions from Camera Raspberry Pi, and `droneFeed.py` to receive drone video from Drone Raspberry Pi.
 
 **Controls Raspberry Pi:** Runs program `roverControls.py` to receive controls from Central Raspberry Pi and run them on rover. Sends camera positions to Camera Raspberry Pi.
 
@@ -67,13 +67,10 @@ This project is still a work in progress.
 
 **Drone Raspberry Pi:** Runs `droneToCentral.py` to transmit digital drone video to Central Raspberry Pi.
 
-**Drone VTX:** Transmits analog drone video at a specific frequency for Central Raspberry Pi to receive.
-
 ---
 
 ## Necessary Libraries
 
-- [gpiozero](https://gpiozero.readthedocs.io/en/stable/installing.html)
 - [OpenCV](https://opencv.org/get-started/)
 - [pygame](https://www.pygame.org/news)
 - [picamera and picamera[array]](https://picamera.readthedocs.io/en/release-1.13/install.html)

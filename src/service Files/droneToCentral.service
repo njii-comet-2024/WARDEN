@@ -5,10 +5,10 @@ Requires=network.target
 
 [Service]
 Type=idle
-User=pi
-ExecStart= /usr/bin/python  /home/pi/Desktop/droneToCentral.py
+User=comet
+ExecStart= /usr/bin/python  /home/comet/Desktop/droneToCentral.py
 Restart=always
 RestartSec=15
 
 [Install]
-wantedBy=multi-user.target
+WantedBy=multi-user.target

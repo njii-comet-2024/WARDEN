@@ -156,6 +156,8 @@ def parseKeyByMap(stdscr,k,focuser:Focuser,camera):
         t = focuser.get(Focuser.OPT_MODE)
         focuser.set(Focuser.OPT_MODE,t^0x0001)
         focuser.waitingForFree()
+        camera.setCamRotation(focuser.get(Focuser.OPT_MOTOR_X))
+        camera.setCamTilt(focuser.get(Focuser.OPT_MOTOR_Y))
     elif k == curses.KEY_UP:
         auto_focus_idx = (auto_focus_idx + 1)%10
         focuser.move(auto_focus_map[auto_focus_idx].focus, auto_focus_map[auto_focus_idx].zoom)

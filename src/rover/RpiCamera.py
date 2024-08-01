@@ -7,7 +7,7 @@ import cvzone
 import socket
 import base64
 
-ROVER_IP = '10.255.0.137'
+ROVER_IP = '10.255.0.106'
 SERVER_IP = '10.255.0.137'
 
 TOP_HORIZ = -70
@@ -57,13 +57,30 @@ class Camera():
     
     def setCamRotation(self, setVal):
         global camRotation
-        self.cameraRotation = setVal
+        mappedRotation = self.numToRange(setVal, 0, 180, 180, 0)
+        self.cameraRotation = mappedRotation
         camRotation = self.cameraRotation
     
     def setCamZoom(self, setVal):
         global camZoom
         self.cameraZoom = setVal
         camZoom = self.cameraZoom
+    
+    """
+    Maps a number from one range to another
+
+    @param `num` : number to re-map
+    @param `inMin` : original range min
+    @param `inMax` : original range max
+    @param `outMin` : target range min
+    @param `outMax` : target range max
+
+    @return (int) number mapped to new range
+    """
+    def numToRange(self, num, inMin, inMax, outMin, outMax):
+        flSpeed = outMin + (float(num - inMin) / float(inMax - inMin) * (outMax
+                        - outMin))
+        return int(flSpeed)
         
     debug = True
     is_running = False
@@ -131,18 +148,18 @@ class Camera():
             imgResult = cvzone.overlayPNG(imgResult, infoBackground, [5, 540])# adds info background for ease of seeing words
             #create positional data variables
             #display location coords
-            imgResult = cv2.putText(imgResult,' Zoom: ' + str(camZoom) + 'x', (40, 570), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
-            imgResult = cv2.putText(imgResult, 'ValueY: ' + str(camTilt) + '  ValueX: ' + str(camRotation), (40, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0),2)
+            imgResult = cv2.putText(imgResult,' Zoom: ' + str(camZoom), (40, 570), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255),2)
+            imgResult = cv2.putText(imgResult, 'ValueY: ' + str(camTilt) + '  ValueX: ' + str(camRotation), (40, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255),2)
             #display max limit messages
-            if(camTilt == 0 or camTilt == 180):
-                imgResult = cv2.putText(imgResult, 'Y AXIS LIMIT REACHED' , (390, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
-            if(camRotation == 0 or camRotation == 205):
-                imgResult = cv2.putText(imgResult, 'X AXIS LIMIT REACHED' , (390, 570), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
-            if(camZoom == 0 or camZoom == 10):
-                imgResult = cv2.putText(imgResult, 'ZOOM LIMIT REACHED' , (650, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255),2)
+            if(camTilt == 40 or camTilt == 130):
+                imgResult = cv2.putText(imgResult, 'Y AXIS LIMIT REACHED' , (390, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255),2)# 35 , 140
+            if(camRotation == 0 or camRotation == 180):
+                imgResult = cv2.putText(imgResult, 'X AXIS LIMIT REACHED' , (390, 570), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255),2)
+            if(camZoom == 0 or camZoom == 1800):
+                imgResult = cv2.putText(imgResult, 'ZOOM LIMIT REACHED' , (650, 590), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255),2)
             #overlay indicator
             imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [(camRotation * 5) + 60, TOP_VERT])#adds moving vertical
-            imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ, (camTilt * 2)+100])
+            imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [SIDE_HORIZ, (camTilt * 4)-80])
             self.frame.pushQueue(imgResult)
             cv2.imshow(self.window_name,imgResult)
 

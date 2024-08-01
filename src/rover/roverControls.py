@@ -6,7 +6,7 @@ Receives control code from central and runs on rover
         [vito tribuzio] [@Snoopy-0]
         [Soumya Khera] [@soumya-khera]
 
-Date last modified: 07/26/2024
+Date last modified: 08/01/2024
 """
 # Libraries
 import pickle
@@ -18,16 +18,6 @@ from roboclaw_3 import Roboclaw
 # IN1 => CLOCKWISE
 # IN2 => COUNTER-CLOCKWISE
 
-# Motor 3 -- Left wheg treads
-M3_ENA = 0
-M3_IN1 = 0
-M3_IN2 = 0
-
-# Motor 4 -- Left wheg treads
-M4_ENA = 0
-M4_IN1 = 0
-M4_IN2 = 0
-
 # Motors 5 & 6 -- Articulating treads (DM456AI)
 STEPPER_AIN = 22
 STEPPER_ENA = 27
@@ -38,9 +28,7 @@ STEPPER_DIR_RELAY = 4
 # Motor 7 -- Camera Telescope Linear Actuator
 M7_IN1 = 0
 M7_IN2 = 0
-
-# Camera motor/servos
-#telescope = Motor(M7_IN1, M7_IN2)
+M7_ENA = 0
 
 # Wheg stepper motors
 GPIO.setwarnings(False)
@@ -52,10 +40,14 @@ GPIO.setup(STEPPER_ENA_RELAY, GPIO.OUT)
 GPIO.setup(STEPPER_DIR, GPIO.OUT)
 GPIO.setup(STEPPER_DIR_RELAY, GPIO.OUT)
 
+#Actuator Motor
+GPIO.setup(M7_IN1, GPIO.OUT)
+GPIO.setup(M7_IN2, GPIO.OUT)
+GPIO.setup(M7_ENA, GPIO.OUT)
+
 # Global variables
 IP = '192.168.10.148'  # change to controls pi IP
-RECV_PORT = 55555
-SEND_PORT = 1111
+PORT = 55555
 
 cameraType = 0
 
@@ -77,9 +69,6 @@ rcLeft.Open()
 rcRight = Roboclaw("/dev/ttyACM1", 38400) # right treads
 rcRight.Open()
 
-auto_focus_map = []
-auto_focus_idx = 0
-
 """
 Class that defines a rover and its functionality
 """
@@ -93,7 +82,7 @@ class Rover:
 
         # Socket to receive controls from central pi
         self.recvSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.recvSocket.bind((IP, RECV_PORT))
+        self.recvSocket.bind((IP, PORT))
         
         self.recv = 0
 
@@ -106,7 +95,6 @@ class Rover:
 
         while self.on:
             self.drive()
-            # self.sendToCameraPi()
             # If no commands are sent for an extended period of time
             if self.loopCount > maxLoopCount:
                 self.on = False
@@ -122,14 +110,16 @@ class Rover:
         serializedControls, addr = self.recvSocket.recvfrom(1024)
 
         # if(addr):
-        #     self.recv = 1
+        #     self.recv += 1
 
         # if(self.recv == 1):
         #     print("Connected to ", addr)
 
         controls = pickle.loads(serializedControls)  # deserializes controls
 
-        zoomPos = controls["cameraZoom"]
+        if(controls["end"] == 1):
+            self.on = False
+            return
 
         rightSpeed = int(controls["rightTread"] * 80)
         leftSpeed = int(controls["leftTread"] * 80)
@@ -153,7 +143,6 @@ class Rover:
             ctrls.append("Left back")
 
        #STEPPER CODE
-
         if(controls["wheg"] < 0): 
             GPIO.output(STEPPER_ENA, GPIO.HIGH)
             GPIO.output(STEPPER_ENA_RELAY, GPIO.HIGH)
@@ -169,37 +158,28 @@ class Rover:
 
             ctrls.append("Whegs down")
 
-        if(controls["wheg"] > 0):                   #WHEGS OFF
+        if(controls["wheg"] == 0): # WHEGS OFF
             GPIO.output(STEPPER_ENA, GPIO.LOW)
             GPIO.output(STEPPER_ENA_RELAY, GPIO.LOW)
         
-        #Acutator Code
-        # if(controls["cameraTelescope"] < 0):
-        #     telescope.backward()
-        #     ctrls.append("Telescope up")
+        #LINEAR ACTUATOR CODE
+        if(controls["cameraTelescope"] < 0): # UP
+            GPIO.output(M7_IN1, GPIO.LOW)
+            GPIO.output(M7_IN2, GPIO.HIGH)
+            GPIO.output(M7_ENA, GPIO.HIGH)
+            ctrls.append("Telescope up")
         
-        # if(controls["cameraTelescope"] > 0):
-        #     telescope.backward()
-        #     ctrls.append("Telescope down")
+        if(controls["cameraTelescope"] > 0): # DOWN
+            GPIO.output(M7_IN1, GPIO.HIGH)
+            GPIO.output(M7_IN2, GPIO.LOW)
+            GPIO.output(M7_ENA, GPIO.HIGH)
+            ctrls.append("Telescope down")
+        
+        if(controls["cameraTelescope"] == 0): # OFF
+            GPIO.output(M7_ENA, GPIO.LOW)
        
         if(ctrls):
             print(ctrls)
-
-    """
-    Maps a number from one range to another
-
-    @param `num` : number to re-map
-    @param `inMin` : original range min
-    @param `inMax` : original range max
-    @param `outMin` : target range min
-    @param `outMax` : target range max
-
-    @return (int) number mapped to new range
-    """
-    def numToRange(self, num, inMin, inMax, outMin, outMax):
-        flSpeed = outMin + (float(num - inMin) / float(inMax - inMin) * (outMax
-                        - outMin))
-        return int(flSpeed)
 
 rover = Rover()
 rover.start()
