@@ -20,7 +20,7 @@ class Camera:
     """
     Transmits Rover Video Data from a usb camera Over UDP sockets, acting as the server
     """
-    def recieveCamFeed():
+    def receiveCamFeed():
         bufferSize = 65536
         serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
@@ -39,7 +39,7 @@ class Camera:
             WIDTH = 1080
             HEIGHT = 400
             #while vid.isOpened():
-            #recieve Packet
+            #receive Packet
             packet,_ = serverSocket.recvfrom(bufferSize)
         
             #decode data
@@ -56,11 +56,4 @@ class Camera:
         serverSocket.close()
         cv.destroyAllWindows()
 
-Camera.recieveCamFeed()
-
-
-
-
-
-
-
+Camera.receiveCamFeed()
