@@ -46,7 +46,7 @@ GPIO.setup(M7_IN2, GPIO.OUT)
 GPIO.setup(M7_ENA, GPIO.OUT)
 
 # Global variables
-IP = '192.168.10.148'  # change to controls pi IP
+IP = '192.168.110.19'  # change to controls pi IP
 PORT = 55555
 
 cameraType = 0
