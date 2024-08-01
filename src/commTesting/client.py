@@ -19,7 +19,7 @@ SIDE_HORIZ = -5
 SIDE_ACTU = 340
 
 
-class videoReciever:
+class videoReceiver:
     def __init__(self):
         print("initializing")
 
@@ -102,4 +102,4 @@ class videoReciever:
                 break
 
 #serverProgram()
-videoReciever.recieveRoverCam(ROVER_IP)
+videoReceiver.receiveRoverCam(ROVER_IP)
