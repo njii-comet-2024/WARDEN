@@ -57,13 +57,30 @@ class Camera():
     
     def setCamRotation(self, setVal):
         global camRotation
-        self.cameraRotation = setVal
+        mappedRotation = self.numToRange(setVal, 0, 180, 180, 0)
+        self.cameraRotation = mappedRotation
         camRotation = self.cameraRotation
     
     def setCamZoom(self, setVal):
         global camZoom
         self.cameraZoom = setVal
         camZoom = self.cameraZoom
+    
+    """
+    Maps a number from one range to another
+
+    @param `num` : number to re-map
+    @param `inMin` : original range min
+    @param `inMax` : original range max
+    @param `outMin` : target range min
+    @param `outMax` : target range max
+
+    @return (int) number mapped to new range
+    """
+    def numToRange(self, num, inMin, inMax, outMin, outMax):
+        flSpeed = outMin + (float(num - inMin) / float(inMax - inMin) * (outMax
+                        - outMin))
+        return int(flSpeed)
         
     debug = True
     is_running = False
