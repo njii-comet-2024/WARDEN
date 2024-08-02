@@ -69,10 +69,6 @@ rcRight.Open()
 rcLeft = Roboclaw("/dev/ttyACM1", 38400) # left treads
 rcLeft.Open()
 
-# Socket to receive controls from central pi
-recvSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-recvSocket.bind((IP, PORT))
-
 """
 Class that defines a rover and its functionality
 """
@@ -84,6 +80,9 @@ class Rover:
         self.loopCount = 0
         self.on = True  # Rover running
 
+        # Socket to receive controls from central pi
+        self.recvSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.recvSocket.bind((IP, PORT))
         
         self.recv = 0
 
@@ -108,7 +107,7 @@ class Rover:
         global zoomPos, tiltPos, swivelPos, telePos
         ctrls = []
         
-        serializedControls, addr = recvSocket.recvfrom(1024)
+        serializedControls, addr = self.recvSocket.recvfrom(1024)
 
         if(addr):
             self.recv += 1
