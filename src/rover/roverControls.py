@@ -62,11 +62,11 @@ telePos = 0 # change to middle position
 # SPEED => (0, 128)
 address = 0x80
 # port: ls -l /dev/serial/by-id/
-rcLeft = Roboclaw("/dev/ttyACM0", 38400) # left treads
-rcLeft.Open()
-
-rcRight = Roboclaw("/dev/ttyACM1", 38400) # right treads
+rcRight = Roboclaw("/dev/ttyACM0", 38400) # left treads
 rcRight.Open()
+
+rcLeft = Roboclaw("/dev/ttyACM1", 38400) # right treads
+rcLeft.Open()
 
 """
 Class that defines a rover and its functionality
