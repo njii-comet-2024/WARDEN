@@ -6,7 +6,7 @@ Receives control code from central and runs on rover
         [vito tribuzio] [@Snoopy-0]
         [Soumya Khera] [@soumya-khera]
 
-Date last modified: 08/01/2024
+Date last modified: 08/02/2024
 """
 # Libraries
 import pickle
@@ -62,10 +62,11 @@ telePos = 0 # change to middle position
 # SPEED => (0, 128)
 address = 0x80
 # port: ls -l /dev/serial/by-id/
-rcRight = Roboclaw("/dev/ttyACM0", 38400) # left treads
+
+rcRight = Roboclaw("/dev/ttyACM0", 38400) # right treads
 rcRight.Open()
 
-rcLeft = Roboclaw("/dev/ttyACM1", 38400) # right treads
+rcLeft = Roboclaw("/dev/ttyACM1", 38400) # left treads
 rcLeft.Open()
 
 """
@@ -120,9 +121,10 @@ class Rover:
             print("END")
             self.on = False
             return
-
-        rightSpeed = int(controls["rightTread"] * 80)
-        leftSpeed = int(controls["leftTread"] * 80)
+        
+        # max speed capped at 40/128 -- can be changed depending on use case
+        rightSpeed = int(controls["rightTread"] * 40)
+        leftSpeed = int(controls["leftTread"] * 40)
 
         if rightSpeed > 0:
             rcRight._write1(address, Roboclaw.Cmd.M1FORWARD, rightSpeed)
@@ -179,6 +181,8 @@ class Rover:
         
         if(controls["cameraTelescope"] == 0): # OFF
             GPIO.output(M7_ENA, GPIO.LOW)
+            GPIO.output(M7_IN1, GPIO.LOW)
+            GPIO.output(M7_IN2, GPIO.LOW)
        
         if(ctrls):
             print(ctrls)
