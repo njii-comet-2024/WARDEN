@@ -45,7 +45,9 @@ GPIO.setup(M7_IN2, GPIO.OUT)
 GPIO.setup(M7_ENA, GPIO.OUT)
 
 # Global variables
-IP = '10.255.0.27'  # change to controls pi IP
+hostName = socket.gethostname()
+IP = socket.gethostbyname(hostName)
+#IP = '10.255.0.27'  # change to controls pi IP
 PORT = 55555
 
 cameraType = 0
