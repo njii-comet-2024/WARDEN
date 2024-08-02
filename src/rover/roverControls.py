@@ -122,9 +122,9 @@ class Rover:
             self.on = False
             return
         
-        # max speed capped at 40/128 -- can be changed depending on use case
-        rightSpeed = int(controls["rightTread"] * 50)
-        leftSpeed = int(controls["leftTread"] * 50)
+        # max speed capped at 60/128 -- can be changed depending on use case
+        rightSpeed = int(controls["rightTread"] * 60)
+        leftSpeed = int(controls["leftTread"] * 60)
 
         if rightSpeed > 0:
             rcRight._write1(address, Roboclaw.Cmd.M1FORWARD, rightSpeed)
