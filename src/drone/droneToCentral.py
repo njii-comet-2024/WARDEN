@@ -16,7 +16,7 @@ from picamera2 import Picamera2
 
 # Socket parameters
 server_ip = '192.168.110.5'  # Replace with receiver's IP address
-server_port = 5000
+server_port = 5005
 
 # Initialize socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
