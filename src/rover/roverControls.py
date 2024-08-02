@@ -120,7 +120,7 @@ class Rover:
         if(controls["end"] > 0):
             print("END")
             self.on = False
-            return
+            # return
         
         # max speed capped at 60/128 -- can be changed depending on use case
         rightSpeed = int(controls["rightTread"] * 60)
