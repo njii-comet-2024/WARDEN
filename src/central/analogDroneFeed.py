@@ -1,6 +1,6 @@
 """
 Receives analog drone feed from drone VTX
-Runs on Central Raspberry Pi 2
+Runs on Central Raspberry Pi
 
 @author [Christopher Prol] [@prolvalone]
 

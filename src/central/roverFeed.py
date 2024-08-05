@@ -1,6 +1,6 @@
 """
 Connects to rover and recieves camera locations and video feed over UDP sockets
-Runs on Central Raspberry Pi 1
+Runs on Central Raspberry Pi
 
 @author [Christopher Prol]  [@prolvalone]
 

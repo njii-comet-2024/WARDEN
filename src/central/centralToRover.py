@@ -1,6 +1,6 @@
 """
 Transmits rover controls from central pi to controls pi
-Runs on Central Raspberry Pi 2
+Runs on Central Raspberry Pi
 
 @author [Zoe Rizzo] [@zizz-0]
 

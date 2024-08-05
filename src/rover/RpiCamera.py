@@ -1,6 +1,6 @@
 """
 Rover arducam controls with GUI overlay
-Runs on Camera Raspberry Pi (through Central Raspberry Pi 2 SSH)
+Runs on Camera Raspberry Pi (through Central Raspberry Pi SSH)
 
 @author [Zoe Rizzo] [@zizz-0]
         [Christopher Prol] [@prolvalone]
