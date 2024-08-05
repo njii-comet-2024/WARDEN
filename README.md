@@ -5,10 +5,7 @@
 
 ![WARDEN_Project](WARDEN_logo.png)
 
-# W.A.R.D.E.N. -- COMET 2024
-Wireless Assessment Rover with Drone Extended Network
-
-</br>
+# NJII COMET 2024 Intern Project
 
 https://github.com/njii-comet-2024/WARDEN
 
