@@ -59,13 +59,21 @@ This project is still a work in progress.
 
 ## Controller Components
 
-**Central Raspberry Pi:** Runs programs `centralToRover.py` to send controls to Controls Raspberry Pi, `roverFeed.py` to receive rover video and camera positions from Camera Raspberry Pi, and `droneFeed.py` to receive drone video from Drone Raspberry Pi.
+The system is currently set up using two central Raspberry Pis, two rover Raspberry Pis, one drone Raspberry Pi, and one drone analog video transmitter. The reason for two central Pis is because the ground station uses four screens and Raspberry Pis only have two HDMI ports. This system can be easily modified to only use one central Raspberry Pi by changing the IP address in `roverToCentral.py` to Central Raspberry Pi 1's IP address.
 
-**Controls Raspberry Pi:** Runs program `roverControls.py` to receive controls from Central Raspberry Pi and run them on rover. Sends camera positions to Camera Raspberry Pi.
+<br>
 
-**Camera Raspberry Pi:** Runs program `roverToCentral.py` to receive camera positions from Controls Raspberry Pi and send rover video and camera positions to Central Raspberry Pi.
+**Central Raspberry Pi 1:** Runs programs `roverFeed.py` to receive rover video and camera positions from Camera Raspberry Pi and `droneFeed.py` to receive drone video from Drone Raspberry Pi.
 
-**Drone Raspberry Pi:** Runs `droneToCentral.py` to transmit digital drone video to Central Raspberry Pi.
+**Central Raspberry Pi 2:** Runs program `centralToRover.py` to send controls to Controls Raspberry Pi, receives analog drone video from Drone VTX, and SSH's into Camera Raspberry Pi to run `roverToCentral.py`.
+
+**Controls Raspberry Pi:** Runs program `roverControls.py` to receive controls from Central Raspberry Pi 2 and run them on rover.
+
+**Camera Raspberry Pi:** Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi 1 and send rover video and camera positions to Central Raspberry Pi.
+
+**Drone Raspberry Pi:** Runs `droneToCentral.py` to transmit digital drone video to Central Raspberry Pi 1.
+
+**Drone VTX:** Transmits analog drone video to Central Raspberry Pi 2.
 
 ---
 

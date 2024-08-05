@@ -1,3 +1,15 @@
+"""
+Rover arducam controls with GUI overlay
+Runs on Camera Raspberry Pi (through Central Raspberry Pi 2 SSH)
+
+@author [Zoe Rizzo] [@zizz-0]
+        [Christopher Prol] [@prolvalone]
+        [Vito Tribuzio] [@Snoopy-0]
+        [Soumya Khera] [@soumya-khera]
+
+Date last modified: 08/05/2024
+"""
+
 from picamera2 import Picamera2
 import cv2
 import threading

@@ -1,10 +1,10 @@
 """
-connects to rover and recieves camera locations and video feed over UDP 
-sockets
+Connects to rover and recieves camera locations and video feed over UDP sockets
+Runs on Central Raspberry Pi 1
 
 @author [Christopher Prol]  [@prolvalone]
 
-Date last modified: 07/30/2024
+Date last modified: 08/05/2024
 """
 
 # Libraries
@@ -12,8 +12,6 @@ import socket
 import cv2 as cv
 import numpy as np 
 import base64
-
-ROVER_IP = '192.168.110.78'
 
 """
 This is a class for video reception

@@ -1,12 +1,13 @@
 """
 Receives control code from central and runs on rover
+Runs on Controls Pi
 
 @author [Zoe Rizzo] [@zizz-0]
         [Christopher Prol] [@prolvalone]
-        [vito tribuzio] [@Snoopy-0]
+        [Vito Tribuzio] [@Snoopy-0]
         [Soumya Khera] [@soumya-khera]
 
-Date last modified: 08/02/2024
+Date last modified: 08/05/2024
 """
 # Libraries
 import pickle
@@ -47,7 +48,7 @@ GPIO.setup(M7_ENA, GPIO.OUT)
 # Global variables
 hostName = socket.gethostname()
 IP = socket.gethostbyname(hostName)
-#IP = '10.255.0.27'  # change to controls pi IP
+#IP = '10.255.0.27'  # Controls Pi IP
 PORT = 55555
 
 cameraType = 0

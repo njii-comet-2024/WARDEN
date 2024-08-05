@@ -1,16 +1,17 @@
 """
 Transmits rover controls from central pi to controls pi
+Runs on Central Raspberry Pi 2
 
 @author [Zoe Rizzo] [@zizz-0]
 
-Date last modified: 08/01/2024
+Date last modified: 08/05/2024
 """
  
 import socket
 import pygame
 import pickle
 
-IP = '10.255.0.27' # change to controls pi IP
+IP = '10.255.0.27' # Controls Pi IP
 PORT = 55555
 
 pygame.init()
