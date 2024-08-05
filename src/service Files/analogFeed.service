@@ -1,0 +1,13 @@
+[Unit]
+Description = Runs analog feed from drone on startup
+Requires=network.target
+
+[Service]
+Type=idle
+User=pi
+ExecStart= /usr/bin/python  /home/pi/Desktop/WARDEN/src/central/analogDroneFeed.py
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

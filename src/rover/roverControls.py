@@ -26,9 +26,9 @@ STEPPER_DIR = 17
 STEPPER_DIR_RELAY = 4
 
 # Motor 7 -- Camera Telescope Linear Actuator
-M7_IN1 = 0
-M7_IN2 = 0
-M7_ENA = 0
+M7_IN1 = 26
+M7_IN2 = 19
+M7_ENA = 13
 
 # Wheg stepper motors
 GPIO.setwarnings(False)
@@ -45,7 +45,9 @@ GPIO.setup(M7_IN2, GPIO.OUT)
 GPIO.setup(M7_ENA, GPIO.OUT)
 
 # Global variables
-IP = '10.255.0.27'  # change to controls pi IP
+hostName = socket.gethostname()
+IP = socket.gethostbyname(hostName)
+#IP = '10.255.0.27'  # change to controls pi IP
 PORT = 55555
 
 cameraType = 0
