@@ -89,13 +89,13 @@ class Camera():
     #def set_cam_height(int n1):
        # pass
         
-    def start_preview(self,width=1024,length=600):
+    def startPreview(self,width=1024,length=600):
         self.is_running = True
-        self.capture_ = threading.Thread(target=self.capture_and_preview_thread, args=(width,length,))
+        self.capture_ = threading.Thread(target=self.captureAndPreviewThread, args=(width,length,))
         self.capture_.setDaemon(True)
         self.capture_.start()
 
-    def stop_preview(self): 
+    def stopPreview(self): 
         self.is_running = False
         self.capture_.join()
 
@@ -104,7 +104,7 @@ class Camera():
             self.cam.stop()
             self.cam.close()
 
-    def capture_and_preview_thread(self,width,length):
+    def captureAndPreviewThread(self,width,length):
         global camTilt
         global camRotation
         global camZoom
