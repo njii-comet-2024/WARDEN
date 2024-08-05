@@ -13,6 +13,13 @@ import cv2 as cv
 import numpy as np 
 import base64
 
+
+#These are for WARDEN and should be same for EXT since they are static IPS
+#RoverCam = 192.168.110.169
+#Drone =  192.168.110.???
+#Rover  = 192.168.110.19
+#Central = 192.168.110.???
+
 """
 This is a class for video reception
 """
