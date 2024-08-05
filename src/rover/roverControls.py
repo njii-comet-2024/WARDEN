@@ -15,6 +15,12 @@ import socket
 import RPi.GPIO as GPIO
 from roboclaw_3 import Roboclaw
 
+#These are for WARDEN and should be same for EXT since they are static IPS
+#RoverCam = 192.168.110.169
+#Drone =  192.168.110.???
+#Rover  = 192.168.110.19
+#Central = 192.168.110.???
+
 # PINS
 # IN1 => CLOCKWISE
 # IN2 => COUNTER-CLOCKWISE
