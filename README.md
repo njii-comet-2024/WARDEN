@@ -63,13 +63,13 @@ The system is currently set up using two central Raspberry Pis, two rover Raspbe
 
 <br>
 
-**Central Raspberry Pi 1:** Runs programs `roverFeed.py` to receive rover video and camera positions from Camera Raspberry Pi and `droneFeed.py` to receive drone video from Drone Raspberry Pi.
+**Central Raspberry Pi 1:** Runs programs `roverFeed.py` to receive rover video from Camera Raspberry Pi and `droneFeed.py` to receive drone video from Drone Raspberry Pi.
 
-**Central Raspberry Pi 2:** Runs program `centralToRover.py` to send controls to Controls Raspberry Pi, receives analog drone video from Drone VTX, and SSH's into Camera Raspberry Pi to run `roverToCentral.py`.
+**Central Raspberry Pi 2:** Runs programs `centralToRover.py` to send controls to Controls Raspberry Pi and `analogDroneFeed.py` to receive analog drone video from Drone VTX. Also used to SSH into Camera Raspberry Pi to run `roverToCentral.py`.
 
 **Controls Raspberry Pi:** Runs program `roverControls.py` to receive controls from Central Raspberry Pi 2 and run them on rover.
 
-**Camera Raspberry Pi:** Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi 1 and send rover video and camera positions to Central Raspberry Pi.
+**Camera Raspberry Pi:** Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi 1 and send rover video to Central Raspberry Pi 1.
 
 **Drone Raspberry Pi:** Runs `droneToCentral.py` to transmit digital drone video to Central Raspberry Pi 1.
 
