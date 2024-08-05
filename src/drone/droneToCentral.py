@@ -15,18 +15,18 @@ import numpy as np
 from picamera2 import Picamera2
 
 # Socket parameters
-server_ip = '192.168.110.5'  # Replace with receiver's IP address
-server_port = 5005
+serverIp = '192.168.110.5'  # Replace with receiver's IP address
+serverPort = 5005
 
 # Initialize socket
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect((server_ip, server_port))
-connection = client_socket.makefile('wb')
+clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+clientSocket.connect((serverIp, serverPort))
+connection = clientSocket.makefile('wb')
 
 # Initialize Picamera2
 camera = Picamera2()
-camera_config = camera.create_still_configuration(main={"size": (1024, 600)}, lores={"size": (1024, 600)}, display="lores")
-camera.configure(camera_config)
+cameraConfig = camera.create_still_configuration(main={"size": (1024, 600)}, lores={"size": (1024, 600)}, display="lores")
+camera.configure(cameraConfig)
 camera.start()
 
 try:
@@ -51,5 +51,5 @@ except KeyboardInterrupt:
 finally:
     # Release resources
     connection.close()
-    client_socket.close()
+    clientSocket.close()
     camera.stop()

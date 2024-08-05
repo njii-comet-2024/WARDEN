@@ -64,7 +64,7 @@ class videoReceiver:
 
         #loop for displaying video
         while True:
-            #recieve Packet
+            #receive Packet
             packet,_ = clientSocket.recvfrom(bufferSize)
            
             #decode data
