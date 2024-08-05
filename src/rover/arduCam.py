@@ -19,8 +19,11 @@
 '''
 
 import cv2 #sudo apt-get install python-opencv
+import numpy as py
+import os
 import sys
 import time
+import argparse
 from RpiCamera import Camera
 from Focuser import Focuser
 import curses
