@@ -114,15 +114,24 @@ class Rover:
         global zoomPos, tiltPos, swivelPos, telePos
         ctrls = []
         
-        serializedControls, addr = self.recvSocket.recvfrom(1024)
+        try: 
+            serializedControls, addr = self.recvSocket.recvfrom(1024)
+            controls = pickle.loads(serializedControls)  # deserializes controls
+        except socket.error: 
+            controls = {
+                "leftTread" : 0,
+                "rightTread" : 0,
+                "wheg" : 0,
+                "cameraTelescope" : 0,
+                "end" : 0
+            }
+            
 
         if(addr):
             self.recv += 1
 
         if(self.recv == 1):
             print("Connected to ", addr)
-
-        controls = pickle.loads(serializedControls)  # deserializes controls
 
         if(controls["end"] > 0):
             print("END")
