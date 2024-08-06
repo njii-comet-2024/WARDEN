@@ -1,15 +1,3 @@
-"""
-Rover arducam controls with GUI overlay
-Runs on Camera Raspberry Pi (through Central Raspberry Pi SSH)
-
-@author [Zoe Rizzo] [@zizz-0]
-        [Christopher Prol] [@prolvalone]
-        [Vito Tribuzio] [@Snoopy-0]
-        [Soumya Khera] [@soumya-khera]
-
-Date last modified: 08/05/2024
-"""
-
 from picamera2 import Picamera2
 import cv2
 import threading
@@ -107,13 +95,13 @@ class Camera():
     #def set_cam_height(int n1):
        # pass
         
-    def startPreview(self,width=1024,length=600):
+    def start_preview(self,width=1024,length=600):
         self.is_running = True
-        self.capture_ = threading.Thread(target=self.captureAndPreviewThread, args=(width,length,))
+        self.capture_ = threading.Thread(target=self.capture_and_preview_thread, args=(width,length,))
         self.capture_.setDaemon(True)
         self.capture_.start()
 
-    def stopPreview(self): 
+    def stop_preview(self): 
         self.is_running = False
         self.capture_.join()
 
@@ -122,7 +110,7 @@ class Camera():
             self.cam.stop()
             self.cam.close()
 
-    def captureAndPreviewThread(self,width,length):
+    def capture_and_preview_thread(self,width,length):
         global camTilt
         global camRotation
         global camZoom
