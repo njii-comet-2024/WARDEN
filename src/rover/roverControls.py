@@ -19,7 +19,7 @@ from roboclaw_3 import Roboclaw
 #RoverCam = 192.168.110.169
 #Drone =  192.168.110.???
 #Rover  = 192.168.110.19
-#Central = 192.168.110.???
+#Central = 192.168.110.5
 
 # PINS
 # IN1 => CLOCKWISE
@@ -52,9 +52,7 @@ GPIO.setup(M7_IN2, GPIO.OUT)
 GPIO.setup(M7_ENA, GPIO.OUT)
 
 # Global variables
-hostName = socket.gethostname()
-IP = socket.gethostbyname(hostName)
-#IP = '10.255.0.27'  # Controls Pi IP
+IP = '192.168.110.19'  # Controls Pi IP
 PORT = 55555
 
 cameraType = 0

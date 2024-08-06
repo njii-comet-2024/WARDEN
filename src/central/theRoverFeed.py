@@ -17,7 +17,7 @@ import numpy as np
 #RoverCam = 192.168.110.169
 #Drone =  192.168.110.???
 #Rover  = 192.168.110.19
-#Central = 192.168.110.???
+#Central = 192.168.110.5
 
 #socket parameters
 hostIP = '192.168.110.78'

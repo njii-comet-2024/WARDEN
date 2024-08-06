@@ -10,15 +10,16 @@ Date last modified: 08/05/2024
 import socket
 import pygame
 import pickle
+import sys
 
 
 #These are for WARDEN and should be same for EXT since they are static IPS
 #RoverCam = 192.168.110.169
 #Drone =  192.168.110.???
 #Rover  = 192.168.110.19
-#Central = 192.168.110.???
+#Central = 192.168.110.5
 
-IP = '10.255.0.27' # Controls Pi IP
+IP = '192.168.110.19' # Controls Pi IP
 PORT = 55555
 
 pygame.init()
@@ -122,7 +123,12 @@ class Transmitter:
 
     def sendContinuous(self):
         serializedControls = pickle.dumps(controls)
-        self.sock.sendto(serializedControls, (IP, PORT))
+
+        try:
+            self.sock.sendto(serializedControls, (IP, PORT))
+        except socket.error as e:
+            print("DISCONNECTED -- Error sending data: ", e)
+            sys.exit(1)
 
         val = False
         for x in controls.values():

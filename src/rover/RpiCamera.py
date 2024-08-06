@@ -23,10 +23,10 @@ import base64
 #RoverCam = 192.168.110.169
 #Drone =  192.168.110.???
 #Rover  = 192.168.110.19
-#Central = 192.168.110.???
+#Central = 192.168.110.5
 
-ROVER_IP = '10.255.0.106'
-SERVER_IP = '10.255.0.137'
+IP = '192.168.110.5'
+PORT = 9999
 
 TOP_HORIZ = -70
 TOP_VERT = 0
@@ -154,8 +154,6 @@ class Camera():
         bufferSize = 65536
         clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
-        print(ROVER_IP)
-        PORT = 9999                                 # can change based on possible interference, et
 
         while self.is_running == True:
             buf = self.cam.capture_array()
@@ -188,7 +186,7 @@ class Camera():
 
             message = base64.b64encode(buffer)
                 
-            clientSocket.sendto(message, (SERVER_IP, PORT))
+            clientSocket.sendto(message, (IP, PORT))
 
             keyCode = cv2.waitKey(1)
             if(keyCode == ord('q')):

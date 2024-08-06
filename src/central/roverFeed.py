@@ -18,7 +18,7 @@ import base64
 #RoverCam = 192.168.110.169
 #Drone =  192.168.110.???
 #Rover  = 192.168.110.19
-#Central = 192.168.110.???
+#Central = 192.168.110.5
 
 """
 This is a class for video reception
