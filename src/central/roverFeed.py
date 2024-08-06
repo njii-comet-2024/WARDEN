@@ -20,6 +20,9 @@ import base64
 #Rover  = 192.168.110.19
 #Central = 192.168.110.5
 
+IP = '192.168.110.5'
+PORT = 9999
+
 """
 This is a class for video reception
 """
@@ -36,11 +39,7 @@ class videoReceiver:
         bufferSize = 65536
         serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
-        hostName = socket.gethostname()
-        hostIp = socket.gethostbyname(hostName)
-        print(hostIp)
-        port = 9999
-        socketAddress = (hostIp, port)
+        socketAddress = (IP, PORT)
         serverSocket.bind(socketAddress)
         print('Listening at:', socketAddress)
         
