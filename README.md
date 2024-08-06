@@ -4,6 +4,8 @@
 ---
 
 ![WARDEN_Project](WARDEN_logo.png)
+![NJII](NJII_logo.png)
+![COMET](COMET_logo.jpeg)
 
 # NJII COMET 2024 Intern Project
 
