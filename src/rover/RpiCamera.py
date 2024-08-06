@@ -1,3 +1,15 @@
+"""
+Rover arducam controls with GUI overlay
+Runs on Camera Raspberry Pi (through Central Raspberry Pi SSH)
+
+@author [Zoe Rizzo] [@zizz-0]
+        [Christopher Prol] [@prolvalone]
+        [Vito Tribuzio] [@Snoopy-0]
+        [Soumya Khera] [@soumya-khera]
+
+Date last modified: 08/06/2024
+"""
+
 from picamera2 import Picamera2
 import cv2
 import threading
@@ -9,7 +21,7 @@ import base64
 
 #These are for WARDEN and should be same for EXT since they are static IPS
 #RoverCam = 192.168.110.169
-#Drone =  192.168.110.???
+#Drone =  192.168.110.228
 #Rover  = 192.168.110.19
 #Central = 192.168.110.5
 
@@ -95,13 +107,13 @@ class Camera():
     #def set_cam_height(int n1):
        # pass
         
-    def start_preview(self,width=1024,length=600):
+    def startPreview(self,width=1024,length=600):
         self.is_running = True
-        self.capture_ = threading.Thread(target=self.capture_and_preview_thread, args=(width,length,))
+        self.capture_ = threading.Thread(target=self.captureAndPreviewThread, args=(width,length,))
         self.capture_.setDaemon(True)
         self.capture_.start()
 
-    def stop_preview(self): 
+    def stopPreview(self): 
         self.is_running = False
         self.capture_.join()
 
@@ -110,7 +122,7 @@ class Camera():
             self.cam.stop()
             self.cam.close()
 
-    def capture_and_preview_thread(self,width,length):
+    def captureAndPreviewThread(self,width,length):
         global camTilt
         global camRotation
         global camZoom

@@ -345,11 +345,11 @@ def main():
     camera = Camera()
     #open camera preview
 
-    camera.start_preview(1080,600)
+    camera.startPreview(1080,600)
     time.sleep(1)
     curses.wrapper(draw_menu_focus_map, camera, 1)
 
-    camera.stop_preview()
+    camera.stopPreview()
     camera.close()
 
 if __name__ == "__main__":
