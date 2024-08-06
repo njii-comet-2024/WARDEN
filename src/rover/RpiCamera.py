@@ -109,7 +109,7 @@ class Camera():
         
     def startPreview(self,width=1024,length=600):
         self.is_running = True
-        self.capture_ = threading.Thread(target=self.captureAndPreviewThread, args=(width,length,))
+        self.capture_ = threading.Thread(target=self.captureAndPreviewThread, args=(width,length))
         self.capture_.setDaemon(True)
         self.capture_.start()
 
