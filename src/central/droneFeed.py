@@ -4,7 +4,7 @@ Sets up server for connection with pi on the drone. received video feed from ext
 @author [Vito Tribuzio][@Snoopy-0]
         [Zoe Rizzo][zizz-0]
 
-Date last modified: 07/23/2024
+Date last modified: 08/07/2024
 """
 import cv2 as cv
 import socket
