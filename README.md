@@ -3,7 +3,7 @@
 
 ---
 
-![WARDEN_Project](WARDEN_logo.png)
+![WARDEN_Project](WARDEN_logo_white.png)
 ![NJII](NJII_Logo.png)
 ![COMET](COMET_Logo.jpeg)
 
