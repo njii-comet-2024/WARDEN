@@ -183,10 +183,10 @@ def parseKeyByMap(stdscr,k,focuser:Focuser,camera):
         if confirmed:
             genFocusMap(stdscr, focuser, camera)
             focuser.waitingForFree()
-            foucusMapLoad(stdscr, focuser, camera)
+            focusMapLoad(stdscr, focuser, camera)
         # genFocusMap(stdscr,focuser,camera)
         # focuser.waitingForFree()
-        # foucusMapLoad(stdscr,focuser,camera)
+        # focusMapLoad(stdscr,focuser,camera)
 
 
 def genFocusMap(stdscr,focuser,camera):
@@ -267,7 +267,7 @@ def focusReset(i2c_bus):
     # focuser.set(Focuser.OPT_FOCUS,0)
     return focuser
 
-def foucusMapLoad(stdscr,focuser,camera):
+def focusMapLoad(stdscr,focuser,camera):
     global auto_focus_map
     auto_focus_map.clear()
     data = focuser.read_map()
@@ -276,7 +276,7 @@ def foucusMapLoad(stdscr,focuser,camera):
         time.sleep(3)
         genFocusMap(stdscr,focuser,camera)
         time.sleep(0.01)
-        foucusMapLoad(stdscr,focuser,camera);
+        focusMapLoad(stdscr,focuser,camera);
     else:
         focuser.opts[Focuser.OPT_ZOOM]["MAX_VALUE"] = data[0]
         focuser.opts[Focuser.OPT_FOCUS]["MAX_VALUE"] = data[1]
@@ -292,7 +292,7 @@ def draw_menu_focus_map(stdscr, camera:Camera, i2c_bus):
     # auto_focus = AutoFocus(focuser,camera)
     # auto_focus = None
     if focuser.driver_version() >= 0x104:
-        foucusMapLoad(stdscr,focuser,camera)
+        focusMapLoad(stdscr,focuser,camera)
     else :
         print("firmware version too low!")
         sys.exit(0)
