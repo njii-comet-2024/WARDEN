@@ -5,7 +5,7 @@
 
 ![WARDEN_Project](WARDEN_logo.png)
 
-# NJII COMET 2024 Intern Project
+# NJII COMET Summer 2024 Internship Project
 
 https://github.com/njii-comet-2024/WARDEN
 
@@ -73,6 +73,7 @@ This project is still a work in progress.
 ## Necessary Libraries
 
 - [OpenCV](https://opencv.org/get-started/)
+- [cvzone](https://pypi.org/project/cvzone/)
 - [pygame](https://www.pygame.org/news)
 - [picamera and picamera[array]](https://picamera.readthedocs.io/en/release-1.13/install.html)
 - [RPI.GPIO](https://pypi.org/project/RPi.GPIO/)
