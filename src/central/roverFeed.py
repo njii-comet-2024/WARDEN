@@ -1,5 +1,5 @@
 """
-Connects to rover and recieves camera locations and video feed over UDP sockets
+Connects to rover and receives camera locations and video feed over UDP sockets
 Runs on Central Raspberry Pi
 
 @author [Christopher Prol]  [@prolvalone]
@@ -33,9 +33,9 @@ class videoReceiver:
 
    
     """
-    This function recieves Rover Cam footage from the PI Camera.  USE THIS ONE, NOT THE TOP ONE  
+    This function receives Rover Cam footage from the PI Camera.  USE THIS ONE, NOT THE TOP ONE  
     """
-    def receiveCamFeed():
+    def receiveCamFeed(self):
         bufferSize = 65536
         serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
