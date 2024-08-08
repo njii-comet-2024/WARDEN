@@ -16,6 +16,11 @@
     DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
     OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
     OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+This code has been significantly altered for the WARDEN project's specific needs and uses.  
+
+
 '''
 
 import cv2 #sudo apt-get install python-opencv
