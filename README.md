@@ -18,7 +18,6 @@ This repository holds the control code for the COMET 2024 internship project.
 
 The project, called W.A.R.D.E.N., is a deployable field recon system. It is comprised of a ground rover and aerial vehicle. The objective of the aerial vehicle is to extend the communication range of the ground rover for recon.
 
-
 ![WARDEN](docs/WARDEN.png)
 ![Domain Model](docs/WARDENDomainModel.png)
 ![Controls](docs/controller_diagram.png)
