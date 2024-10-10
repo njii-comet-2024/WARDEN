@@ -52,15 +52,15 @@ def gstreamer_pipeline(
     capture_height=1080,
     display_width=840,
     display_height=560,
-    framerate=30,
+    framerate=60,
     flip_method=0,
 ):
     return (
         "nvarguscamerasrc ! "
         "video/x-raw(memory:NVMM), "
         "width=(int)%d, height=(int)%d, "
-        "format=(string)NV12, framerate=(fraction)%d/1 ! "
-        "queue max-size-buffers=2 ! "
+        "pixelformat=RG10, framerate=(fraction)%d/1 ! "
+        "queue max-size-buffers=2 leaky=upstream ! "
         "nvvidconv flip-method=%d ! "
         "video/x-raw, width=(int)%d, height=(int)%d, format=(string)BGRx ! "
         "videoconvert ! "
