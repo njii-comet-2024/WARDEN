@@ -44,12 +44,6 @@ class videoReceiver:
         print('Listening at:', socketAddress)
         
         while True:
-            
-            #msg, clientAddr = serverSocket.recvfrom(bufferSize)
-            #print('GOT connection from ', clientAddr)
-            WIDTH = 1080
-            HEIGHT = 400
-            #while vid.isOpened():
             #receive Packet
             packet,_ = serverSocket.recvfrom(bufferSize)
         
@@ -68,4 +62,5 @@ class videoReceiver:
         cv.destroyAllWindows()
 
 #serverProgram()
-videoReceiver.receiveCamFeed()
+recv = videoReceiver()
+recv.receiveCamFeed()
