@@ -17,6 +17,8 @@ except ModuleNotFoundError:
 import  threading
 import signal
 import sys
+import socket
+import base64
 from jetson_inference import detectNet
 from jetson_utils import cudaFromNumpy, cudaDeviceSynchronize
 
@@ -26,8 +28,8 @@ from jetson_utils import cudaFromNumpy, cudaDeviceSynchronize
 #Rover  = 192.168.110.19
 #Central = 192.168.110.5
 
-#IP = '10.255.0.102'
-#PORT = 9999
+IP = '10.255.0.102'
+PORT = 9999
 
 TOP_HORIZ = -70
 TOP_VERT = 0
@@ -132,6 +134,11 @@ class Previewer(threading.Thread):
         hudTopIndicator = cv2.resize(hudTopIndicator, (0, 0), None, .5, .5)
         infoBackground = cv2.resize(infoBackground, (0, 0), None, .9, .9)
         
+        #Connect to server Socket
+        bufferSize = 65536
+        clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, bufferSize)
+        
         self._running = True
         while self._running:
             frame = self.camera.getFrame(2000)
@@ -167,6 +174,13 @@ class Previewer(threading.Thread):
             imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [-15, (camTilt * 5) - 500])
 
             cv2.imshow(self.window_name, imgResult)
+            
+            frame = imgResult
+            frame = cv2.resize(frame, (1024, 600))
+            encoded, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 20])
+            message = base64.b64encode(buffer)
+            clientSocket.sendto(message, (IP, PORT))
+            
             keyCode = cv2.waitKey(16) & 0xFF
         cv2.destroyWindow(self.window_name)
 
