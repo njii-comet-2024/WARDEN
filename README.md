@@ -7,7 +7,7 @@
 
 # NJII COMET Summer 2024 Internship Project
 
-![W.A.R.D.E.N. Presentation](docs/WARDEN_presentation.pdf)
+Click ![here](docs/WARDEN_presentation.pdf) to view the full in-depth project report presentation from research to final designs.
 
 ---
 
