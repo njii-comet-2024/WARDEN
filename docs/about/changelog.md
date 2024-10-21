@@ -66,3 +66,25 @@ This release expands on previous releases and includes an arduino to run motor c
 **Bugfixes**
 
 - Switched from picam to picam2 for compatibility with OpenCV, NumPy, and Python3
+
+## Version 1.0.0 (08/08/2024)
+
+This release completes all the basic goals of the project and is now considered fully functional.
+
+
+**Features**
+
+- Switched from Arduino motor control to Raspberry Pi 
+- Rover control code finalized
+- Ground station implemented to receive both vehicle feeds simultaneously and send camera/movement controls to ground vehicle
+- Arducam PTZ camera implemented on ground vehicle with reactive GUI
+
+
+**Minor Changes**
+
+- Diagrams and documentation updated
+
+
+**Bugfixes**
+
+- No longer using Arduinos
