@@ -107,6 +107,8 @@ Single line comment before any complex code blocks.
 
 Variables, functions, and classes should be named using camel case (e.g. camelCase).
 
+---
+
 ## Project Progress
 
 This project is ongoing since June 2024. Currently, all of the basic goals have been met and the system is fully functioning.
