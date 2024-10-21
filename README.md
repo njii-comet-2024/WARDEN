@@ -73,8 +73,12 @@ The project, called W.A.R.D.E.N., is a deployable field recon system. It is comp
 - [OpenCV](https://opencv.org/get-started/)
 - [cvzone](https://pypi.org/project/cvzone/)
 - [pygame](https://www.pygame.org/news)
-- [picamera and picamera[array]](https://picamera.readthedocs.io/en/release-1.13/install.html)
+- ~~[picamera and picamera[array]](https://picamera.readthedocs.io/en/release-1.13/install.html)~~ Only used with Raspberry Pi
 - [RPI.GPIO](https://pypi.org/project/RPi.GPIO/)
+
+Used with NVIDIA Jetson Orin Nano:
+- [jetson-utils](https://github.com/dusty-nv/jetson-utils)
+- [jetson-inference](https://github.com/dusty-nv/jetson-inference)
 
 ---
 

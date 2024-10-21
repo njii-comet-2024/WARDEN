@@ -88,3 +88,23 @@ This release completes all the basic goals of the project and is now considered 
 **Bugfixes**
 
 - No longer using Arduinos
+
+## Version 1.1.0 (10/21/2024)
+
+This release focuses on camera functionality by implementing basic object detection.
+
+
+**Features**
+
+- Swapped Camera Raspberry Pi with NVIDIA Jetson Orin Nano
+- Added AI object detection overlayed on video stream using Jetson Inference detectNet
+
+
+**Minor Changes**
+
+- Updated documentation
+
+
+**Bugfixes**
+
+- 
