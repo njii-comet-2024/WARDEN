@@ -13,7 +13,7 @@
 
 ## Description
 
-This repository holds the control code for the COMET 2024 internship project. 
+This repository holds the control and communication code for the COMET 2024 internship project. This is an ongoing project.
 
 
 The project, called W.A.R.D.E.N., is a deployable field recon system. It is comprised of a ground rover and aerial vehicle. The objective of the aerial vehicle is to extend the communication range of the ground rover for recon.
@@ -106,3 +106,9 @@ Single line comment before any complex code blocks.
 ### Naming Conventions
 
 Variables, functions, and classes should be named using camel case (e.g. camelCase).
+
+## Project Progress
+
+This project is ongoing since June 2024. Currently, all of the basic goals have been met and the system is fully functioning.
+
+Ongoing and future changes surround the rover camera. The Camera Raspberry Pi has been swapped out with an NVIDIA Jetson Orin Nano to implement object detection and, in the future, possibly autonomy or semi-autonomy.
