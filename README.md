@@ -5,7 +5,7 @@
 
 ![WARDEN_Project](WARDEN_logo.png)
 
-# NJII COMET Summer 2024 Internship Project
+# NJII COMET Summer/Fall 2024 Internship Project
 
 Click ![here](docs/WARDEN_presentation.pdf) to view the full in-depth project report presentation from research to final designs.
 
@@ -76,7 +76,7 @@ The project, called W.A.R.D.E.N., is a deployable field recon system. It is comp
 
 ## Controller Components
 
-**Central Raspberry Pi:** Runs programs `roverFeed.py` to receive rover video from Camera Raspberry Pi, `centralToRover.py` to send controls to Controls Raspberry Pi, `droneFeed.py` to receive drone video from Drone Raspberry Pi, and `analogDroneFeed.py` to receive analog drone video from Drone VTX. Also used to SSH into Camera Raspberry Pi to run `roverToCentral.py`.
+**Central Raspberry Pi:** Runs programs `roverFeed.py` to receive rover video from ~~Camera Raspberry Pi~~ Camera Jetson, `centralToRover.py` to send controls to Controls Raspberry Pi, `droneFeed.py` to receive drone video from Drone Raspberry Pi, and `analogDroneFeed.py` to receive analog drone video from Drone VTX. Also used to SSH into ~~Camera Raspberry Pi~~ Camera Jetson to run `roverToCentral.py`.
 
 **Controls Raspberry Pi:** Runs program `roverControls.py` to receive controls from Central Raspberry Pi and run them on rover.
 
