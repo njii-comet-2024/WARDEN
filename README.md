@@ -11,6 +11,18 @@ Click ![here](docs/WARDEN_presentation.pdf) to view the full in-depth project re
 
 ---
 
+## Contents
+[Description](#description)
+[Goals](#goals)
+[Definitions](#definitions)
+[Controller Components](#controller-components)
+[Necessary Libraries](#necessary-libraries)
+[Changelog](#changelog)
+[Standards](#standards)
+[Project Progress](#project-progress)
+
+---
+
 ## Description
 
 This repository holds the control and communication code for the COMET 2024 internship project. This is an ongoing project.
@@ -60,11 +72,19 @@ The project, called W.A.R.D.E.N., is a deployable field recon system. It is comp
 
 **Controls Raspberry Pi:** Runs program `roverControls.py` to receive controls from Central Raspberry Pi and run them on rover.
 
-**Camera Raspberry Pi:** Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi and send rover back video to Central Raspberry Pi.
+~~**Camera Raspberry Pi:** Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi and send rover back video to Central Raspberry Pi.~~ *Replaced with NVIDIA Jetson Orin Nano*
 
 **Drone Raspberry Pi:** Runs `droneToCentral.py` to transmit digital drone video to Central Raspberry Pi.
 
 **Drone VTX:** Transmits analog drone video to Central Raspberry Pi.
+
+**Camera Jetson:** Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi and send rover back video to Central Raspberry Pi.
+
+
+### The switch to NVIDIA Jetson
+The Camera Raspberry Pi was replaced with an NVIDIA Jetson Orin Nano to implement real-time object detection.
+
+All Raspberry Pi programs are saved in this [folder](src\rover\raspi_cam_archive).
 
 ---
 
@@ -85,6 +105,8 @@ Used with NVIDIA Jetson Orin Nano:
 ## Changelog
 
 Major changes will be documented in the ![Changelog](docs/about/changelog.md). These changes will be tagged as a new version.
+
+Current Version: v1.1.0
 
 ---
 
