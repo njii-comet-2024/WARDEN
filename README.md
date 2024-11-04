@@ -12,13 +12,21 @@ Click ![here](docs/WARDEN_presentation.pdf) to view the full in-depth project re
 ---
 
 ## Contents
+
 [Description](#description)
+
 [Goals](#goals)
+
 [Definitions](#definitions)
+
 [Controller Components](#controller-components)
+
 [Necessary Libraries](#necessary-libraries)
+
 [Changelog](#changelog)
+
 [Standards](#standards)
+
 [Project Progress](#project-progress)
 
 ---
