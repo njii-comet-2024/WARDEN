@@ -92,7 +92,7 @@ The project, called W.A.R.D.E.N., is a deployable field recon system. It is comp
 ### The Switch to NVIDIA Jetson
 The Camera Raspberry Pi was replaced with an NVIDIA Jetson Orin Nano to implement real-time object detection.
 
-All Raspberry Pi programs are saved in this [folder](src\rover\raspi_cam_archive).
+All Raspberry Pi programs are saved in this [folder](src/rover/raspi_cam_archive).
 
 ---
 
