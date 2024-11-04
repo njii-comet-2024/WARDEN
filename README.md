@@ -80,7 +80,7 @@ The project, called W.A.R.D.E.N., is a deployable field recon system. It is comp
 
 **Controls Raspberry Pi:** Runs program `roverControls.py` to receive controls from Central Raspberry Pi and run them on rover.
 
-~~**Camera Raspberry Pi:** Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi and send rover back video to Central Raspberry Pi.~~ *Replaced with NVIDIA Jetson Orin Nano*
+~~**Camera Raspberry Pi:** Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi and send rover back video to Central Raspberry Pi.~~ *Replaced with NVIDIA Jetson Orin Nano.*
 
 **Drone Raspberry Pi:** Runs `droneToCentral.py` to transmit digital drone video to Central Raspberry Pi.
 
@@ -89,7 +89,7 @@ The project, called W.A.R.D.E.N., is a deployable field recon system. It is comp
 **Camera Jetson:** Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi and send rover back video to Central Raspberry Pi.
 
 
-### The switch to NVIDIA Jetson
+### The Switch to NVIDIA Jetson
 The Camera Raspberry Pi was replaced with an NVIDIA Jetson Orin Nano to implement real-time object detection.
 
 All Raspberry Pi programs are saved in this [folder](src\rover\raspi_cam_archive).
