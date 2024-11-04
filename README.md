@@ -7,18 +7,19 @@
 
 # NJII COMET Summer 2024 Internship Project
 
-https://github.com/njii-comet-2024/WARDEN
+Click ![here](docs/WARDEN_presentation.pdf) to view the full in-depth project report presentation from research to final designs.
 
 ---
 
 ## Description
 
-This repository holds the control code for the COMET 2024 internship project. 
+This repository holds the control and communication code for the COMET 2024 internship project. This is an ongoing project.
 
 
 The project, called W.A.R.D.E.N., is a deployable field recon system. It is comprised of a ground rover and aerial vehicle. The objective of the aerial vehicle is to extend the communication range of the ground rover for recon.
 
-![WARDEN](docs/WARDEN.png)
+![W.A.R.D.E.N. Poster](docs/WARDEN_poster.png)
+![W.A.R.D.E.N.](docs/WARDEN.png)
 ![Domain Model](docs/WARDENDomainModel.png)
 ![Controls](docs/controller_diagram.png)
 
@@ -72,8 +73,12 @@ The project, called W.A.R.D.E.N., is a deployable field recon system. It is comp
 - [OpenCV](https://opencv.org/get-started/)
 - [cvzone](https://pypi.org/project/cvzone/)
 - [pygame](https://www.pygame.org/news)
-- [picamera and picamera[array]](https://picamera.readthedocs.io/en/release-1.13/install.html)
+- ~~[picamera and picamera[array]](https://picamera.readthedocs.io/en/release-1.13/install.html)~~ Only used with Raspberry Pi
 - [RPI.GPIO](https://pypi.org/project/RPi.GPIO/)
+
+Used with NVIDIA Jetson Orin Nano:
+- [jetson-utils](https://github.com/dusty-nv/jetson-utils)
+- [jetson-inference](https://github.com/dusty-nv/jetson-inference)
 
 ---
 
@@ -105,3 +110,11 @@ Single line comment before any complex code blocks.
 ### Naming Conventions
 
 Variables, functions, and classes should be named using camel case (e.g. camelCase).
+
+---
+
+## Project Progress
+
+This project is ongoing since June 2024. Currently, all of the basic goals have been met and the system is fully functioning.
+
+Ongoing and future changes surround the rover camera. The Camera Raspberry Pi has been swapped out with an NVIDIA Jetson Orin Nano to implement object detection and, in the future, possibly autonomy or semi-autonomy.
