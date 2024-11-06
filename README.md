@@ -87,21 +87,18 @@ The project, called W.A.R.D.E.N., is a deployable field recon system. It is comp
 
 Runs programs `roverFeed.py` to receive rover video from ~~Camera Raspberry Pi~~ Camera Jetson, `centralToRover.py` to send controls to Controls Raspberry Pi, `droneFeed.py` to receive drone video from Drone Raspberry Pi, and `analogDroneFeed.py` to receive analog drone video from Drone VTX. Also used to SSH into ~~Camera Raspberry Pi~~ Camera Jetson to run `roverToCentral.py`.
 
-~~**Controls Arduino**  *(Arduino Uno)*~~
+~~**Controls Arduino**  *(Arduino Uno)*~~ *Replaced with Raspberry Pi*
 
 ~~Runs program `roverControls.py` to receive controls from Central Raspberry Pi and run them on rover.~~ 
 
-*Replaced with Raspberry Pi*
 
 **Controls Raspberry Pi**  *(Raspberry Pi 4)*
 
 Runs program `roverControls.py` to receive controls from Central Raspberry Pi and run them on rover.
 
-~~**Camera Raspberry Pi:**  *(Raspberry Pi 4)*~~
+~~**Camera Raspberry Pi:**  *(Raspberry Pi 4)*~~ *Replaced with NVIDIA Jetson.*
 
 ~~Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi and send rover back video to Central Raspberry Pi.~~ 
-
-*Replaced with NVIDIA Jetson Orin Nano.*
 
 **Camera Jetson**  *(NVIDIA Jetson Orin Nano)*
 
