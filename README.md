@@ -203,17 +203,17 @@ Steps to install and build OpenCV for this project on Orin Nano:
 
 1. Download and install OpenCV:
 
-`cd ~`
-`wget -O opencv.zip https://github.com/opencv/opencv/archive/refs/heads/master.zip`
-`unzip opencv.zip`
+`cd ~`\
+`wget -O opencv.zip https://github.com/opencv/opencv/archive/refs/heads/master.zip`\
+`unzip opencv.zip`\
 `cd opencv-master`
 
 2. Install dependencies for GTK+ and GStreamer:
 
-`sudo apt-get update`
-`sudo apt-get install -y libgtk2.0-dev pkg-config`
-`sudo apt-get install -y libgtk-3-dev`
-`sudo apt-get install cmake g++ wget unzip`
+`sudo apt-get update`\
+`sudo apt-get install -y libgtk2.0-dev pkg-config`\
+`sudo apt-get install -y libgtk-3-dev`\
+`sudo apt-get install cmake g++ wget unzip`\
 `sudo apt-get install libopencv-dev gstreamer1.0-tools gstreamer1.0-plugins-base`
 
 3. Ensure GStreamer path is accessible:
@@ -238,9 +238,9 @@ Confirm the changes were successful:
 
 4. Clean (if already exists) and create your build directory:
 
-`cd ~/opencv-master`
-`rm -rf build`
-`mkdir build`
+`cd ~/opencv-master`\
+`rm -rf build`\
+`mkdir build`\
 `cd build`
 
 5. Configure the build with GTK+ and GStreamer enabled:
@@ -249,7 +249,7 @@ Confirm the changes were successful:
 
 6. Build and install OpenCV:
 
-`make -j4`
+`make -j4`\
 `sudo make install`
 
 7. Verify installation:
