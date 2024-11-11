@@ -201,14 +201,14 @@ OpenCV needs to be built with GStreamer and GTK+ enabled.
 
 Steps to install and build OpenCV for this project on Orin Nano:
 
-\1. Download and install OpenCV:
+1. Download and install OpenCV:
 
 `cd ~`\
 `wget -O opencv.zip https://github.com/opencv/opencv/archive/refs/heads/master.zip`\
 `unzip opencv.zip`\
 `cd opencv-master`
 
-\2. Install dependencies for GTK+ and GStreamer:
+2. Install dependencies for GTK+ and GStreamer:
 
 `sudo apt-get update`\
 `sudo apt-get install -y libgtk2.0-dev pkg-config`\
@@ -216,7 +216,7 @@ Steps to install and build OpenCV for this project on Orin Nano:
 `sudo apt-get install cmake g++ wget unzip`\
 `sudo apt-get install libopencv-dev gstreamer1.0-tools gstreamer1.0-plugins-base`
 
-\3. Ensure GStreamer path is accessible:
+3. Ensure GStreamer path is accessible:
 
 `echo $LD_LIBRARY_PATH`
 
@@ -236,23 +236,23 @@ Confirm the changes were successful:
 
 `echo $LD_LIBRARY_PATH`
 
-\4. Clean (if already exists) and create your build directory:
+4. Clean (if already exists) and create your build directory:
 
 `cd ~/opencv-master`\
 `rm -rf build`\
 `mkdir build`\
 `cd build`
 
-\5. Configure the build with GTK+ and GStreamer enabled:
+5. Configure the build with GTK+ and GStreamer enabled:
 
 `cmake -D WITH_GSTREAMER=ON -D WITH_QT=OFF -D WITH_GTK=ON -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local ..`
 
-\6. Build and install OpenCV:
+6. Build and install OpenCV:
 
 `make -j4`\
 `sudo make install`
 
-\7. Verify installation:
+7. Verify installation:
 
 `python3 -c "import cv2; print(cv2.getBuildInformation())"`
 
