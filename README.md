@@ -34,9 +34,9 @@ Click ![here](docs/WARDEN_presentation.pdf) to view the full in-depth project re
 
 [Standards](#standards)
 
-[Project Progress](#project-progress)
-
 [NVIDIA Jetson Orin Nano Setup](#setting-up-nvidia-jetson-orin-nano)
+
+[Project Progress](#project-progress)
 
 ---
 
@@ -116,10 +116,8 @@ Transmits analog drone video to Central Raspberry Pi.
 
 
 ### The Switch to NVIDIA Jetson
-The Camera Raspberry Pi was replaced with an NVIDIA Jetson Orin Nano to implement real-time object detection.
-
-All Raspberry Pi programs are saved in this [folder](src/rover/raspi_cam_archive).
-
+The Camera Raspberry Pi was replaced with an NVIDIA Jetson Orin Nano to implement real-time object detection.\
+All Raspberry Pi programs are saved in this [folder](src/rover/raspi_cam_archive).\
 Orin Nano setup information can be found [here](#setting-up-nvidia-jetson-orin-nano).
 
 ---
@@ -171,20 +169,11 @@ Variables, functions, and classes should be named using camel case (e.g. camelCa
 
 ---
 
-## Project Progress
-
-This project is ongoing since June 2024. Currently, all of the basic goals have been met and the system is fully functioning.
-
-Ongoing and future changes surround the rover camera. The Camera Raspberry Pi has been swapped out with an NVIDIA Jetson Orin Nano to implement object detection and, in the future, possibly autonomy or semi-autonomy.
-
----
-
 ## Setting Up NVIDIA Jetson Orin Nano
 
 NVIDIA Jetson Nanos can be a bit complicated to set up.
 
-To flash a new Orin Nano, follow [this tutorial](https://developer.nvidia.com/embedded/learn/jetson-orin-nano-devkit-user-guide/software_setup.html). It requires a host machine that runs Ubuntu.
-
+To flash a new Orin Nano, follow [this tutorial](https://developer.nvidia.com/embedded/learn/jetson-orin-nano-devkit-user-guide/software_setup.html). It requires a host machine that runs Ubuntu.\
 Any other set-up issues can be resolved by searching through [this guide](https://developer.nvidia.com/embedded/learn/get-started-jetson-orin-nano-devkit).
 
 ### Camera Initialization
@@ -263,3 +252,11 @@ Confirm the changes were successful:
 `python3 -c "import cv2; print(cv2.getBuildInformation())"`
 
 Look for GTK+ and GStreamer. Both should show they are enabled by specifying "ON"
+
+---
+
+## Project Progress
+
+This project is ongoing since June 2024. Currently, all of the basic goals have been met and the system is fully functioning.
+
+Ongoing and future changes surround the rover camera. The Camera Raspberry Pi has been swapped out with an NVIDIA Jetson Orin Nano to implement object detection and, in the future, possibly autonomy or semi-autonomy.
