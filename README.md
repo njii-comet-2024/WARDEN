@@ -36,6 +36,8 @@ Click ![here](docs/WARDEN_presentation.pdf) to view the full in-depth project re
 
 [Project Progress](#project-progress)
 
+[NVIDIA Jetson Orin Nano Setup](#setting-up-nvidia-jetson-orin-nano)
+
 ---
 
 ## Description
@@ -118,6 +120,8 @@ The Camera Raspberry Pi was replaced with an NVIDIA Jetson Orin Nano to implemen
 
 All Raspberry Pi programs are saved in this [folder](src/rover/raspi_cam_archive).
 
+Orin Nano setup information can be found [here](#setting-up-nvidia-jetson-orin-nano).
+
 ---
 
 ## Necessary Libraries
@@ -172,3 +176,84 @@ Variables, functions, and classes should be named using camel case (e.g. camelCa
 This project is ongoing since June 2024. Currently, all of the basic goals have been met and the system is fully functioning.
 
 Ongoing and future changes surround the rover camera. The Camera Raspberry Pi has been swapped out with an NVIDIA Jetson Orin Nano to implement object detection and, in the future, possibly autonomy or semi-autonomy.
+
+---
+
+## Setting Up NVIDIA Jetson Orin Nano
+
+NVIDIA Jetson Nanos can be a bit complicated to set up.
+
+To flash a new Orin Nano, follow [this tutorial](https://developer.nvidia.com/embedded/learn/jetson-orin-nano-devkit-user-guide/software_setup.html). It requires a host machine that runs Ubuntu.
+
+Any other set-up issues can be resolved by searching through [this guide](https://developer.nvidia.com/embedded/learn/get-started-jetson-orin-nano-devkit).
+
+### Camera Initialization
+
+Jetsons can be very picky with supported cameras. For Orin Nanos, many USB webcams are plug-and-play compatible. However, not many CSI cameras are plug-and-play since it can only support certain camera sensors. View [this list](https://developer.nvidia.com/embedded/jetson-partner-supported-cameras?t-1_supported-jetson-products=Orin) to see which cameras are compatible. Currently, this project uses an [Arducam B016712MP](https://www.uctronics.com/arducam-12mp-pan-tilt-zoom-ptz-camera-for-raspberry-pi-and-jetson-nano-b016712mp.html) (which uses an IMX477 sensor).
+
+#### Arducam IMX477 Driver
+
+ADD INFO HERE
+
+### OpenCV
+
+OpenCV needs to be built with GStreamer and GTK+ enabled.
+
+Steps to install and build OpenCV for this project on Orin Nano:
+
+1. Download and install OpenCV:
+
+`cd ~`
+`wget -O opencv.zip https://github.com/opencv/opencv/archive/refs/heads/master.zip`
+`unzip opencv.zip`
+`cd opencv-master`
+
+2. Install dependencies for GTK+ and GStreamer:
+
+`sudo apt-get update`
+`sudo apt-get install -y libgtk2.0-dev pkg-config`
+`sudo apt-get install -y libgtk-3-dev`
+`sudo apt-get install cmake g++ wget unzip`
+`sudo apt-get install libopencv-dev gstreamer1.0-tools gstreamer1.0-plugins-base`
+
+3. Ensure GStreamer path is accessible:
+
+`echo $LD_LIBRARY_PATH`
+
+You should see paths like `/usr/local/lib` or `/usr/lib/gstreamer-1.0/` in the output. If not, you will need to add LD_LIBRARY_PATH to the shell profile file:
+
+`nano ~/.bashrc`
+
+Add the following line to the end of the file:
+
+`export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/gstreamer-1.0:$LD_LIBRARY_PATH`
+
+Apply the changes:
+
+`source ~/.bashrc`
+
+Confirm the changes were successful:
+
+`echo $LD_LIBRARY_PATH`
+
+4. Clean (if already exists) and create your build directory:
+
+`cd ~/opencv-master`
+`rm -rf build`
+`mkdir build`
+`cd build`
+
+5. Configure the build with GTK+ and GStreamer enabled:
+
+`cmake -D WITH_GSTREAMER=ON -D WITH_QT=OFF -D WITH_GTK=ON -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local ..`
+
+6. Build and install OpenCV:
+
+`make -j4`
+`sudo make install`
+
+7. Verify installation:
+
+`python3 -c "import cv2; print(cv2.getBuildInformation())"`
+
+Look for GTK+ and GStreamer. Both should show they are enabled by specifying "ON"
