@@ -23,6 +23,10 @@
     OR OTHER DEALINGS IN THE SOFTWARE.
 '''
 
+"""
+This code has been significantly altered for the WARDEN project's specific needs and uses.
+Runs `JetsonCamera.py` to send camera frames from rover to central.
+"""
 import cv2
 import numpy as py
 import os

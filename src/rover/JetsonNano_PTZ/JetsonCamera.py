@@ -5,6 +5,10 @@
 # NVIDIA Jetson Nano Developer Kit using OpenCV
 # Drivers for the camera and OpenCV are included in the base image
 
+"""
+This code has been significantly altered for the WARDEN project's specific needs and uses.
+Camera GUI, object detection, UDP streaming from rover to central. Camera controls in `FocuserExample.py`.
+"""
 import cv2
 import cvzone
 import time
