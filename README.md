@@ -193,7 +193,13 @@ Jetsons can be very picky with supported cameras. For Orin Nanos, many USB webca
 
 #### Arducam IMX477 Driver
 
-ADD INFO HERE
+Check the [Arducam MIPI GitHub](https://github.com/ArduCAM/MIPI_Camera/releases) or official drivers. Make sure to download the driver that is compatible with the version of JetPack the Jetson is running. Currently, only JetPack versions up to 5.15 are supported on that list.
+
+For JetPack 6, use [this driver](https://drive.google.com/file/d/1gqm25pW37vRDFeogCUQRs3GYsN5l7CZl/view).
+
+Run the following command to install the downloaded driver:
+
+`sudo dpkg -i <DRIVER_PATH>`
 
 ### OpenCV
 

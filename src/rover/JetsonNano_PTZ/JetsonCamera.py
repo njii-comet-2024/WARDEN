@@ -23,6 +23,7 @@ from jetson_inference import detectNet
 from jetson_utils import cudaFromNumpy, cudaDeviceSynchronize
 from PlantNet300k.utils import load_model
 from torchvision.models import resnet18
+import torch.nn.functional as F
 from PIL import Image, ImageDraw, ImageFont
 from torchvision import transforms
 import torch
@@ -202,15 +203,20 @@ class Previewer(threading.Thread):
             # Run the model and get predictions
             with torch.no_grad():
                 output = self.model(input_tensor)
-            _, predicted_class = torch.max(output, 1)
-            predicted_class = predicted_class.item()
+                probabilities = F.softmax(output, dim=1)  # Get class probabilities
+                confidence, predicted_class = torch.max(probabilities, 1)  # Get max probability and class
+                confidence = confidence.item()  # Get the confidence score as a float
+                predicted_class = predicted_class.item()  # Get the class index as an integer
 
-            # Get species name from class index
-            species_id = self.class_idx_to_species_id.get(str(predicted_class))
-            species_name = self.species_id_to_name.get(str(species_id), "Unknown Species")
-            
-            # Draw the prediction on the frame
-            cv2.putText(frame, f"Species: {species_name}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+            confidence_threshold = 0.8
+
+            if confidence >= confidence_threshold:
+                # Get species name from class index
+                species_id = self.class_idx_to_species_id.get(str(predicted_class))
+                species_name = self.species_id_to_name.get(str(species_id), "Unknown Species")
+                
+                # Draw the prediction on the frame
+                cv2.putText(frame, f"Species: {species_name}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
                 
             imgResult = cvzone.overlayPNG(frame, hudTop, [210, -85])  # Adds top HUD
             imgResult = cvzone.overlayPNG(imgResult, hudSide, [-130, 120])  # Adds side HUD
