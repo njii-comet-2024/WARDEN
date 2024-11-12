@@ -85,29 +85,23 @@ The project, called W.A.R.D.E.N., is a deployable field recon system. It is comp
 
 ## Controller Components
 
-**Central Raspberry Pi** *(Raspberry Pi 4)*
-
+**Central Raspberry Pi** *(Raspberry Pi 4)*\
 Runs programs `roverFeed.py` to receive rover video from ~~Camera Raspberry Pi~~ Camera Jetson, `centralToRover.py` to send controls to Controls Raspberry Pi, `droneFeed.py` to receive drone video from Drone Raspberry Pi, and `analogDroneFeed.py` to receive analog drone video from Drone VTX. Also used to SSH into ~~Camera Raspberry Pi~~ Camera Jetson to run `roverToCentral.py`.
 
-~~**Controls Arduino**  *(Arduino Uno)*~~ *Replaced with Raspberry Pi*
-
+~~**Controls Arduino**  *(Arduino Uno)*~~ *Replaced with Raspberry Pi*\
 ~~Runs program `roverControls.py` to receive controls from Central Raspberry Pi and run them on rover.~~ 
 
 
-**Controls Raspberry Pi**  *(Raspberry Pi 4)*
-
+**Controls Raspberry Pi**  *(Raspberry Pi 4)*\
 Runs program `roverControls.py` to receive controls from Central Raspberry Pi and run them on rover.
 
-~~**Camera Raspberry Pi:**  *(Raspberry Pi 4)*~~ *Replaced with NVIDIA Jetson.*
-
+~~**Camera Raspberry Pi:**  *(Raspberry Pi 4)*~~ *Replaced with NVIDIA Jetson.*\
 ~~Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi and send rover back video to Central Raspberry Pi.~~ 
 
-**Camera Jetson**  *(NVIDIA Jetson Orin Nano)*
-
+**Camera Jetson**  *(NVIDIA Jetson Orin Nano)*\
 Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi and send rover back video to Central Raspberry Pi.
 
-**Drone Raspberry Pi**  *(Raspberry Pi Zero 2 W)*
-
+**Drone Raspberry Pi**  *(Raspberry Pi Zero 2 W)*\
 Runs `droneToCentral.py` to transmit digital drone video to Central Raspberry Pi.
 
 **Drone VTX** *([Rush Tank VTX 2.5w](https://www.amazon.com/Transmitter-Shell-Range-MultiRotor-Racing/dp/B0BRMMLVR2?crid=2CTFRSN8RZNY0&dib=eyJ2IjoiMSJ9.Ep95uNd_KIHQ_NfudOZkjacavk7IkO_HMLPncmSX4hPKJ7Htd1LIK6H60x-WQMAeLTqYsmTw-XttnXRyoeSBf7geDy-LK4m_Ot7ZY2xFTCmQStFHR1gcZK11FN3HuXEgWWCtCvLa-8XcAixjIzq05hXqyFlu579TaomtrKd2cAn0pWcRIo_2wtbg_gsOlwL5Lc7x0el0ZRvYCgYxnk1uQhFR9Y4B7VhYjrmgjpxs0zaKD-AAqNF5AVHNj0A6pspWuaGRUK2ncWSxe_jBvZKSVhbM2KBv1PThUY9bGBp_F8I.aXfZaHTuSs1NUDGYdNQBMw6FXfqc_P9ZIj2S3TazcPQ&dib_tag=se&keywords=rush+tank+solo&qid=1719510570&sprefix=rush+tank+solo%2Caps%2C142&sr=8-1))*
