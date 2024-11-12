@@ -198,18 +198,22 @@ Steps to install and build OpenCV for this project on Orin Nano:
 
 1. Download and install OpenCV:
 
-`cd ~`\
-`wget -O opencv.zip https://github.com/opencv/opencv/archive/refs/heads/master.zip`\
-`unzip opencv.zip`\
-`cd opencv-master`
+```
+cd ~
+wget -O opencv.zip https://github.com/opencv/opencv/archive/refs/heads/master.zip
+unzip opencv.zip
+cd opencv-master
+```
 
 2. Install dependencies for GTK+ and GStreamer:
 
-`sudo apt-get update`\
-`sudo apt-get install -y libgtk2.0-dev pkg-config`\
-`sudo apt-get install -y libgtk-3-dev`\
-`sudo apt-get install cmake g++ wget unzip`\
-`sudo apt-get install libopencv-dev gstreamer1.0-tools gstreamer1.0-plugins-base`
+```
+sudo apt-get update
+sudo apt-get install cmake g++ wget unzip
+sudo apt-get install libopencv-dev gstreamer1.0-tools gstreamer1.0-plugins-base
+sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-good1.0-dev libgstreamer-plugins-bad1.0-dev libgstreamer-plugins-ugly1.0-dev
+sudo apt-get install -y libgtk2.0-dev libgtk-3-dev libcanberra-gtk3-dev pkg-config
+```
 
 3. Ensure GStreamer path is accessible:
 
@@ -233,19 +237,30 @@ Confirm the changes were successful:
 
 4. Clean (if already exists) and create your build directory:
 
-`cd ~/opencv-master`\
-`rm -rf build`\
-`mkdir build`\
-`cd build`
+```
+cd ~/opencv-master
+rm -rf build
+mkdir build
+cd build
+```
 
 5. Configure the build with GTK+ and GStreamer enabled:
 
-`cmake -D WITH_GSTREAMER=ON -D WITH_QT=OFF -D WITH_GTK=ON -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local ..`
+```
+cmake -D WITH_GSTREAMER=ON -D WITH_GTK=ON -D CMAKE_BUILD_TYPE=Release \
+      -D CMAKE_INSTALL_PREFIX=/usr/local \
+      -D PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig:/usr/local/lib/pkgconfig \
+      -D CMAKE_PREFIX_PATH=/usr/lib/aarch64-linux-gnu \
+      -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
+      -D BUILD_opencv_xfeatures2d=OFF ..
+```
 
 6. Build and install OpenCV:
 
-`make -j4`\
-`sudo make install`
+```
+make -j4
+sudo make install
+```
 
 7. Verify installation:
 
