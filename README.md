@@ -188,7 +188,9 @@ For JetPack 6, use [this driver](https://drive.google.com/file/d/1gqm25pW37vRDFe
 
 Run the following command to install the downloaded driver:
 
-`sudo dpkg -i <DRIVER_PATH>`
+```
+sudo dpkg -i <DRIVER_PATH>
+```
 
 ### OpenCV
 
@@ -217,23 +219,33 @@ sudo apt-get install -y libgtk2.0-dev libgtk-3-dev libcanberra-gtk3-dev pkg-conf
 
 3. Ensure GStreamer path is accessible:
 
-`echo $LD_LIBRARY_PATH`
+```
+echo $LD_LIBRARY_PATH
+```
 
 You should see paths like `/usr/local/lib` or `/usr/lib/gstreamer-1.0/` in the output. If not, you will need to add LD_LIBRARY_PATH to the shell profile file:
 
-`nano ~/.bashrc`
+```
+nano ~/.bashrc
+```
 
 Add the following line to the end of the file:
 
-`export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/gstreamer-1.0:$LD_LIBRARY_PATH`
+```
+export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/gstreamer-1.0:$LD_LIBRARY_PATH
+```
 
 Apply the changes:
 
-`source ~/.bashrc`
+```
+source ~/.bashrc
+```
 
 Confirm the changes were successful:
 
-`echo $LD_LIBRARY_PATH`
+```
+echo $LD_LIBRARY_PATH
+```
 
 4. Clean (if already exists) and create your build directory:
 
@@ -264,7 +276,9 @@ sudo make install
 
 7. Verify installation:
 
-`python3 -c "import cv2; print(cv2.getBuildInformation())"`
+```
+python3 -c "import cv2; print(cv2.getBuildInformation())"
+```
 
 Look for GTK+ and GStreamer. Both should show they are enabled by specifying "ON"
 
