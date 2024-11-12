@@ -188,7 +188,7 @@ For JetPack 6, use [this driver](https://drive.google.com/file/d/1gqm25pW37vRDFe
 
 Run the following command to install the downloaded driver:
 
-```
+```sh
 sudo dpkg -i <DRIVER_PATH>
 ```
 
@@ -200,7 +200,7 @@ Steps to install and build OpenCV for this project on Orin Nano:
 
 1. Download and install OpenCV:
 
-```
+```sh
 cd ~
 wget -O opencv.zip https://github.com/opencv/opencv/archive/refs/heads/master.zip
 unzip opencv.zip
@@ -209,7 +209,7 @@ cd opencv-master
 
 2. Install dependencies for GTK+ and GStreamer:
 
-```
+```sh
 sudo apt-get update
 sudo apt-get install cmake g++ wget unzip
 sudo apt-get install libopencv-dev gstreamer1.0-tools gstreamer1.0-plugins-base
@@ -219,37 +219,37 @@ sudo apt-get install -y libgtk2.0-dev libgtk-3-dev libcanberra-gtk3-dev pkg-conf
 
 3. Ensure GStreamer path is accessible:
 
-```
+```sh
 echo $LD_LIBRARY_PATH
 ```
 
 You should see paths like `/usr/local/lib` or `/usr/lib/gstreamer-1.0/` in the output. If not, you will need to add LD_LIBRARY_PATH to the shell profile file:
 
-```
+```sh
 nano ~/.bashrc
 ```
 
 Add the following line to the end of the file:
 
-```
+```sh
 export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/gstreamer-1.0:$LD_LIBRARY_PATH
 ```
 
 Apply the changes:
 
-```
+```sh
 source ~/.bashrc
 ```
 
 Confirm the changes were successful:
 
-```
+```sh
 echo $LD_LIBRARY_PATH
 ```
 
 4. Clean (if already exists) and create your build directory:
 
-```
+```sh
 cd ~/opencv-master
 rm -rf build
 mkdir build
@@ -258,7 +258,7 @@ cd build
 
 5. Configure the build with GTK+ and GStreamer enabled:
 
-```
+```sh
 cmake -D WITH_GSTREAMER=ON -D WITH_GTK=ON -D CMAKE_BUILD_TYPE=Release \
       -D CMAKE_INSTALL_PREFIX=/usr/local \
       -D PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig:/usr/local/lib/pkgconfig \
@@ -269,14 +269,14 @@ cmake -D WITH_GSTREAMER=ON -D WITH_GTK=ON -D CMAKE_BUILD_TYPE=Release \
 
 6. Build and install OpenCV:
 
-```
+```sh
 make -j4
 sudo make install
 ```
 
 7. Verify installation:
 
-```
+```sh
 python3 -c "import cv2; print(cv2.getBuildInformation())"
 ```
 
