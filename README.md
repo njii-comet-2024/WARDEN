@@ -223,16 +223,30 @@ sudo apt-get install -y libgtk2.0-dev libgtk-3-dev libcanberra-gtk3-dev pkg-conf
 echo $LD_LIBRARY_PATH
 ```
 
-You should see paths like `/usr/local/lib` or `/usr/lib/gstreamer-1.0/` in the output. If not, you will need to add LD_LIBRARY_PATH to the shell profile file:
+You should see paths like `/usr/local/lib` or `/usr/lib/gstreamer-1.0/` in the output.
+
+Repeat this process with the following two commands to check the paths for CMake:
+
+```sh
+echo $PKG_CONFIG_PATH 
+```
+
+```sh
+echo $CMAKE_PREFIX_PATH 
+```
+
+If any of these paths do not output as expected, you will need to add LD_LIBRARY_PATH, PKG_CONFIG_PATH, and/or CMAKE_PREFIX_PATH to the shell profile file:
 
 ```sh
 nano ~/.bashrc
 ```
 
-Add the following line to the end of the file:
+Add the following lines to the end of the file as needed:
 
 ```sh
 export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/gstreamer-1.0:$LD_LIBRARY_PATH
+export PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig:/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
+export CMAKE_PREFIX_PATH=/usr/lib/aarch64-linux-gnu:$CMAKE_PREFIX_PATH
 ```
 
 Apply the changes:
@@ -245,6 +259,8 @@ Confirm the changes were successful:
 
 ```sh
 echo $LD_LIBRARY_PATH
+echo $CMAKE_PREFIX_PATH 
+echo $PKG_CONFIG_PATH 
 ```
 
 4. Clean (if already exists) and create your build directory:
@@ -261,8 +277,8 @@ cd build
 ```sh
 cmake -D WITH_GSTREAMER=ON -D WITH_GTK=ON -D CMAKE_BUILD_TYPE=Release \
       -D CMAKE_INSTALL_PREFIX=/usr/local \
-      -D PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig:/usr/local/lib/pkgconfig \
-      -D CMAKE_PREFIX_PATH=/usr/lib/aarch64-linux-gnu \
+      -D PKG_CONFIG_PATH=$PKG_CONFIG_PATH \
+      -D CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
       -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
       -D BUILD_opencv_xfeatures2d=OFF ..
 ```
