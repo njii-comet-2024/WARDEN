@@ -88,39 +88,39 @@ The project, called W.A.R.D.E.N., is a deployable field recon system. It is comp
 
 ## Main Programs
 
-### Rover Programs
+### Rover
 
-### `roverControls.py`
+#### `roverControls.py`
 
 Receives controls from central and controls motors/servos on rover
 
-### `roverDetectNet.py`
+#### `roverDetectNet.py`
 
 Runs the camera via `JetsonCamera.py` and overlays GUI and generic object detections before sending frames to central \
 *Run via SSH from central*
 
-### `roverPlantNet.py`
+#### `roverPlantNet.py`
 
 Runs the camera via `PlantClassification.py` and overlays GUI and plant classification before sending frames to central \
 *Run via SSH from central*
 
-## Drone
+### Drone
 
-### `droneToCentral.py`
+#### `droneToCentral.py`
 
 Runs the camera and sends frames to central
 
-## Central
+### Central
 
-### `droneFeed.py`
+#### `droneFeed.py`
 
 Receives frames from drone and displays them
 
-### `roverFeed.py`
+#### `roverFeed.py`
 
 Receives frames from rover and displays them 
 
-### `centralToRover.py`
+#### `centralToRover.py`
 
 Detects controller input and transmits it to rover
 
