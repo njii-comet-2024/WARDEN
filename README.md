@@ -175,7 +175,7 @@ Used with NVIDIA Jetson Orin Nano:
 
 Major changes will be documented in the ![Changelog](docs/about/changelog.md). These changes will be tagged as a new version.
 
-Current Version: [v1.1.0](https://github.com/njii-comet-2024/WARDEN/releases/tag/v1.1.0)
+Current Version: [v1.2.0](https://github.com/njii-comet-2024/WARDEN/releases/tag/v1.2.0)
 
 ---
 
