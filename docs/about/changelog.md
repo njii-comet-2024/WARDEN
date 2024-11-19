@@ -108,3 +108,24 @@ This release focuses on camera functionality by implementing basic object detect
 **Bugfixes**
 
 - 
+
+## Version 1.2.0 (11/19/2024)
+
+This release further implements object detection and classification.
+
+
+**Features**
+
+- Fully set up Jetson
+- Improved detectNet object detection overlays
+- Created a separate program for plant classification using PlantNet-300K
+
+
+**Minor Changes**
+
+- Heavily updated documentation with instructions, notes, and lessons learned
+
+
+**Bugfixes**
+
+- Fixed OpenCV GStreamer pipeline issues and installation issues (fixes reflected in [README](../../README.md#camera-initialization))
