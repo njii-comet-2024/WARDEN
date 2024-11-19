@@ -208,6 +208,10 @@ sudo apt-get install cmake g++ wget unzip
 sudo apt-get install libopencv-dev gstreamer1.0-tools gstreamer1.0-plugins-base
 sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-good1.0-dev libgstreamer-plugins-bad1.0-dev libgstreamer-plugins-ugly1.0-dev
 sudo apt-get install -y libgtk2.0-dev libgtk-3-dev libcanberra-gtk3-dev pkg-config
+sudo apt-get install -y libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libavresample-dev
+sudo apt-get install --quiet -y --no-install-recommends gstreamer1.0-gl gstreamer1.0-opencv gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly libgstreamer1.0-0
+sudo apt install ubuntu-restricted-extras
+sudo apt-get install gstreamer1.0*
 ```
 
 3. Ensure GStreamer path is accessible:
@@ -268,12 +272,12 @@ cd build
 5. Configure the build with GTK+ and GStreamer enabled:
 
 ```sh
-cmake -D WITH_GSTREAMER=ON -D WITH_GTK=ON -D CMAKE_BUILD_TYPE=Release \
-      -D CMAKE_INSTALL_PREFIX=/usr/local \
-      -D PKG_CONFIG_PATH=$PKG_CONFIG_PATH \
-      -D CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
-      -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
-      -D BUILD_opencv_xfeatures2d=OFF ..
+cmake -D WITH_GSTREAMER=ON \
+      -D WITH_QT=OFF \
+      -D WITH_GTK=ON \
+      -D WITH_FFMPEG=ON \
+      -D CMAKE_BUILD_TYPE=Release \
+      -D CMAKE_INSTALL_PREFIX=/usr/local ..
 ```
 
 6. Build and install OpenCV:
