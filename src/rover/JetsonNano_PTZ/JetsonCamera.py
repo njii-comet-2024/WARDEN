@@ -147,6 +147,39 @@ class Previewer(threading.Thread):
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
     
+    def object_detection_with_resnet(self, frame, confidence_threshold=0.8):
+        selective_search = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()
+        selective_search.setBaseImage(frame)
+        selective_search.switchToSelectiveSearchFast()
+
+        rects = selective_search.process()  # Get proposed regions
+        detections = []
+
+        for (x, y, w, h) in rects:
+            roi = frame[y:y+h, x:x+w]
+            if roi.shape[0] < 224 or roi.shape[1] < 224:
+                continue  # Skip small regions
+
+            # Preprocess the region of interest
+            pil_roi = Image.fromarray(cv2.cvtColor(roi, cv2.COLOR_BGR2RGB))
+            input_tensor = self.preprocess(pil_roi).unsqueeze(0).to(self.device)
+
+            # Run the model on the region and get probabilities
+            with torch.no_grad():
+                output = self.model(input_tensor)
+                probabilities = F.softmax(output, dim=1)
+                confidence, predicted_class = torch.max(probabilities, 1)
+                confidence = confidence.item()
+                predicted_class = predicted_class.item()
+
+            if confidence >= confidence_threshold:
+                # Get species name from class index
+                species_id = self.class_idx_to_species_id.get(str(predicted_class))
+                species_name = self.species_id_to_name.get(str(species_id), "Unknown Species")
+                detections.append((x, y, x + w, y + h, species_name, confidence))
+
+        return detections
+
     def run(self):
         global camTilt
         global camRotation
@@ -204,23 +237,32 @@ class Previewer(threading.Thread):
             pil_frame = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
             input_tensor = self.preprocess(pil_frame).unsqueeze(0).to(self.device)
 
+            detections = self.object_detection_with_resnet(frame)
+
+            # Draw detections on the frame
+            for (x1, y1, x2, y2, species_name, confidence) in detections:
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                label = f"{species_name}: {confidence:.2f}"
+                cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+
             # Run the model and get predictions
-            with torch.no_grad():
-                output = self.model(input_tensor)
-                probabilities = F.softmax(output, dim=1)  # Get class probabilities
-                confidence, predicted_class = torch.max(probabilities, 1)  # Get max probability and class
-                confidence = confidence.item()  # Get the confidence score as a float
-                predicted_class = predicted_class.item()  # Get the class index as an integer
+            # with torch.no_grad():
+            #     output = self.model(input_tensor)
+            #     probabilities = F.softmax(output, dim=1)  # Get class probabilities
+            #     confidence, predicted_class = torch.max(probabilities, 1)  # Get max probability and class
+            #     confidence = confidence.item()  # Get the confidence score as a float
+            #     predicted_class = predicted_class.item()  # Get the class index as an integer
 
-            confidence_threshold = 0.8
+            # confidence_threshold = 0.8
 
-            if confidence >= confidence_threshold:
-                # Get species name from class index
-                species_id = self.class_idx_to_species_id.get(str(predicted_class))
-                species_name = self.species_id_to_name.get(str(species_id), "Unknown Species")
+            # if confidence >= confidence_threshold:
+            #     # Get species name from class index
+            #     species_id = self.class_idx_to_species_id.get(str(predicted_class))
+            #     species_name = self.species_id_to_name.get(str(species_id), "Unknown Species")
                 
-                # Draw the prediction on the frame
-                cv2.putText(frame, f"Species: {species_name}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+            #     # Draw the prediction on the frame
+            #     cv2.putText(frame, f"Species: {species_name}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
                 
             imgResult = cvzone.overlayPNG(frame, hudTop, [210, -85])  # Adds top HUD
             imgResult = cvzone.overlayPNG(imgResult, hudSide, [-130, 120])  # Adds side HUD
