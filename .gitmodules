@@ -1,0 +1,3 @@
+[submodule "src/rover/JetsonNano_PTZ/src/rover/JetsonNano_PTZ/PlantNet300k"]
+	path = src/rover/JetsonNano_PTZ/src/rover/JetsonNano_PTZ/PlantNet300k
+	url = https://github.com/zizz-0/PlantNet-300k
