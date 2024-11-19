@@ -26,6 +26,8 @@ Click ![here](docs/WARDEN_presentation.pdf) to view the full in-depth project re
 
 [Definitions](#definitions)
 
+[Main Programs](#main-programs)
+
 [Controller Components](#controller-components)
 
 [Necessary Libraries](#necessary-libraries)
@@ -44,6 +46,7 @@ Click ![here](docs/WARDEN_presentation.pdf) to view the full in-depth project re
 
 This repository holds the control and communication code for the COMET 2024 internship project. This is an ongoing project.
 
+For COMET W.A.R.D.E.N. setup instructions, check the sharepoint.
 
 The project, called W.A.R.D.E.N., is a deployable field recon system. It is comprised of a ground rover and aerial vehicle. The objective of the aerial vehicle is to extend the communication range of the ground rover for recon.
 
@@ -83,14 +86,53 @@ The project, called W.A.R.D.E.N., is a deployable field recon system. It is comp
 
 ---
 
+## Main Programs
+
+### Rover Programs
+
+### `roverControls.py`
+
+Receives controls from central and controls motors/servos on rover
+
+### `roverDetectNet.py`
+
+Runs the camera via `JetsonCamera.py` and overlays GUI and generic object detections before sending frames to central \
+*Run via SSH from central*
+
+### `roverPlantNet.py`
+
+Runs the camera via `PlantClassification.py` and overlays GUI and plant classification before sending frames to central \
+*Run via SSH from central*
+
+## Drone
+
+### `droneToCentral.py`
+
+Runs the camera and sends frames to central
+
+## Central
+
+### `droneFeed.py`
+
+Receives frames from drone and displays them
+
+### `roverFeed.py`
+
+Receives frames from rover and displays them 
+
+### `centralToRover.py`
+
+Detects controller input and transmits it to rover
+
+---
+
 ## Controller Components
 
 **Central Raspberry Pi** *(Raspberry Pi 4)*\
 Runs programs `roverFeed.py` to receive rover video from ~~Camera Raspberry Pi~~ Camera Jetson, `centralToRover.py` to send controls to Controls Raspberry Pi, `droneFeed.py` to receive drone video from Drone Raspberry Pi, and `analogDroneFeed.py` to receive analog drone video from Drone VTX. Also used to SSH into ~~Camera Raspberry Pi~~ Camera Jetson to run `roverToCentral.py`.
 
 ~~**Controls Arduino**  *(Arduino Uno)*~~ *Replaced with Raspberry Pi*\
-~~Runs program `roverControls.py` to receive controls from Central Raspberry Pi and run them on rover.~~ 
-
+~~Runs program `roverControls.ino` to receive controls from Central Raspberry Pi and run them on rover.~~ 
 
 **Controls Raspberry Pi**  *(Raspberry Pi 4)*\
 Runs program `roverControls.py` to receive controls from Central Raspberry Pi and run them on rover.
@@ -99,7 +141,7 @@ Runs program `roverControls.py` to receive controls from Central Raspberry Pi an
 ~~Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi and send rover back video to Central Raspberry Pi.~~ 
 
 **Camera Jetson**  *(NVIDIA Jetson Orin Nano)*\
-Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi and send rover back video to Central Raspberry Pi.
+Runs program `roverDetectNet.py` or `roverPlantNet.py` to receive camera positions from Central and send rover back video to Central Raspberry Pi.
 
 **Drone Raspberry Pi**  *(Raspberry Pi Zero 2 W)*\
 Runs `droneToCentral.py` to transmit digital drone video to Central Raspberry Pi.
