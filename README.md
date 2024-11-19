@@ -210,6 +210,7 @@ sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev lib
 sudo apt-get install -y libgtk2.0-dev libgtk-3-dev libcanberra-gtk3-dev pkg-config
 sudo apt-get install -y libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libavresample-dev
 sudo apt-get install --quiet -y --no-install-recommends gstreamer1.0-gl gstreamer1.0-opencv gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly libgstreamer1.0-0
+sudo apt install libgstrtspserver-1.0-0
 sudo apt install ubuntu-restricted-extras
 sudo apt-get install gstreamer1.0*
 ```

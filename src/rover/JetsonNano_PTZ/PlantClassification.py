@@ -10,17 +10,24 @@ import cvzone
 import time
 
 try:
-    from  Queue import  Queue
+    from Queue import Queue
 except ModuleNotFoundError:
-    from  queue import  Queue
+    from queue import Queue
 
-import  threading
+import threading
 import signal
 import sys
 import socket
 import base64
 from jetson_inference import detectNet
 from jetson_utils import cudaFromNumpy, cudaDeviceSynchronize
+from PlantNet300k.utils import load_model
+from torchvision.models import resnet18
+import torch.nn.functional as F
+from PIL import Image, ImageDraw, ImageFont
+from torchvision import transforms
+import torch
+import json
 
 #These are for WARDEN and should be same for EXT since they are static IPS
 #RoverCam = 192.168.110.169
@@ -45,7 +52,7 @@ camTilt = 90
 camRotation = 90
 camZoom = 8
 
-net = detectNet("ssd-mobilenet-v2", threshold=0.5)
+# net = detectNet("ssd-mobilenet-v2", threshold=0.5)
 
 def gstreamer_pipeline(
     capture_width=1920,
@@ -110,6 +117,31 @@ class Previewer(threading.Thread):
         threading.Thread.__init__(self)
         self.name = name
         self.camera = camera
+
+        # Load the PlantNet model and class mappings
+        self.filename = 'PlantNet300k/resnet18_weights_best_acc.tar'  # path to model weights
+        self.use_gpu = False  # set to True if you have a GPU and want to use it
+        self.device = torch.device("cuda" if self.use_gpu and torch.cuda.is_available() else "cpu")
+        
+        # Initialize model
+        self.model = resnet18(num_classes=1081)  # 1081 classes in Pl@ntNet-300K
+        load_model(self.model, filename=self.filename, use_gpu=self.use_gpu)
+        self.model.to(self.device)
+        self.model.eval()
+
+        # Load JSON mappings
+        with open("PlantNet300k/class_idx_to_species_id.json", "r") as f:
+            self.class_idx_to_species_id = json.load(f)
+        with open("PlantNet300k/plantnet300K_species_id_2_name.json", "r") as f:
+            self.species_id_to_name = json.load(f)
+
+        # Define preprocessing steps
+        self.preprocess = transforms.Compose([
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        ])
     
     def run(self):
         global camTilt
@@ -144,7 +176,9 @@ class Previewer(threading.Thread):
             frame = self.camera.getFrame(2000)
             if frame is None:
                 continue
-
+            
+            """
+            detectNet object detection
             # Convert the OpenCV frame to CUDA (for Jetson object detection)
             cuda_img = cudaFromNumpy(frame)
 
@@ -160,6 +194,11 @@ class Previewer(threading.Thread):
                 left, top, right, bottom = int(detection.Left), int(detection.Top), int(detection.Right), int(detection.Bottom)
                 cv2.rectangle(frame, (left, top), (right, bottom), (255, 0, 0), 2)
                 cv2.putText(frame, net.GetClassDesc(detection.ClassID), (left, top-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 0, 0), 2)
+            """
+
+            # Convert the frame to PIL format for preprocessing
+            pil_frame = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+            input_tensor = self.preprocess(pil_frame).unsqueeze(0).to(self.device)
                 
             imgResult = cvzone.overlayPNG(frame, hudTop, [210, -85])  # Adds top HUD
             imgResult = cvzone.overlayPNG(imgResult, hudSide, [-130, 120])  # Adds side HUD
@@ -172,6 +211,24 @@ class Previewer(threading.Thread):
             #overlay indicator
             imgResult = cvzone.overlayPNG(imgResult, hudTopIndicator, [(camRotation * 5) - 60, -20])#adds moving vertical
             imgResult = cvzone.overlayPNG(imgResult, hudSideIndicator, [-15, (camTilt * 5) - 500])
+
+            # Run the model and get predictions
+            with torch.no_grad():
+                output = self.model(input_tensor)
+                probabilities = F.softmax(output, dim=1)  # Get class probabilities
+                confidence, predicted_class = torch.max(probabilities, 1)  # Get max probability and class
+                confidence = confidence.item()  # Get the confidence score as a float
+                predicted_class = predicted_class.item()  # Get the class index as an integer
+
+            confidence_threshold = 0.8
+
+            if confidence >= confidence_threshold:
+                # Get species name from class index
+                species_id = self.class_idx_to_species_id.get(str(predicted_class))
+                species_name = self.species_id_to_name.get(str(species_id), "Unknown Species")
+                
+                # Draw the prediction on the frame
+                cv2.putText(imgResult, f"Species: {species_name}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2)
 
             cv2.imshow(self.window_name, imgResult)
             
