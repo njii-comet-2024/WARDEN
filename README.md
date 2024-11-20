@@ -344,4 +344,4 @@ Look for GTK+ and GStreamer. Both should show they are enabled by specifying "ON
 
 This project is ongoing since June 2024. Currently, all of the basic goals have been met and the system is fully functioning.
 
-Ongoing and future changes surround the rover camera. The Camera Raspberry Pi has been swapped out with an NVIDIA Jetson Orin Nano to implement object detection and, in the future, possibly autonomy or semi-autonomy.
+Ongoing and future changes surround the rover camera. The Camera Raspberry Pi has been swapped out with an NVIDIA Jetson Orin Nano to implement object detection classification. Currently, object detection using detectNet with ssd-mobilenet-v2 and plant classification using PlantNet-300K with resnet18 are fully implemented. Work is ongoing to implement a biodiversity mapping system using the plant classification program, but progress is paused while waiting on a GPS module to ship.
