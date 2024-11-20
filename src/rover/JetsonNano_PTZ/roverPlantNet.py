@@ -25,7 +25,11 @@
 
 """
 This code has been significantly altered for the WARDEN project's specific needs and uses.
-Runs `JetsonCamera.py` to send camera frames from rover to central.
+Runs `PlantClassification.py` to send camera frames from rover to central.
+
+@author [Zoe Rizzo] [@zizz-0]
+
+Date last modified: 11/20/2024
 """
 import cv2
 import numpy as py

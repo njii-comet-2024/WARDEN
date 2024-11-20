@@ -5,6 +5,14 @@
 # NVIDIA Jetson Nano Developer Kit using OpenCV
 # Drivers for the camera and OpenCV are included in the base image
 
+"""
+Initializes camera, adds plant classification, sends packets to central
+
+@author [Zoe Rizzo] [@zizz-0]
+
+Date last modified: 11/20/2024
+"""
+
 import cv2
 import cvzone
 import time
