@@ -16,6 +16,7 @@ Date last modified: 11/20/2024
 import cv2
 import cvzone
 import time
+import os
 
 try:
     from Queue import Queue
@@ -36,6 +37,8 @@ from PIL import Image, ImageDraw, ImageFont
 from torchvision import transforms
 import torch
 import json
+import geocoder
+import folium
 
 #These are for WARDEN and should be same for EXT since they are static IPS
 #RoverCam = 192.168.110.169
@@ -143,14 +146,56 @@ class Previewer(threading.Thread):
         with open("PlantNet300k/plantnet300K_species_id_2_name.json", "r") as f:
             self.species_id_to_name = json.load(f)
 
-        # Define preprocessing steps
         self.preprocess = transforms.Compose([
             transforms.Resize(256),
             transforms.CenterCrop(224),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
+
+        # biodiversity map init
+        self.mapPath = "plant_species_map.html"
+        self.mapDataPath = "plant_species_data.json"
+
+        self.mapData = self.loadMapData()
+        self.map = self.loadOrCreateMap()
+
+    def loadOrCreateMap(self):
+        if os.path.exists(self.mapPath) and self.mapData:
+            print(f"Loading existing map from {self.mapPath}")
+            lastMarker = self.mapData[-1]
+            return folium.Map(location=[lastMarker['lat'], lastMarker['long']], zoom_start=15)
+        else:
+            print("Creating a new map...")
+            return folium.Map(location=[0, 0], zoom_start=2)
     
+    def loadMapData(self):
+        if os.path.exists(self.mapDataPath):
+            with open(self.mapDataPath, 'r') as f:
+                return json.load(f)
+        return []
+
+    def saveMapData(self):
+        with open(self.mapDataPath, 'w') as f:
+            json.dump(self.mapData, f, indent=4)
+            
+    def addMarker(self, lat, long, species):
+        folium.Marker([lat, long], popup=species).add_to(self.map)
+        self.mapData.append({'lat': lat, 'long': long, 'species': species})
+        self.saveMapData()
+
+    def saveMap(self):
+        self.map.save(self.mapPath)
+        print(f"Map updated and saved to {self.mapPath}")
+
+    def getGPSCoordinates(self):
+        g = geocoder.ip('me')
+        if g.latlng:
+            return g.latlng
+        else:
+            print("Could not fetch GPS coordinates.")
+            return None
+
     def run(self):
         global camTilt
         global camRotation
@@ -184,25 +229,6 @@ class Previewer(threading.Thread):
             frame = self.camera.getFrame(2000)
             if frame is None:
                 continue
-            
-            """
-            detectNet object detection
-            # Convert the OpenCV frame to CUDA (for Jetson object detection)
-            cuda_img = cudaFromNumpy(frame)
-
-            # Run object detection
-            detections = net.Detect(cuda_img)
-
-            # Synchronize CUDA and get the frame back to OpenCV
-            cudaDeviceSynchronize()
-
-            # Display the results
-            for detection in detections:
-                # Draw bounding boxes on the frame
-                left, top, right, bottom = int(detection.Left), int(detection.Top), int(detection.Right), int(detection.Bottom)
-                cv2.rectangle(frame, (left, top), (right, bottom), (255, 0, 0), 2)
-                cv2.putText(frame, net.GetClassDesc(detection.ClassID), (left, top-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 0, 0), 2)
-            """
 
             # Convert the frame to PIL format for preprocessing
             pil_frame = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
@@ -237,6 +263,13 @@ class Previewer(threading.Thread):
                 
                 # Draw the prediction on the frame
                 cv2.putText(imgResult, f"Species: {species_name}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2)
+
+                gpsCoordinates = self.getGPSCoordinates()
+                if gpsCoordinates:
+                    lat, long = gpsCoordinates
+                    print(f"Adding marker for {species_name} at {lat}, {long}")
+                    self.addMarker(lat, long, species_name)
+                    self.saveMap()
 
             cv2.imshow(self.window_name, imgResult)
             
