@@ -1,0 +1,26 @@
+[
+    {
+        "lat": 41.0748,
+        "long": -73.7751,
+        "species": [
+            "Cirsium vulgare (Savi) Ten."
+        ],
+        "popup": "Cirsium vulgare (Savi) Ten."
+    },
+    {
+        "lat": 41.0748,
+        "long": -73.7751,
+        "species": [
+            "Anemone blanda Schott & Kotschy"
+        ],
+        "popup": "Anemone blanda Schott & Kotschy"
+    },
+    {
+        "lat": 41.0748,
+        "long": -73.7751,
+        "species": [
+            "Sedum rupestre L."
+        ],
+        "popup": "Sedum rupestre L."
+    }
+]

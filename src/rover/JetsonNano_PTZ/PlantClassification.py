@@ -17,6 +17,7 @@ import cv2
 import cvzone
 import time
 import os
+import math
 
 try:
     from Queue import Queue
@@ -39,6 +40,7 @@ import torch
 import json
 import geocoder
 import folium
+from folium.plugins import MarkerCluster
 
 #These are for WARDEN and should be same for EXT since they are static IPS
 #RoverCam = 192.168.110.169
@@ -162,38 +164,53 @@ class Previewer(threading.Thread):
 
     def loadOrCreateMap(self):
         if os.path.exists(self.mapPath) and self.mapData:
-            print(f"Loading existing map from {self.mapPath}")
             lastMarker = self.mapData[-1]
-            return folium.Map(location=[lastMarker['lat'], lastMarker['long']], zoom_start=15)
+            folium_map = folium.Map(location=[lastMarker['lat'], lastMarker['long']], zoom_start=15)
         else:
-            print("Creating a new map...")
-            return folium.Map(location=[0, 0], zoom_start=2)
+            folium_map = folium.Map(location=[0, 0], zoom_start=2)
+
+        self.marker_cluster = MarkerCluster().add_to(folium_map)
+
+        return folium_map
     
     def loadMapData(self):
         if os.path.exists(self.mapDataPath):
             with open(self.mapDataPath, 'r') as f:
-                return json.load(f)
+                data = json.load(f)
+                for marker in data:
+                    if isinstance(marker.get('species'), str):
+                        marker['species'] = [marker['species']]
+                return data
         return []
 
     def saveMapData(self):
         with open(self.mapDataPath, 'w') as f:
             json.dump(self.mapData, f, indent=4)
             
-    def addMarker(self, lat, long, species):
-        folium.Marker([lat, long], popup=species).add_to(self.map)
-        self.mapData.append({'lat': lat, 'long': long, 'species': species})
+    def addMarker(self, lat, long, species, tolerance=0.00025):
+        for marker in self.mapData:
+            distance = math.sqrt((marker['lat'] - lat) ** 2 + (marker['long'] - long) ** 2)
+            if distance < tolerance and species in marker['species']:
+                return
+
+        new_marker = {
+            'lat': lat,
+            'long': long,
+            'species': [species],
+            'popup': species
+        }
+        self.mapData.append(new_marker)
+        folium.Marker([lat, long], popup=species).add_to(self.marker_cluster)
         self.saveMapData()
 
     def saveMap(self):
         self.map.save(self.mapPath)
-        print(f"Map updated and saved to {self.mapPath}")
 
     def getGPSCoordinates(self):
         g = geocoder.ip('me')
         if g.latlng:
             return g.latlng
         else:
-            print("Could not fetch GPS coordinates.")
             return None
 
     def run(self):
@@ -267,7 +284,6 @@ class Previewer(threading.Thread):
                 gpsCoordinates = self.getGPSCoordinates()
                 if gpsCoordinates:
                     lat, long = gpsCoordinates
-                    print(f"Adding marker for {species_name} at {lat}, {long}")
                     self.addMarker(lat, long, species_name)
                     self.saveMap()
 

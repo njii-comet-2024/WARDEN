@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_137376ca4bf0052d46c89d5467ce1fc2 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_137376ca4bf0052d46c89d5467ce1fc2" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_137376ca4bf0052d46c89d5467ce1fc2 = L.map(
+                "map_137376ca4bf0052d46c89d5467ce1fc2",
+                {
+                    center: [0.0, 0.0],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 2,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_41f0466708459188259f5a62d92a88a5 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            var marker_cluster_5a5898b44491aee20697ce70208624b5 = L.markerClusterGroup(
+                {}
+            );
+        
+    
+            var marker_04e76920e968fbd81e9f367dd183bd55 = L.marker(
+                [41.0748, -73.7751],
+                {}
+            ).addTo(marker_cluster_5a5898b44491aee20697ce70208624b5);
+        
+    
+        var popup_f367218671bbdd9823dc4e89d00a0ffc = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_33bf76d8c360ccd63f5aac678290261b = $(`<div id="html_33bf76d8c360ccd63f5aac678290261b" style="width: 100.0%; height: 100.0%;">Cirsium vulgare (Savi) Ten.</div>`)[0];
+                popup_f367218671bbdd9823dc4e89d00a0ffc.setContent(html_33bf76d8c360ccd63f5aac678290261b);
+            
+        
+
+        marker_04e76920e968fbd81e9f367dd183bd55.bindPopup(popup_f367218671bbdd9823dc4e89d00a0ffc)
+        ;
+
+        
+    
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            var marker_0063fbf8b2e67e1a129d902b40642d85 = L.marker(
+                [41.0748, -73.7751],
+                {}
+            ).addTo(marker_cluster_5a5898b44491aee20697ce70208624b5);
+        
+    
+        var popup_e3f848cb37f679f9d38c2b1c64810651 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_77d4e58f142fa27a44e430a12251d09e = $(`<div id="html_77d4e58f142fa27a44e430a12251d09e" style="width: 100.0%; height: 100.0%;">Anemone blanda Schott & Kotschy</div>`)[0];
+                popup_e3f848cb37f679f9d38c2b1c64810651.setContent(html_77d4e58f142fa27a44e430a12251d09e);
+            
+        
+
+        marker_0063fbf8b2e67e1a129d902b40642d85.bindPopup(popup_e3f848cb37f679f9d38c2b1c64810651)
+        ;
+
+        
+    
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            var marker_6ccf93e3a48870c1859b9b3d2cbf5a4c = L.marker(
+                [41.0748, -73.7751],
+                {}
+            ).addTo(marker_cluster_5a5898b44491aee20697ce70208624b5);
+        
+    
+        var popup_4abdb351981a2d59ac7a80a03fd4a15f = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_3b0b94cf018ff9f4f9a10190a6b95a0e = $(`<div id="html_3b0b94cf018ff9f4f9a10190a6b95a0e" style="width: 100.0%; height: 100.0%;">Sedum rupestre L.</div>`)[0];
+                popup_4abdb351981a2d59ac7a80a03fd4a15f.setContent(html_3b0b94cf018ff9f4f9a10190a6b95a0e);
+            
+        
+
+        marker_6ccf93e3a48870c1859b9b3d2cbf5a4c.bindPopup(popup_4abdb351981a2d59ac7a80a03fd4a15f)
+        ;
+
+        
+    
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+    
+            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        
+</script>
+</html>
