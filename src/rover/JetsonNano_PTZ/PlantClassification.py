@@ -10,7 +10,7 @@ Initializes camera, adds plant classification, sends packets to central
 
 @author [Zoe Rizzo] [@zizz-0]
 
-Date last modified: 11/20/2024
+Date last modified: 11/21/2024
 """
 
 import cv2
