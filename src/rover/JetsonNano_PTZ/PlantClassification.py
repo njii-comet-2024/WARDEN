@@ -156,7 +156,7 @@ class Previewer(threading.Thread):
         ])
 
         # biodiversity map init
-        self.species_clusters = {}
+        self.speciesClusters = []
         self.mapPath = "plant_species_map.html"
         self.mapDataPath = "plant_species_data.json"
 
@@ -173,20 +173,42 @@ class Previewer(threading.Thread):
         else:
             folium_map = folium.Map(location=[0, 0], zoom_start=2)
 
-        self.marker_cluster = MarkerCluster().add_to(folium_map)
-        self.temp_cluster = MarkerCluster().add_to(folium_map)
-
         species_set = set()
+        self.markerCluster = MarkerCluster().add_to(folium_map)
         
         # adds existing species to map as markers
         for marker in self.mapData:
-            if isinstance(marker.get('species'), list):
-                for species in marker['species']:
-                    species_set.add(species)
-                    folium.Marker([marker['lat'], marker['long']], popup=species, title=species).add_to(self.marker_cluster)
-            elif isinstance(marker.get('species'), str):
-                species_set.add(marker['species'])
-                folium.Marker([marker['lat'], marker['long']], popup=species, title=species).add_to(self.marker_cluster)
+            markerLat = marker['lat']
+            markerLong = marker['long']
+            species = marker.get('species')
+            inCluster = False
+
+            for cluster in self.speciesClusters:
+                clusterCenter = cluster['center']
+                clusterMarkers = cluster['markers']
+
+                distance = math.sqrt((markerLat - clusterCenter[0]) ** 2 + (markerLong - clusterCenter[1]) ** 2)
+                if distance < 0.00025:
+                    clusterMarkers.append(marker)
+                    inCluster = True
+                    break
+
+            if not inCluster:
+                newCluster = {
+                    'center': (markerLat, markerLong),
+                    'markers': [marker]
+                }
+                self.speciesClusters.append(newCluster)
+                
+        for cluster in self.speciesClusters:
+            for marker in cluster['markers']:
+                if isinstance(marker.get('species'), list):
+                    for species in marker['species']:
+                        species_set.add(species)
+                        folium.Marker([marker['lat'], marker['long']], popup=species, title=species).add_to(self.markerCluster)
+                elif isinstance(marker.get('species'), str):
+                    species_set.add(marker['species'])
+                    folium.Marker([marker['lat'], marker['long']], popup=species, title=species).add_to(self.markerCluster)
 
         return folium_map
     
@@ -216,21 +238,50 @@ class Previewer(threading.Thread):
     """
     def addMarker(self, lat, long, species, tolerance=0.00025):
         for marker in self.mapData:
-            distance = math.sqrt((marker['lat'] - lat) ** 2 + (marker['long'] - long) ** 2)
-            if distance < tolerance and species in marker['species']:
-                return
+            inCluster = False
+            newMarker = None
 
-        new_marker = {
-            'lat': lat,
-            'long': long,
-            'species': [species],
-            'popup': species
-        }
-        self.mapData.append(new_marker)
-        folium.Marker([lat, long], popup=species, title=species).add_to(self.marker_cluster)
+            for cluster in self.speciesClusters:
+                clusterCenter = cluster['center']
+                clusterMarkers = cluster['markers']
 
-        self.saveMapData()
-        self.saveMap()
+                distance = math.sqrt((lat - clusterCenter[0]) ** 2 + (long - clusterCenter[1]) ** 2)
+                if distance < tolerance:
+                    if species in marker['species']:
+                        return
+                    
+                    newMarker = {
+                        'lat': lat,
+                        'long': long,
+                        'species': [species],
+                        'popup': species
+                    }
+
+                    clusterMarkers.append(newMarker)
+                    inCluster = True
+                    break
+
+            if not inCluster:
+                newMarker = {
+                    'lat': lat,
+                    'long': long,
+                    'species': [species],
+                    'popup': species
+                }
+
+                newCluster = {
+                    'center': (lat, long),
+                    'markers': [newMarker]
+                }
+
+                self.speciesClusters.append(newCluster)
+
+        if newMarker:
+            self.mapData.append(newMarker)
+            folium.Marker([lat, long], popup=species, title=species).add_to(self.markerCluster)
+
+            self.saveMapData()
+            self.saveMap()
 
     """
     Saves html map
