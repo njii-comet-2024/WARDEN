@@ -374,7 +374,7 @@ class Previewer(threading.Thread):
                     self.addMarker(lat, long, species_name)
                     self.saveMap()
 
-            cv2.imshow(self.window_name, imgResult)
+            # cv2.imshow(self.window_name, imgResult)
             
             frame = imgResult
             frame = cv2.resize(frame, (1024, 600))
