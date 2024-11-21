@@ -156,12 +156,16 @@ class Previewer(threading.Thread):
         ])
 
         # biodiversity map init
+        self.species_clusters = {}
         self.mapPath = "plant_species_map.html"
         self.mapDataPath = "plant_species_data.json"
 
         self.mapData = self.loadMapData()
         self.map = self.loadOrCreateMap()
 
+    """
+    Loads biodiversity html map or creates it if it does not already exist
+    """
     def loadOrCreateMap(self):
         if os.path.exists(self.mapPath) and self.mapData:
             lastMarker = self.mapData[-1]
@@ -170,24 +174,11 @@ class Previewer(threading.Thread):
             folium_map = folium.Map(location=[0, 0], zoom_start=2)
 
         self.marker_cluster = MarkerCluster().add_to(folium_map)
-
-        filter_script = """
-        function filterMarkers(species) {
-            let markers = document.querySelectorAll('.leaflet-marker-icon');
-
-            markers.forEach(function(marker) {
-                let popupText = marker.getAttribute('title');
-                if (popupText.includes(species) || species === "All") {
-                    marker.style.display = 'block';
-                } else {
-                    marker.style.display = 'none';  // Hide the marker if it doesn't match
-                }
-            });
-        }
-        """
+        self.temp_cluster = MarkerCluster().add_to(folium_map)
 
         species_set = set()
-
+        
+        # adds existing species to map as markers
         for marker in self.mapData:
             if isinstance(marker.get('species'), list):
                 for species in marker['species']:
@@ -197,22 +188,11 @@ class Previewer(threading.Thread):
                 species_set.add(marker['species'])
                 folium.Marker([marker['lat'], marker['long']], popup=species, title=species).add_to(self.marker_cluster)
 
-        species_list = sorted(species_set)
-        self.dropdown_html = '<select id="speciesFilter" onchange="filterMarkers(this.value)">'
-        self.dropdown_html += '<option value="All">All</option>'
-        for species in species_list:
-            self.dropdown_html += f'<option value="{species}">{species}</option>'
-        self.dropdown_html += '</select>'
-
-        folium_map.get_root().html.add_child(folium.Element(f"""
-        <script>
-        {filter_script}
-        </script>
-        """))
-        folium_map.get_root().html.add_child(folium.Element(self.dropdown_html))
-
         return folium_map
     
+    """
+    Loads JSON data for map markers
+    """
     def loadMapData(self):
         if os.path.exists(self.mapDataPath):
             with open(self.mapDataPath, 'r') as f:
@@ -224,10 +204,16 @@ class Previewer(threading.Thread):
                 return data
         return []
 
+    """
+    Saves map JSON data
+    """
     def saveMapData(self):
         with open(self.mapDataPath, 'w') as f:
             json.dump(self.mapData, f, indent=4)
-            
+    
+    """
+    Adds a new marker to the map
+    """
     def addMarker(self, lat, long, species, tolerance=0.00025):
         for marker in self.mapData:
             distance = math.sqrt((marker['lat'] - lat) ** 2 + (marker['long'] - long) ** 2)
@@ -243,27 +229,19 @@ class Previewer(threading.Thread):
         self.mapData.append(new_marker)
         folium.Marker([lat, long], popup=species, title=species).add_to(self.marker_cluster)
 
-        self.updateDropdown(species)
-
         self.saveMapData()
         self.saveMap()
-    
-    def updateDropdown(self, species):
-        script = f"""
-        <script>
-        var dropdown = document.getElementById("speciesFilter");
-        var newOption = document.createElement("option");
-        newOption.value = "{species}";
-        newOption.text = "{species}";
-        dropdown.appendChild(newOption);
-        </script>
-        """
 
-        self.map.get_root().html.add_child(folium.Element(script))
-
+    """
+    Saves html map
+    """
     def saveMap(self):
         self.map.save(self.mapPath)
 
+    """
+    Gets current coordinates based on IP address
+    TEMPORARY FUNCTION -- will be replaced with GPS module so internet connection is not required
+    """
     def getGPSCoordinates(self):
         g = geocoder.ip('me')
         if g.latlng:
