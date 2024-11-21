@@ -11,9 +11,25 @@
         "lat": 41.0748,
         "long": -73.7751,
         "species": [
-            "Anemone blanda Schott & Kotschy"
+            "Centranthus ruber (L.) DC."
         ],
-        "popup": "Anemone blanda Schott & Kotschy"
+        "popup": "Centranthus ruber (L.) DC."
+    },
+    {
+        "lat": 41.0748,
+        "long": -73.7751,
+        "species": [
+            "Aegopodium podagraria L."
+        ],
+        "popup": "Aegopodium podagraria L."
+    },
+    {
+        "lat": 41.0748,
+        "long": -73.7751,
+        "species": [
+            "Zamioculcas zamiifolia (Lodd.) Engl."
+        ],
+        "popup": "Zamioculcas zamiifolia (Lodd.) Engl."
     },
     {
         "lat": 41.0748,
@@ -22,5 +38,21 @@
             "Sedum rupestre L."
         ],
         "popup": "Sedum rupestre L."
+    },
+    {
+        "lat": 41.0748,
+        "long": -73.7751,
+        "species": [
+            "Tradescantia pallida (Rose) D.R.Hunt"
+        ],
+        "popup": "Tradescantia pallida (Rose) D.R.Hunt"
+    },
+    {
+        "lat": 41.0748,
+        "long": -73.7751,
+        "species": [
+            "Anemone blanda Schott & Kotschy"
+        ],
+        "popup": "Anemone blanda Schott & Kotschy"
     }
 ]

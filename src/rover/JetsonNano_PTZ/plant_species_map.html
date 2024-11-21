@@ -25,7 +25,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_137376ca4bf0052d46c89d5467ce1fc2 {
+                #map_9ffbb07843b8c5fcf7885d1b0d6a86f3 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -42,18 +42,45 @@
 <body>
     
     
-            <div class="folium-map" id="map_137376ca4bf0052d46c89d5467ce1fc2" ></div>
+        <script>
+        
+        function filterMarkers(species) {
+            let layers = document.querySelectorAll('.leaflet-marker-icon');
+            layers.forEach(layer => {
+                let popupText = layer.getAttribute('title');
+                if (popupText.includes(species) || species === "All") {
+                    layer.style.display = 'block';
+                } else {
+                    layer.style.display = 'none';
+                }
+            });
+        }
+        
+        </script>
+        
+    <select id="speciesFilter" onchange="filterMarkers(this.value)"><option value="All">All</option><option value="Aegopodium podagraria L.">Aegopodium podagraria L.</option><option value="Centranthus ruber (L.) DC.">Centranthus ruber (L.) DC.</option><option value="Cirsium vulgare (Savi) Ten.">Cirsium vulgare (Savi) Ten.</option><option value="Sedum rupestre L.">Sedum rupestre L.</option><option value="Tradescantia pallida (Rose) D.R.Hunt">Tradescantia pallida (Rose) D.R.Hunt</option><option value="Zamioculcas zamiifolia (Lodd.) Engl.">Zamioculcas zamiifolia (Lodd.) Engl.</option></select>
+    
+        <script>
+        var dropdown = document.getElementById("speciesFilter");
+        var newOption = document.createElement("option");
+        newOption.value = "Anemone blanda Schott & Kotschy";
+        newOption.text = "Anemone blanda Schott & Kotschy";
+        dropdown.appendChild(newOption);
+        </script>
+        
+    
+            <div class="folium-map" id="map_9ffbb07843b8c5fcf7885d1b0d6a86f3" ></div>
         
 </body>
 <script>
     
     
-            var map_137376ca4bf0052d46c89d5467ce1fc2 = L.map(
-                "map_137376ca4bf0052d46c89d5467ce1fc2",
+            var map_9ffbb07843b8c5fcf7885d1b0d6a86f3 = L.map(
+                "map_9ffbb07843b8c5fcf7885d1b0d6a86f3",
                 {
-                    center: [0.0, 0.0],
+                    center: [41.0748, -73.7751],
                     crs: L.CRS.EPSG3857,
-                    zoom: 2,
+                    zoom: 15,
                     zoomControl: true,
                     preferCanvas: false,
                 }
@@ -63,198 +90,186 @@
 
         
     
-            var tile_layer_41f0466708459188259f5a62d92a88a5 = L.tileLayer(
+            var tile_layer_6f3de54eb92bf89e873b8e56b16bc0aa = L.tileLayer(
                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
             );
         
     
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+            tile_layer_6f3de54eb92bf89e873b8e56b16bc0aa.addTo(map_9ffbb07843b8c5fcf7885d1b0d6a86f3);
         
     
-            var marker_cluster_5a5898b44491aee20697ce70208624b5 = L.markerClusterGroup(
+            var marker_cluster_6d12227118ea4c3f59a1cbde1e144bc6 = L.markerClusterGroup(
                 {}
             );
         
     
-            var marker_04e76920e968fbd81e9f367dd183bd55 = L.marker(
+            var marker_a97c94bee1e5685c58d25c3e78df72df = L.marker(
                 [41.0748, -73.7751],
                 {}
-            ).addTo(marker_cluster_5a5898b44491aee20697ce70208624b5);
+            ).addTo(marker_cluster_6d12227118ea4c3f59a1cbde1e144bc6);
         
     
-        var popup_f367218671bbdd9823dc4e89d00a0ffc = L.popup({"maxWidth": "100%"});
+        var popup_11860594392376db31bd37d8f8adacf1 = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_33bf76d8c360ccd63f5aac678290261b = $(`<div id="html_33bf76d8c360ccd63f5aac678290261b" style="width: 100.0%; height: 100.0%;">Cirsium vulgare (Savi) Ten.</div>`)[0];
-                popup_f367218671bbdd9823dc4e89d00a0ffc.setContent(html_33bf76d8c360ccd63f5aac678290261b);
+                var html_10e7084f6170d8e1fb11e7c51bd0687d = $(`<div id="html_10e7084f6170d8e1fb11e7c51bd0687d" style="width: 100.0%; height: 100.0%;">Cirsium vulgare (Savi) Ten.</div>`)[0];
+                popup_11860594392376db31bd37d8f8adacf1.setContent(html_10e7084f6170d8e1fb11e7c51bd0687d);
             
         
 
-        marker_04e76920e968fbd81e9f367dd183bd55.bindPopup(popup_f367218671bbdd9823dc4e89d00a0ffc)
+        marker_a97c94bee1e5685c58d25c3e78df72df.bindPopup(popup_11860594392376db31bd37d8f8adacf1)
         ;
 
         
     
     
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            var marker_0063fbf8b2e67e1a129d902b40642d85 = L.marker(
+            var marker_8bc3e82f55fe46361ee03b88155f504c = L.marker(
                 [41.0748, -73.7751],
                 {}
-            ).addTo(marker_cluster_5a5898b44491aee20697ce70208624b5);
+            ).addTo(marker_cluster_6d12227118ea4c3f59a1cbde1e144bc6);
         
     
-        var popup_e3f848cb37f679f9d38c2b1c64810651 = L.popup({"maxWidth": "100%"});
+        var popup_dc14472384df8dd6fc12dc2adcedccbe = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_77d4e58f142fa27a44e430a12251d09e = $(`<div id="html_77d4e58f142fa27a44e430a12251d09e" style="width: 100.0%; height: 100.0%;">Anemone blanda Schott & Kotschy</div>`)[0];
-                popup_e3f848cb37f679f9d38c2b1c64810651.setContent(html_77d4e58f142fa27a44e430a12251d09e);
+                var html_fe1b0308b36e00ac2ab542ddc2e4761c = $(`<div id="html_fe1b0308b36e00ac2ab542ddc2e4761c" style="width: 100.0%; height: 100.0%;">Centranthus ruber (L.) DC.</div>`)[0];
+                popup_dc14472384df8dd6fc12dc2adcedccbe.setContent(html_fe1b0308b36e00ac2ab542ddc2e4761c);
             
         
 
-        marker_0063fbf8b2e67e1a129d902b40642d85.bindPopup(popup_e3f848cb37f679f9d38c2b1c64810651)
+        marker_8bc3e82f55fe46361ee03b88155f504c.bindPopup(popup_dc14472384df8dd6fc12dc2adcedccbe)
         ;
 
         
     
     
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
-        
-    
-            var marker_6ccf93e3a48870c1859b9b3d2cbf5a4c = L.marker(
+            var marker_9bc7c4db00d0a7de5a582ce28248490e = L.marker(
                 [41.0748, -73.7751],
                 {}
-            ).addTo(marker_cluster_5a5898b44491aee20697ce70208624b5);
+            ).addTo(marker_cluster_6d12227118ea4c3f59a1cbde1e144bc6);
         
     
-        var popup_4abdb351981a2d59ac7a80a03fd4a15f = L.popup({"maxWidth": "100%"});
+        var popup_2255d949d49cb847314d0a9d0c35efdf = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_3b0b94cf018ff9f4f9a10190a6b95a0e = $(`<div id="html_3b0b94cf018ff9f4f9a10190a6b95a0e" style="width: 100.0%; height: 100.0%;">Sedum rupestre L.</div>`)[0];
-                popup_4abdb351981a2d59ac7a80a03fd4a15f.setContent(html_3b0b94cf018ff9f4f9a10190a6b95a0e);
+                var html_c184ba02273e57b6db5e213626dc0102 = $(`<div id="html_c184ba02273e57b6db5e213626dc0102" style="width: 100.0%; height: 100.0%;">Aegopodium podagraria L.</div>`)[0];
+                popup_2255d949d49cb847314d0a9d0c35efdf.setContent(html_c184ba02273e57b6db5e213626dc0102);
             
         
 
-        marker_6ccf93e3a48870c1859b9b3d2cbf5a4c.bindPopup(popup_4abdb351981a2d59ac7a80a03fd4a15f)
+        marker_9bc7c4db00d0a7de5a582ce28248490e.bindPopup(popup_2255d949d49cb847314d0a9d0c35efdf)
         ;
 
         
     
     
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+            var marker_d2d200c2fe4d59a907ff9d3e2ab444ea = L.marker(
+                [41.0748, -73.7751],
+                {}
+            ).addTo(marker_cluster_6d12227118ea4c3f59a1cbde1e144bc6);
         
     
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        var popup_a67ddb2d21405def18ff4118ff91eb09 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_650d7f56eb343a4783bdb58dfbda5fc2 = $(`<div id="html_650d7f56eb343a4783bdb58dfbda5fc2" style="width: 100.0%; height: 100.0%;">Zamioculcas zamiifolia (Lodd.) Engl.</div>`)[0];
+                popup_a67ddb2d21405def18ff4118ff91eb09.setContent(html_650d7f56eb343a4783bdb58dfbda5fc2);
+            
+        
+
+        marker_d2d200c2fe4d59a907ff9d3e2ab444ea.bindPopup(popup_a67ddb2d21405def18ff4118ff91eb09)
+        ;
+
         
     
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+    
+            var marker_f5ee4d7a04b6613acfe0c104065c216e = L.marker(
+                [41.0748, -73.7751],
+                {}
+            ).addTo(marker_cluster_6d12227118ea4c3f59a1cbde1e144bc6);
         
     
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        var popup_b8ff162edcf546a9d73ad9c3c12cb671 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_662b676488bd2515a8de6b14e086dc36 = $(`<div id="html_662b676488bd2515a8de6b14e086dc36" style="width: 100.0%; height: 100.0%;">Sedum rupestre L.</div>`)[0];
+                popup_b8ff162edcf546a9d73ad9c3c12cb671.setContent(html_662b676488bd2515a8de6b14e086dc36);
+            
+        
+
+        marker_f5ee4d7a04b6613acfe0c104065c216e.bindPopup(popup_b8ff162edcf546a9d73ad9c3c12cb671)
+        ;
+
         
     
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+    
+            var marker_08166655d7c935cbb6e4b294a69b5f77 = L.marker(
+                [41.0748, -73.7751],
+                {}
+            ).addTo(marker_cluster_6d12227118ea4c3f59a1cbde1e144bc6);
         
     
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        var popup_129f78cf18f47d13f544a28d040117f2 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_876fa218b501ec1863bb10cbd47b648d = $(`<div id="html_876fa218b501ec1863bb10cbd47b648d" style="width: 100.0%; height: 100.0%;">Tradescantia pallida (Rose) D.R.Hunt</div>`)[0];
+                popup_129f78cf18f47d13f544a28d040117f2.setContent(html_876fa218b501ec1863bb10cbd47b648d);
+            
+        
+
+        marker_08166655d7c935cbb6e4b294a69b5f77.bindPopup(popup_129f78cf18f47d13f544a28d040117f2)
+        ;
+
         
     
-            tile_layer_41f0466708459188259f5a62d92a88a5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+    
+            var marker_b0b5d2fb646df2cb48d979eda9911cd8 = L.marker(
+                [41.0748, -73.7751],
+                {}
+            ).addTo(marker_cluster_6d12227118ea4c3f59a1cbde1e144bc6);
         
     
-            marker_cluster_5a5898b44491aee20697ce70208624b5.addTo(map_137376ca4bf0052d46c89d5467ce1fc2);
+        var popup_685bd31e53a44660d0e9db0bd743b3d5 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_cdeedacf6d0349050ff8d33707db52cb = $(`<div id="html_cdeedacf6d0349050ff8d33707db52cb" style="width: 100.0%; height: 100.0%;">Anemone blanda Schott & Kotschy</div>`)[0];
+                popup_685bd31e53a44660d0e9db0bd743b3d5.setContent(html_cdeedacf6d0349050ff8d33707db52cb);
+            
+        
+
+        marker_b0b5d2fb646df2cb48d979eda9911cd8.bindPopup(popup_685bd31e53a44660d0e9db0bd743b3d5)
+        ;
+
+        
+    
+    
+            marker_cluster_6d12227118ea4c3f59a1cbde1e144bc6.addTo(map_9ffbb07843b8c5fcf7885d1b0d6a86f3);
+        
+    
+            tile_layer_6f3de54eb92bf89e873b8e56b16bc0aa.addTo(map_9ffbb07843b8c5fcf7885d1b0d6a86f3);
+        
+    
+            marker_cluster_6d12227118ea4c3f59a1cbde1e144bc6.addTo(map_9ffbb07843b8c5fcf7885d1b0d6a86f3);
+        
+    
+            tile_layer_6f3de54eb92bf89e873b8e56b16bc0aa.addTo(map_9ffbb07843b8c5fcf7885d1b0d6a86f3);
+        
+    
+            marker_cluster_6d12227118ea4c3f59a1cbde1e144bc6.addTo(map_9ffbb07843b8c5fcf7885d1b0d6a86f3);
+        
+    
+            tile_layer_6f3de54eb92bf89e873b8e56b16bc0aa.addTo(map_9ffbb07843b8c5fcf7885d1b0d6a86f3);
+        
+    
+            marker_cluster_6d12227118ea4c3f59a1cbde1e144bc6.addTo(map_9ffbb07843b8c5fcf7885d1b0d6a86f3);
         
 </script>
 </html>
