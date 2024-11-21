@@ -48,7 +48,7 @@ from folium.plugins import MarkerCluster
 #Rover  = 192.168.110.19
 #Central = 192.168.110.5
 
-IP = '10.255.0.102'
+IP = '10.255.0.29'
 PORT = 9999
 
 TOP_HORIZ = -70
