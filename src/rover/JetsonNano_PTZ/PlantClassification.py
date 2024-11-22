@@ -18,6 +18,7 @@ import cvzone
 import time
 import os
 import math
+import random
 
 try:
     from Queue import Queue
@@ -206,9 +207,15 @@ class Previewer(threading.Thread):
                     for species in marker['species']:
                         species_set.add(species)
                         folium.Marker([marker['lat'], marker['long']], popup=species, title=species).add_to(self.markerCluster)
+                        """
+                        marker color function call
+                        """
                 elif isinstance(marker.get('species'), str):
                     species_set.add(marker['species'])
                     folium.Marker([marker['lat'], marker['long']], popup=species, title=species).add_to(self.markerCluster)
+                    """
+                    marker color function call
+                    """
 
         return folium_map
     
@@ -257,6 +264,10 @@ class Previewer(threading.Thread):
                         'popup': species
                     }
 
+                    """
+                    marker color function call
+                    """
+
                     clusterMarkers.append(newMarker)
                     inCluster = True
                     break
@@ -274,6 +285,10 @@ class Previewer(threading.Thread):
                     'markers': [newMarker]
                 }
 
+                """
+                marker color function call
+                """
+
                 self.speciesClusters.append(newCluster)
 
         if newMarker:
@@ -282,6 +297,16 @@ class Previewer(threading.Thread):
 
             self.saveMapData()
             self.saveMap()
+
+    """
+    generate random color marker --
+    pass in species
+    color JSON (species, color) -- JSON for data persistence
+    if species in JSON, return corresponding color
+    if not, generate new color (in while true loop to ensure no duplicate colors)
+    add new species, color pair to JSON
+    return new color
+    """
 
     """
     Saves html map
