@@ -10,7 +10,7 @@ Initializes camera, adds plant classification, sends packets to central
 
 @author [Zoe Rizzo] [@zizz-0]
 
-Date last modified: 11/21/2024
+Date last modified: 11/25/2024
 """
 
 import cv2
@@ -44,7 +44,8 @@ import folium
 from folium.plugins import MarkerCluster
 
 #These are for WARDEN and should be same for EXT since they are static IPS
-#RoverCam = 192.168.110.169
+#RoverCam RASPI = 192.168.110.169
+#RoverCam JETSON = 192.168.110.218
 #Drone =  192.168.110.228
 #Rover  = 192.168.110.19
 #Central = 192.168.110.5
