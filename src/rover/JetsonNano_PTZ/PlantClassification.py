@@ -160,9 +160,11 @@ class Previewer(threading.Thread):
         self.speciesClusters = []
         self.mapPath = "plant_species_map.html"
         self.mapDataPath = "plant_species_data.json"
+        self.markerColorsPath = "marker_colors.json"
 
         self.mapData = self.loadMapData()
         self.map = self.loadOrCreateMap()
+        self.colorMarkers = self.getColorMarkers()
 
     """
     Loads biodiversity html map or creates it if it does not already exist
@@ -206,13 +208,17 @@ class Previewer(threading.Thread):
                 if isinstance(marker.get('species'), list):
                     for species in marker['species']:
                         species_set.add(species)
-                        folium.Marker([marker['lat'], marker['long']], popup=species, title=species).add_to(self.markerCluster)
+                        markerColor = self.colorMarker
+                        icon = folium.Icon(color=markerColor, icon="info-sign")
+                        folium.Marker([marker['lat'], marker['long']], popup=species, title=species, icon=icon).add_to(self.markerCluster)
                         """
                         marker color function call
                         """
                 elif isinstance(marker.get('species'), str):
                     species_set.add(marker['species'])
-                    folium.Marker([marker['lat'], marker['long']], popup=species, title=species).add_to(self.markerCluster)
+                    markerColor = self.colorMarker
+                    icon = folium.Icon(color=markerColor, icon="info-sign")
+                    folium.Marker([marker['lat'], marker['long']], popup=species, title=species, icon=icon).add_to(self.markerCluster)
                     """
                     marker color function call
                     """
@@ -293,20 +299,40 @@ class Previewer(threading.Thread):
 
         if newMarker:
             self.mapData.append(newMarker)
-            folium.Marker([lat, long], popup=species, title=species).add_to(self.markerCluster)
+            markerColor = self.colorMarker
+            icon = folium.Icon(color=markerColor, icon="info-sign")
+            folium.Marker([lat, long], popup=species, title=species, icon=icon).add_to(self.markerCluster)
 
             self.saveMapData()
             self.saveMap()
 
-    """
-    generate random color marker --
-    pass in species
-    color JSON (species, color) -- JSON for data persistence
-    if species in JSON, return corresponding color
-    if not, generate new color (in while true loop to ensure no duplicate colors)
-    add new species, color pair to JSON
-    return new color
-    """
+    def getColorMarkers(self):
+        if os.path.exists(self.markerColorsPath):
+            with open(self.markerColorsPath, 'r') as f:
+                data = json.load(f)
+                return data
+        return []
+
+    def colorMarker(self, species):
+        for marker in self.colorMarkers:
+            if marker['species'] == species:
+                return marker['color']
+        
+        duplicate = True
+        while duplicate:
+            newColor = random.randint(0, 0xFFFFFF)
+            for marker in self.colorMarkers:
+                if marker['color'] == newColor:
+                    continue
+            duplicate = False
+        
+        newColorMarker = {
+            'species': species,
+            'color': newColor
+        }
+
+        self.colorMarkers.append(newColorMarker)
+        return newColor
 
     """
     Saves html map
