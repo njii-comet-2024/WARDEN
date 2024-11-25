@@ -338,6 +338,65 @@ python3 -c "import cv2; print(cv2.getBuildInformation())"
 
 Look for GTK+ and GStreamer. Both should show they are enabled by specifying "ON"
 
+### GStreamer Pipeline
+
+The rover camera's GStreamer pipeline heaily depends on the type of camera -- specifically the camera sensor. Pixelformat needs to be set to the correct format based on sensor, which determines what source is used to capture frames (nvargcamerasrc, v4l2, etc).
+
+To figure out pixelformat:
+
+```sh
+v4l2-ctl --list-devices
+```
+
+This will show what port the camera is on (e.g. /dev/video0).
+
+```sh
+v4l2-ctl --device=<PORT> --list-formats-ext
+```
+
+This will show the camera's pixelformat along with what resolution (capture_width, capture_height) matches which framerate.
+
+Arducam B016712MP output:
+
+```sh
+ioctl: VIDIOC_ENUM_FMT
+    Type: Video Capture
+
+    [0]: 'RG10' (10-bit Bayer RGRG/GBGB)
+        Size: Discrete 4032x3040
+            Interval: Discrete 0.048s (21.000 fps)
+        Size: Discrete 3840x2160
+            Interval: Discrete 0.033s (30.000 fps)
+        Size: Discrete 1920x1080
+            Interval: Discrete 0.017s (60.000 fps)
+```
+
+Based on the above output, pixelformat is RG10 and resolution should be 4032x3040 at 21fps.
+
+GStreamer pipeline for Arducam B016712MP:
+
+```python
+def gstreamer_pipeline(
+    capture_width=1920,
+    capture_height=1080,
+    display_width=840,
+    display_height=560,
+    framerate=21,
+    flip_method=0,
+):
+    return (
+        "nvarguscamerasrc ! "
+        "video/x-raw(memory:NVMM), "
+        f"width=(int){capture_width}, height=(int){capture_height}, "
+        f"pixelformat=RG10, framerate=(fraction){framerate}/1 ! "
+        "queue max-size-buffers=2 leaky=upstream ! "
+        f"nvvidconv flip-method={flip_method} ! "
+        f"video/x-raw, width=(int){display_width}, height=(int){display_height}, format=(string)BGRx ! "
+        "videoconvert ! "
+        "video/x-raw, format=(string)BGR ! appsink"
+    )
+```
+
 ---
 
 ## Project Progress

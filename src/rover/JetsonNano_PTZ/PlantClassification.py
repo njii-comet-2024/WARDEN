@@ -80,21 +80,13 @@ def gstreamer_pipeline(
     return (
         "nvarguscamerasrc ! "
         "video/x-raw(memory:NVMM), "
-        "width=(int)%d, height=(int)%d, "
-        "pixelformat=RG10, framerate=(fraction)%d/1 ! "
+        f"width=(int){capture_width}, height=(int){capture_height}, "
+        f"pixelformat=RG10, framerate=(fraction){framerate}/1 ! "
         "queue max-size-buffers=2 leaky=upstream ! "
-        "nvvidconv flip-method=%d ! "
-        "video/x-raw, width=(int)%d, height=(int)%d, format=(string)BGRx ! "
+        f"nvvidconv flip-method={flip_method} ! "
+        f"video/x-raw, width=(int){display_width}, height=(int){display_height}, format=(string)BGRx ! "
         "videoconvert ! "
         "video/x-raw, format=(string)BGR ! appsink"
-        % (
-            capture_width,
-            capture_height,
-            framerate,
-            flip_method,
-            display_width,
-            display_height,
-        )
     )
 
 class FrameReader(threading.Thread):
@@ -161,11 +153,9 @@ class Previewer(threading.Thread):
         self.speciesClusters = []
         self.mapPath = "plant_species_map.html"
         self.mapDataPath = "plant_species_data.json"
-        self.markerColorsPath = "marker_colors.json"
 
         self.mapData = self.loadMapData()
         self.map = self.loadOrCreateMap()
-        self.colorMarkers = self.getColorMarkers()
 
     """
     Loads biodiversity html map or creates it if it does not already exist
@@ -209,20 +199,10 @@ class Previewer(threading.Thread):
                 if isinstance(marker.get('species'), list):
                     for species in marker['species']:
                         species_set.add(species)
-                        markerColor = self.colorMarker
-                        icon = folium.Icon(color=markerColor, icon="info-sign")
-                        folium.Marker([marker['lat'], marker['long']], popup=species, title=species, icon=icon).add_to(self.markerCluster)
-                        """
-                        marker color function call
-                        """
+                        folium.Marker([marker['lat'], marker['long']], popup=species, title=species).add_to(self.markerCluster)
                 elif isinstance(marker.get('species'), str):
                     species_set.add(marker['species'])
-                    markerColor = self.colorMarker
-                    icon = folium.Icon(color=markerColor, icon="info-sign")
-                    folium.Marker([marker['lat'], marker['long']], popup=species, title=species, icon=icon).add_to(self.markerCluster)
-                    """
-                    marker color function call
-                    """
+                    folium.Marker([marker['lat'], marker['long']], popup=species, title=species).add_to(self.markerCluster)
 
         return folium_map
     
@@ -271,10 +251,6 @@ class Previewer(threading.Thread):
                         'popup': species
                     }
 
-                    """
-                    marker color function call
-                    """
-
                     clusterMarkers.append(newMarker)
                     inCluster = True
                     break
@@ -292,48 +268,14 @@ class Previewer(threading.Thread):
                     'markers': [newMarker]
                 }
 
-                """
-                marker color function call
-                """
-
                 self.speciesClusters.append(newCluster)
 
         if newMarker:
             self.mapData.append(newMarker)
-            markerColor = self.colorMarker
-            icon = folium.Icon(color=markerColor, icon="info-sign")
-            folium.Marker([lat, long], popup=species, title=species, icon=icon).add_to(self.markerCluster)
+            folium.Marker([lat, long], popup=species, title=species).add_to(self.markerCluster)
 
             self.saveMapData()
             self.saveMap()
-
-    def getColorMarkers(self):
-        if os.path.exists(self.markerColorsPath):
-            with open(self.markerColorsPath, 'r') as f:
-                data = json.load(f)
-                return data
-        return []
-
-    def colorMarker(self, species):
-        for marker in self.colorMarkers:
-            if marker['species'] == species:
-                return marker['color']
-        
-        duplicate = True
-        while duplicate:
-            newColor = random.randint(0, 0xFFFFFF)
-            for marker in self.colorMarkers:
-                if marker['color'] == newColor:
-                    continue
-            duplicate = False
-        
-        newColorMarker = {
-            'species': species,
-            'color': newColor
-        }
-
-        self.colorMarkers.append(newColorMarker)
-        return newColor
 
     """
     Saves html map

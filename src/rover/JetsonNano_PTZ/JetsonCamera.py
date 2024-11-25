@@ -67,21 +67,13 @@ def gstreamer_pipeline(
     return (
         "nvarguscamerasrc ! "
         "video/x-raw(memory:NVMM), "
-        "width=(int)%d, height=(int)%d, "
-        "pixelformat=RG10, framerate=(fraction)%d/1 ! "
+        f"width=(int){capture_width}, height=(int){capture_height}, "
+        f"pixelformat=RG10, framerate=(fraction){framerate}/1 ! "
         "queue max-size-buffers=2 leaky=upstream ! "
-        "nvvidconv flip-method=%d ! "
-        "video/x-raw, width=(int)%d, height=(int)%d, format=(string)BGRx ! "
+        f"nvvidconv flip-method={flip_method} ! "
+        f"video/x-raw, width=(int){display_width}, height=(int){display_height}, format=(string)BGRx ! "
         "videoconvert ! "
         "video/x-raw, format=(string)BGR ! appsink"
-        % (
-            capture_width,
-            capture_height,
-            framerate,
-            flip_method,
-            display_width,
-            display_height,
-        )
     )
 
 class FrameReader(threading.Thread):
