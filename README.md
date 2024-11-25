@@ -374,7 +374,7 @@ ioctl: VIDIOC_ENUM_FMT
 Based on the above output, pixelformat is RG10 and resolution should be 4032x3040 at 21fps.
 
 > [!WARNING]
-> Currently the pipeline is configured for 21fps and a resolution of 1920x1080. This technically is not correct. However, there is an issue with the specific camera this project is using with screen tearing. A *lot* of debugging has happened to remove the screen tearing, but it is only mitigated by mismatching framerate and resolution. This is incredibly incorrect, but given the time frame for this project, it is an acceptable solution.
+> Currently the pipeline is configured for 21 fps and a resolution of 1920x1080. This is not correct, however, there is an issue with the specific camera this project uses with screen tearing. A *lot* of debugging has happened to remove the screen tearing, but it is only mitigated by mismatching framerate and resolution. This is incredibly incorrect, but given the time frame for this project, it is an acceptable solution.
 
 GStreamer pipeline for Arducam B016712MP:
 
