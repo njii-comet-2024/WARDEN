@@ -283,7 +283,7 @@ nano ~/.bashrc
 
 Add the following lines to the end of the file as needed:
 
-```sh
+```bashrc
 export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/gstreamer-1.0:$LD_LIBRARY_PATH
 export PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig:/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=/usr/lib/aarch64-linux-gnu:$CMAKE_PREFIX_PATH
