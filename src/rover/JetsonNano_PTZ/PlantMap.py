@@ -26,6 +26,8 @@ except ModuleNotFoundError:
     from queue import Queue
 
 import threading
+import signal
+import sys
 import socket
 import base64
 from jetson_inference import detectNet
@@ -33,10 +35,13 @@ from jetson_utils import cudaFromNumpy, cudaDeviceSynchronize
 from PlantNet300k.utils import load_model
 from torchvision.models import resnet18
 import torch.nn.functional as F
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 from torchvision import transforms
 import torch
 import json
+import geocoder
+import folium
+from folium.plugins import MarkerCluster
 
 #These are for WARDEN and should be same for EXT since they are static IPS
 #RoverCam RASPI = 192.168.110.169
@@ -144,6 +149,150 @@ class Previewer(threading.Thread):
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
 
+        # biodiversity map init
+        self.speciesClusters = []
+        self.mapPath = "plant_species_map.html"
+        self.mapDataPath = "plant_species_data.json"
+
+        self.mapData = self.loadMapData()
+        self.map = self.loadOrCreateMap()
+
+    """
+    Loads biodiversity html map or creates it if it does not already exist
+    """
+    def loadOrCreateMap(self):
+        if os.path.exists(self.mapPath) and self.mapData:
+            lastMarker = self.mapData[-1]
+            folium_map = folium.Map(location=[lastMarker['lat'], lastMarker['long']], zoom_start=15)
+        else:
+            folium_map = folium.Map(location=[0, 0], zoom_start=2)
+
+        species_set = set()
+        self.markerCluster = MarkerCluster().add_to(folium_map)
+        
+        # adds existing species to map as markers
+        for marker in self.mapData:
+            markerLat = marker['lat']
+            markerLong = marker['long']
+            species = marker.get('species')
+            inCluster = False
+
+            for cluster in self.speciesClusters:
+                clusterCenter = cluster['center']
+                clusterMarkers = cluster['markers']
+
+                distance = math.sqrt((markerLat - clusterCenter[0]) ** 2 + (markerLong - clusterCenter[1]) ** 2)
+                if distance < 0.00025:
+                    clusterMarkers.append(marker)
+                    inCluster = True
+                    break
+
+            if not inCluster:
+                newCluster = {
+                    'center': (markerLat, markerLong),
+                    'markers': [marker]
+                }
+                self.speciesClusters.append(newCluster)
+                
+        for cluster in self.speciesClusters:
+            for marker in cluster['markers']:
+                if isinstance(marker.get('species'), list):
+                    for species in marker['species']:
+                        species_set.add(species)
+                        folium.Marker([marker['lat'], marker['long']], popup=species, title=species).add_to(self.markerCluster)
+                elif isinstance(marker.get('species'), str):
+                    species_set.add(marker['species'])
+                    folium.Marker([marker['lat'], marker['long']], popup=species, title=species).add_to(self.markerCluster)
+
+        return folium_map
+    
+    """
+    Loads JSON data for map markers
+    """
+    def loadMapData(self):
+        if os.path.exists(self.mapDataPath):
+            with open(self.mapDataPath, 'r') as f:
+                data = json.load(f)
+                for marker in data:
+                    if isinstance(marker.get('species'), str):
+                        marker['species'] = [marker['species']]
+                    print(marker['species'])
+                return data
+        return []
+
+    """
+    Saves map JSON data
+    """
+    def saveMapData(self):
+        with open(self.mapDataPath, 'w') as f:
+            json.dump(self.mapData, f, indent=4)
+    
+    """
+    Adds a new marker to the map
+    """
+    def addMarker(self, lat, long, species, tolerance=0.00025):
+        for marker in self.mapData:
+            inCluster = False
+            newMarker = None
+
+            for cluster in self.speciesClusters:
+                clusterCenter = cluster['center']
+                clusterMarkers = cluster['markers']
+
+                distance = math.sqrt((lat - clusterCenter[0]) ** 2 + (long - clusterCenter[1]) ** 2)
+                if distance < tolerance:
+                    if species in marker['species']:
+                        return
+                    
+                    newMarker = {
+                        'lat': lat,
+                        'long': long,
+                        'species': [species],
+                        'popup': species
+                    }
+
+                    clusterMarkers.append(newMarker)
+                    inCluster = True
+                    break
+
+            if not inCluster:
+                newMarker = {
+                    'lat': lat,
+                    'long': long,
+                    'species': [species],
+                    'popup': species
+                }
+
+                newCluster = {
+                    'center': (lat, long),
+                    'markers': [newMarker]
+                }
+
+                self.speciesClusters.append(newCluster)
+
+        if newMarker:
+            self.mapData.append(newMarker)
+            folium.Marker([lat, long], popup=species, title=species).add_to(self.markerCluster)
+
+            self.saveMapData()
+            self.saveMap()
+
+    """
+    Saves html map
+    """
+    def saveMap(self):
+        self.map.save(self.mapPath)
+
+    """
+    Gets current coordinates based on IP address
+    TEMPORARY FUNCTION -- will be replaced with GPS module so internet connection is not required
+    """
+    def getGPSCoordinates(self):
+        g = geocoder.ip('me')
+        if g.latlng:
+            return g.latlng
+        else:
+            return None
 
     def run(self):
         global camTilt
@@ -213,6 +362,12 @@ class Previewer(threading.Thread):
                 # Draw the prediction on the frame
                 cv2.putText(imgResult, f"Species: {species_name}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2)
 
+                gpsCoordinates = self.getGPSCoordinates()
+                if gpsCoordinates:
+                    lat, long = gpsCoordinates
+                    self.addMarker(lat, long, species_name)
+                    self.saveMap()
+
             # comment this out to stream UDP packets
             cv2.imshow(self.window_name, imgResult)
             
@@ -274,6 +429,9 @@ class Camera(object):
         
     def setCamTilt(self, setVal):
         global camTilt
+        #mappedTilt = self.numToRange(setVal, 0, 180, 180, 0)
+        #self.cameraTilt = mappedTilt
+        #camTilt = self.cameraTilt
         self.cameraTilt = setVal
         camTilt = self.cameraTilt
     
