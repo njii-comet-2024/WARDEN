@@ -104,6 +104,12 @@ Runs the camera via `JetsonCamera.py` and overlays GUI and generic object detect
 Runs the camera via `PlantClassification.py` and overlays GUI and plant classification before sending frames to central \
 *Run via SSH from central*
 
+#### `roverPlantMap.py`
+
+Runs the camera via `PlantMap.py` and overlays GUI and plant classification before sending frames to central \
+Maps biodiversity by dropping markers on an HTML map -- *requires an internet connection, gets location via IP address* \
+*Run via SSH from central*
+
 ### Drone
 
 #### `droneToCentral.py`
@@ -408,4 +414,4 @@ This project is ongoing since June 2024. Currently, all of the basic goals have 
 
 Ongoing and future changes surround the rover camera. The Camera Raspberry Pi has been swapped out with an NVIDIA Jetson Orin Nano to implement object detection classification. Currently, object detection using detectNet with ssd-mobilenet-v2 and plant classification using PlantNet-300K with resnet18 are fully implemented. Work is ongoing to implement a biodiversity mapping system using the plant classification program, currently using IP address to get location, but eventually switching to a GPS module for better accuracy.
 
-Last updated 11/21/2024
+Last updated 12/3/2024

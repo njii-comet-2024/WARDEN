@@ -29,13 +29,10 @@ Runs `PlantMap.py` to send camera frames from rover to central.
 
 @author [Zoe Rizzo] [@zizz-0]
 
-Date last modified: 11/20/2024
+Date last modified: 12/3/2024
 """
 import cv2
 import numpy as py
-import os
-import sys
-import time
 import argparse
 from PlantMap import Camera
 
