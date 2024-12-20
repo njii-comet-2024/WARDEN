@@ -10,9 +10,9 @@
 
 ---
 
-![WARDEN_Project](WARDEN_logo.png)
-
 # NJII COMET Summer/Fall 2024 Internship Project
+
+![WARDEN_Project](WARDEN_logo.png)
 
 ---
 
