@@ -129,3 +129,23 @@ This release further implements object detection and classification.
 **Bugfixes**
 
 - Fixed OpenCV GStreamer pipeline issues and installation issues (fixes reflected in [README](../../README.md#camera-initialization))
+
+
+## Version 1.2.1 (12/20/2024)
+
+Final release of Project W.A.R.D.E.N.
+
+
+**Features**
+
+- 
+
+
+**Minor Changes**
+
+- Heavily updated documentation
+
+
+**Bugfixes**
+
+- 
