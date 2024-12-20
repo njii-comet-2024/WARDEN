@@ -27,6 +27,8 @@
 This code has been significantly altered for the WARDEN project's specific needs and uses.
 Runs `PlantMap.py` to send camera frames from rover to central.
 
+Requires an internet connection -- gets location via ip address. Would have switched to gps module but that requires me to be outside and it is curreny december. Would rather not freeze.
+
 @author [Zoe Rizzo] [@zizz-0]
 
 Date last modified: 12/3/2024

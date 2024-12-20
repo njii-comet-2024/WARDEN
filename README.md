@@ -14,8 +14,6 @@
 
 # NJII COMET Summer/Fall 2024 Internship Project
 
-Click ![here](docs/WARDEN_presentation.pdf) to view the full in-depth project report presentation from research to final designs.
-
 ---
 
 ## Contents
@@ -44,7 +42,7 @@ Click ![here](docs/WARDEN_presentation.pdf) to view the full in-depth project re
 
 ## Description
 
-This repository holds the control and communication code for the COMET 2024 internship project. This is an ongoing project.
+This repository holds the control and communication code for the COMET 2024 internship project.
 
 For COMET W.A.R.D.E.N. setup instructions, check the sharepoint.
 
@@ -114,7 +112,8 @@ Maps biodiversity by dropping markers on an HTML map -- *requires an internet co
 
 #### `droneToCentral.py`
 
-Runs the camera and sends frames to central
+Runs the camera and sends frames to central \
+*Run via SSH from central*
 
 ### Central
 
@@ -147,7 +146,7 @@ Runs program `roverControls.py` to receive controls from Central Raspberry Pi an
 ~~Runs program `roverToCentral.py` to receive camera positions from Central Raspberry Pi and send rover back video to Central Raspberry Pi.~~ 
 
 **Camera Jetson**  *(NVIDIA Jetson Orin Nano)*\
-Runs program `roverDetectNet.py` or `roverPlantNet.py` to receive camera positions from Central and send rover back video to Central Raspberry Pi.
+Runs program `roverDetectNet.py`, `roverPlantNet.py`, or `roverPlantMap.py` to receive camera positions from Central and send rover back video to Central Raspberry Pi.
 
 **Drone Raspberry Pi**  *(Raspberry Pi Zero 2 W)*\
 Runs `droneToCentral.py` to transmit digital drone video to Central Raspberry Pi.
@@ -410,8 +409,6 @@ def gstreamer_pipeline(
 
 ## Project Progress
 
-This project is ongoing since June 2024. Currently, all of the basic goals have been met and the system is fully functioning.
+Project concluded as of 12/20/2024, unless someone at COMET decides to continue work in the future.
 
-Ongoing and future changes surround the rover camera. The Camera Raspberry Pi has been swapped out with an NVIDIA Jetson Orin Nano to implement object detection classification. Currently, object detection using detectNet with ssd-mobilenet-v2 and plant classification using PlantNet-300K with resnet18 are fully implemented. Work is ongoing to implement a biodiversity mapping system using the plant classification program, currently using IP address to get location, but eventually switching to a GPS module for better accuracy.
-
-Last updated 12/3/2024
+Last updated 12/20/2024
